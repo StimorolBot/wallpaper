@@ -1,0 +1,23 @@
+.checkbox-style-img
+    display: none
+    position: absolute
+
+.checkbox-style-lbl
+    display: flex
+    align-items: center
+    cursor: pointer
+    background-color: #44944A
+    height: 30px
+    border-radius: 12px
+    padding: 0 10px
+    transition: 0.3s
+    box-shadow: 0 6px #1E5945
+    border: 1px solid #000
+
+    &:hover    
+        background-color: #47A76A
+
+.checkbox-style-img:checked ~ .checkbox-style-lbl
+        box-shadow: 0 4px #1E5945
+        background-color: #47A76A
+        transform: translateY(4px)
