@@ -55,5 +55,13 @@ class JWTToken(JWTTokenABC):
         except ExpiredSignatureError:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Время жизни токена истекло")
 
+    def refresh(self, refresh_token: str) -> str:
+        payload = self.valid_type(token=refresh_token, token_type=TokenType.REFRESH.value)
+        access_token = self.create(
+            token_type=TokenType.ACCESS.value,
+            token_data={"sub": payload["uuid"], "email": payload["email"]}
+        )
+        return access_token
+
 
 jwt_token = JWTToken()
