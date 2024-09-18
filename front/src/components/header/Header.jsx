@@ -16,8 +16,13 @@ export function Header() {
                 <nav className="header__nav">
                     <ul className="header__nav-container">
                         <li className="header__nav-item">
-                            <Link className="header__create-link" to="/create">
+                            <Link className="header__item-link" to="/create">
                                 Создать
+                            </Link>
+                        </li>
+                        <li className="header__nav-item">
+                            <Link className="header__item-link" to="/popular">
+                                Популярные
                             </Link>
                         </li>
                     </ul>
