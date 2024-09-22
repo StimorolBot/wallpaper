@@ -40,11 +40,11 @@ async def login(login_user: Login, session: AsyncSession = Depends(get_async_ses
     user = await user_manager.auth(auth_login=login_user, session=session)
     access_token = jwt_token.create(
         token_type=TokenType.ACCESS.value,
-        token_data={"sub": f"{user.uuid}", "email": user.email}
+        token_data={"sub": user.uuid_user, "email": user.email}
     )
     refresh_token = jwt_token.create(
         token_type=TokenType.REFRESH.value,
-        token_data={"sub": user.email},
+        token_data={"sub": user.uuid_user},
         expire_timedelta=timedelta(days=auth_jwt_setting.refresh_token_expire_days)
     )
     exp = int(timedelta(days=auth_jwt_setting.refresh_token_expire_days).total_seconds())
