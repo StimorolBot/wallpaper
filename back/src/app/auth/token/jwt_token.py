@@ -33,7 +33,10 @@ class JWTToken(JWTTokenABC):
             algorithms: str = auth_jwt_setting.algorithm,
             public_key: str = auth_jwt_setting.public_path_key.read_text()
     ):
-        return jwt.decode(token, public_key, algorithms=algorithms)
+        try:
+            return jwt.decode(token, public_key, algorithms=algorithms)
+        except ExpiredSignatureError:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Время жизни токена истекло")
 
     def create(self, token_type: TokenType, token_data: dict, expire_timedelta: timedelta | None = None):
         jwt_payload = {"type": token_type}
@@ -59,7 +62,7 @@ class JWTToken(JWTTokenABC):
         payload = self.valid_type(token=refresh_token, token_type=TokenType.REFRESH.value)
         access_token = self.create(
             token_type=TokenType.ACCESS.value,
-            token_data={"sub": payload["uuid"], "email": payload["email"]}
+            token_data={"sub": payload["sub"]}
         )
         return access_token
 
