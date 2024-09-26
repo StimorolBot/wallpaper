@@ -16,20 +16,20 @@ export function Header() {
                 <nav className="header__nav">
                     <ul className="header__nav-container">
                         <li className="header__nav-item">
-                            <Link className="header__item-link" to="/create">
+                            <Link className="header__item-link hover" to="/create">
                                 Создать
                             </Link>
                         </li>
                         <li className="header__nav-item">
-                            <Link className="header__item-link" to="/popular">
+                            <Link className="header__item-link hover" to="/popular">
                                 Популярные
                             </Link>
                         </li>
                     </ul>
                 </nav>
                 <div className="header__auth-container">
-                    <Link className="header__auth" to="/auth/login">
-                        <img className="header__auth-link" src="/static/auth.svg" alt="auth" />
+                    <Link className="header__auth-link" to="/auth/login">
+                        <img className="header__auth-img" src="/static/auth.svg" alt="auth" />
                     </Link>
                 </div>
             </div>
