@@ -34,6 +34,7 @@ textarea
     border: none
 
 body
+    font-family: "Comfortaa", sans-serif
     background-image: url("/static/forest.jpg")
 
 #root
@@ -55,3 +56,31 @@ body
     display: flex
     justify-content: center
     align-items: center
+
+#root
+    --reaction: brightness(0) saturate(100%) invert(13%) sepia(60%) saturate(7071%) hue-rotate(360deg) brightness(112%) contrast(79%)
+    --hover-grey: brightness(0) saturate(100%) invert(77%) sepia(0%) saturate(3086%) hue-rotate(105deg) brightness(100%) contrast(67%)
+    --white: brightness(0) saturate(100%) invert(100%) sepia(2%) saturate(7%) hue-rotate(6deg) brightness(104%) contrast(104%)
+
+.hover
+    display: block
+    position: relative
+    
+    &:before,
+    &:after
+        content: ""
+        position: absolute
+        top: 100%
+        width: 0px
+        height: 3px
+        transition: 0.3s
+        
+    &:before
+        left: 50%    
+
+    &:after
+        right: 50%
+        
+    &:hover:before,
+    &:hover:after
+        width: 50%
