@@ -1,4 +1,4 @@
-import api from "../api"
+import { api, refreshToken } from "../api"
 import { useEffect, useState } from "react"
 import { Header } from "../components/header/Header"
 import { CreateImgList } from "../components/img/CreateImgList"
@@ -11,10 +11,12 @@ export function Home(){
     
     useEffect(() => {(
         async () => {
-            await api.get("/").then((response) => {            
+            await api.get("/").then((response) => {    
                 setImgList([...response.data])
-            }).catch((error) =>{
-                console.log(error)
+            }).catch(async (error) => {
+                if (error.status == 400){
+                    await refreshToken()
+                }
             })
         })()
     }, [])
@@ -27,7 +29,7 @@ export function Home(){
                 Галерея изображений
             </h1>
             <div className="wrapper">
-                <CreateImgList imgList={imgList}/>                
+                <CreateImgList imgList={imgList} setImgList={setImgList}/>                
             </div>
         </section>
         </>
