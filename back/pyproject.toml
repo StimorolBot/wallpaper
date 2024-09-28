@@ -20,6 +20,8 @@ black = "^24.8.0"
 pydantic = {extras = ["email"], version = "^2.9.0"}
 fastapi-cache2 = "^0.2.2"
 redis = "^5.0.8"
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+pyjwt = {extras = ["crypto"], version = "^2.9.0"}
 
 
 [build-system]
