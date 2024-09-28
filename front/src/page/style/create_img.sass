@@ -1,3 +1,14 @@
+@keyframes rotate
+    from
+        transform: rotate(-360deg)
+
+@keyframes show
+    0%
+        transform: translateX(-25%)        
+    
+    100%
+        transform: translateX(0%)
+   
 .img-create-section
     flex: 1
     display: flex
@@ -6,12 +17,25 @@
 
 .img-create__container
     display: flex
-    mai-height: 450px
     overflow: hidden
+    gap: 10px
 
-.create-img__result
-    max-width: 440px
+.img-wait__container
+    max-width: 370px
     margin-right: 10px
+    opacity: 0
+    position: absolute
+    visibility: hidden
+
+.img-wait__container_active
+    opacity: 1
+    position: relative
+    visibility: visible
+    transition: 1s
+
+.form__create-img_active
+    animation: show 0.4s linear
+    transform: translateX(0)
 
 .img-generated
     border-radius: 10px
@@ -20,22 +44,28 @@
     animation: rotate 40s linear infinite
     opacity: 0.9
 
-@keyframes rotate
-    from
-        transform: rotate(-360deg)
-
 .img-wait
     text-align: center
+
+.img-container
+    border-radius: 10px
+    overflow: hidden
+    align-self: center
+
+.img-create
+    max-width: 540px
+    max-height: 400px
     
 .form__create-img
-    border: 2px solid rgba(0, 0, 0, 0.8)
+    border: 2px solid #000
     border-radius: 10px
-    max-width: 350px
+    max-width: 540px
     display: flex
     flex-direction: column
     justify-content: space-between
     backdrop-filter: blur(2px)
     padding: 35px
+    row-gap: 10px
 
 .checkbox-style__container
     display: flex
@@ -43,12 +73,13 @@
     gap: 16px 15px
     padding-bottom: 11px
 
-.input-range__container
-    margin: 20px 0
-    display: flex
-    align-items: center
+.range-size
+    text-align: center
 
-.range-size,
+.size__container
+    display: flex
+    justify-content: space-between
+
 .form__create-btn-container
     position: relative
     margin: 0 auto
