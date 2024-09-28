@@ -5,6 +5,6 @@ class FilterTime(Enum):
     HOUR = "HOUR"
     DAY = "DAY"
     WEEK = "WEEK"
-    MONTH = "MOUNT"
+    MONTH = "MONTH"
     YEAR = "YEAR"
     ALL = "ALL"
