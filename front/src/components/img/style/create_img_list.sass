@@ -1,0 +1,51 @@
+.img__container
+    column-count: 4
+    column-gap: 20px
+    padding: 10px 0
+
+.img__wrapper
+    position: relative
+    overflow: hidden
+    border-radius: 14px
+    margin-bottom: 20px
+
+    &:hover .btn-download,
+    &:hover .reaction-img__hov
+        opacity: 1
+        visibility: visible
+        z-index: 999  
+        transition: 0.3s
+
+    &:hover .img__item
+        scale: 1.1
+        filter: brightness(65%)
+
+.img__item
+    cursor: pointer
+    transition: 0.3s  
+
+.reaction-img__hov
+    position: absolute
+    opacity: 0
+    visibility: hidden
+    bottom: 0
+    display: flex
+    width: 100%
+    justify-content: center
+    gap: 5%
+
+.like,
+.dislike
+    cursor: pointer
+    width: 35px
+    transition: 0.2s
+
+    &:hover
+        filter: var(--reaction)
+
+
+.like_active,
+.dislike_active
+    filter: var(--reaction)
+
+
