@@ -11,6 +11,7 @@ from fastapi_cache.backends.redis import RedisBackend
 from src.conf import redis
 from src.app.img.router import img_router
 from src.app.auth.router import register_router
+from src.app.auth.token.router import jwt_router
 
 
 @asynccontextmanager
@@ -22,6 +23,7 @@ app = FastAPI(title="wallpaper", lifespan=lifespan, docs_url=None, redoc_url=Non
 
 app.include_router(img_router)
 app.include_router(register_router)
+app.include_router(jwt_router)
 
 origins = ["http://localhost:5173"]
 
