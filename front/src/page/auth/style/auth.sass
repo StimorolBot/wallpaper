@@ -1,0 +1,60 @@
+.auth
+    min-height: 100vh
+    display: flex
+    justify-content: center
+    align-items: center
+
+.auth__form
+    height: 450px
+    width: 400px
+    padding: 45px 35px
+    backdrop-filter: blur(2px) 
+    border-radius: 10px
+    box-shadow: 0 20px 25px rgba(0, 0, 0, 0.35)
+    display: flex
+    flex-direction: column
+    justify-content: space-between
+
+.auth-title
+    text-align: center
+
+.auth-input__container
+    display: flex
+    flex-direction: column
+    row-gap: 30px
+
+.auth__reset-password
+    margin: 10px 0
+
+.auth-btn__container
+    position: relative
+    margin: 0 auto    
+
+#userManual-input
+    display: none
+    opacity: 0
+    visibility: hidden
+
+.userManual-checkbox
+    font-size: 11px
+    font-weight: 600
+
+    &::before
+        content: ""
+        display: inline-block
+        width: 10px
+        height: 10px
+        border-radius: 50%
+        border: 2px solid #04AA6D
+        margin-right: 5px
+        cursor: pointer
+
+.auth__login
+    text-align: center
+
+.auth__form_big
+    height: 570px
+    padding: 10px 35px
+
+.auth__form_small
+    padding: 20px 35px
