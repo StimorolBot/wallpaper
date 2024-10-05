@@ -38,6 +38,7 @@ app.add_middleware(
         "Content-Type", "Set-Cookie", "Access-Control-Allow-Headers",
         "Access-Control-Allow-Origin", "Authorization"
     ],
+    expose_headers=["Filter-Time"]
 )
 
 
