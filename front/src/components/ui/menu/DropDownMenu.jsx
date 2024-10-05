@@ -27,7 +27,11 @@ export function DropDownMenu({itemList, valueList, callback, title}){
             <ul className={isShow ? "dropdown__container dropdown__container_active" : "dropdown__container"} ref={clikRef}>
                 {itemList?.map((item, index) => {
                     return(
-                        <li className="dropdown__item" key={index} onClick={(e) => callback(e, valueList[index])}>
+                        <li
+                            className="dropdown__item"
+                            key={index} 
+                            onClick={async (e) => await callback(e, valueList[index])}
+                        >
                             {item}
                         </li>
                     )
