@@ -1,26 +1,11 @@
-import { api, refreshToken } from "../api"
-import { useEffect, useState } from "react"
 import { Header } from "../components/header/Header"
-import { CreateImgList } from "../components/img/CreateImgList"
+import { Footer } from "../components/footer/Footer"
+import { Pagination } from "../components/pagination/Pagination"
 
 import "./style/home.sass"
 
 
 export function Home(){
-    const [imgList, setImgList] = useState([])
-    
-    useEffect(() => {(
-        async () => {
-            await api.get("/").then((response) => {    
-                setImgList([...response.data])
-            }).catch(async (error) => {
-                if (error.status == 400){
-                    await refreshToken()
-                }
-            })
-        })()
-    }, [])
-    
     return(
         <>
         <Header/>
@@ -29,9 +14,10 @@ export function Home(){
                 Галерея изображений
             </h1>
             <div className="wrapper">
-                <CreateImgList imgList={imgList} setImgList={setImgList}/>                
+                <Pagination path={"/"}/>
             </div>
         </section>
+        <Footer/>
         </>
     )
 }
