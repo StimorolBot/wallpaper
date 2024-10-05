@@ -1,9 +1,11 @@
+import cookies from "../../cookie"
 import { Link } from "react-router-dom"
 
 import "./header.sass"
 
 
 export function Header() {
+    const token = cookies.get("access_token")
 
     return(
         <header className="header">
@@ -29,7 +31,8 @@ export function Header() {
                 </nav>
                 <div className="header__auth-container">
                     <Link className="header__auth-link" to="/auth/login">
-                        <img className="header__auth-img" src="/static/auth.svg" alt="auth" />
+                        <img className={token === undefined ? "header__auth-img" : "header__auth-img header__auth-img_big" }
+                            src={token === undefined ? "/static/auth.svg" : "/static/user.svg" } alt="auth" />
                     </Link>
                 </div>
             </div>
