@@ -1,23 +1,68 @@
 .about__img
-    max-width: 380px
+    max-height: 560px
+    object-fit: cover
+
+.about-img__container
+    display: flex
+    gap: 5%
+    padding: 10px 0
+
+.about__img-container
     border-radius: 10px
-    position: relative
-    margin: 0 auto
+    overflow: hidden
+    align-self: center
+
+.about__list
+    align-self: center
+    backdrop-filter: blur(2px)
+    border: 2px solid #000
+    padding: 10px
+    border-radius: 10px
+    max-width: 530px
+    width: 100%
+    box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2)
 
 .about__list-container
     display: flex
-    flex-wrap: wrap
-    max-width: 530px
-    border: 2px solid
     overflow: hidden
+    padding: 10px 0
+
+.about__list-dt
+    align-self: center
+    font-weight: 700
+
+.about__list-dd
+    padding: 0 0 0 8px
 
 .reaction__container
     display: flex
     justify-content: center
     column-gap: 20%
 
+.about__list-promt
+    max-height: 165px
+
+.reaction__item
+    padding: 10px 0
+
 .reaction-img
-    width: 30px
+    width: 35px
+    cursor: pointer
+
+    &:hover
+        filter: var(--reaction)
+        transition: 0.2s
 
 .reaction-count
     text-align: center
+
+.download-img__container
+    display: flex
+    justify-content: center
+
+.download-img-link
+    color: #000
+    
+    &:before,
+    &:after
+        background-color: #47eb59
