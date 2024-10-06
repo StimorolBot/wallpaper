@@ -1,5 +1,6 @@
 from typing_extensions import Annotated
 from fastapi import status, HTTPException
+from bg_task.type_email import TypeEmail
 from core.help import valid_forbidden_symbols, valid_len
 from pydantic import BaseModel, ConfigDict, WrapValidator
 
@@ -38,6 +39,10 @@ ValidPassword = Annotated[str, WrapValidator(valid_password)]
 
 class Email(BaseModel):
     email: ValidEmail
+
+
+class CodeConfirm(Email):
+    email_type: TypeEmail
 
 
 class Login(Email):
