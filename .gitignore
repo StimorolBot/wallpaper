@@ -3,3 +3,8 @@ __pycache__
 .venv
 .env
 node_modules
+package-lock.json
+static
+.log
+poetry.lock
+jwt-private.pem
