@@ -2,7 +2,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import Depends, HTTPException, status
 
 from core.crud import crud
-from core.mode import ModeRead
 from src.db.get_session import get_async_session
 from core.abs_model.model import UserManagerABC
 
@@ -19,10 +18,7 @@ class UserManager(UserManagerABC):
             detail="Неверный логин/пароль"
         )
 
-        user = await crud.read(
-            session=session, table=AuthTable,
-            field=AuthTable.email, value=auth_login.email, mode=ModeRead.ONE.value
-        )
+        user = await crud.read(session=session, table=AuthTable, email=auth_login.email)
         if not user:
             raise unauthorized_error_msg
 
@@ -40,7 +36,9 @@ class UserManager(UserManagerABC):
         auth_dict_user["is_active"] = False
         auth_dict_user["is_superuser"] = False
         auth_dict_user["is_verified"] = False
+
         del auth_dict_user["password"]
+        del auth_dict_user["code_confirm"]
 
         return auth_dict_user
 
