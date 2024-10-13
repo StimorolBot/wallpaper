@@ -1,23 +1,22 @@
 import pytest
 from fastapi import status
-from tests.conftest import ac
 from httpx import AsyncClient
-from core.help import set_redis, get_redis
 
-USER_EMAIL = "user@example.com"
+from core.help import set_redis, get_redis
+from tests.conftest import ac, TEST_USER_EMAIL
 
 
 class TestAuthPos:
 
     async def test_get_code_confirm(self, ac: AsyncClient):
-        user_data = {"email": USER_EMAIL}
+        user_data = {"email": TEST_USER_EMAIL}
         response = await ac.post("/auth/get-code", json=user_data)
         assert response.status_code == status.HTTP_200_OK
 
     async def test_register(self, ac: AsyncClient):
-        code = await get_redis(key=USER_EMAIL)
+        code = await get_redis(key=TEST_USER_EMAIL)
         user_data = {
-            "email": USER_EMAIL,
+            "email": TEST_USER_EMAIL,
             "user_name": "string123",
             "password": "string123",
             "code_confirm": code["code"]
@@ -26,20 +25,20 @@ class TestAuthPos:
         assert response.status_code == status.HTTP_201_CREATED
 
     async def test_login(self, ac: AsyncClient):
-        user_data = {"email": USER_EMAIL, "password": "string123"}
+        user_data = {"email": TEST_USER_EMAIL, "password": "string123"}
         response = await ac.post("/auth/login", json=user_data)
 
         token = response.json()
         await set_redis(
-            name="token_test",
+            name="auth_token_test",
             value={"access_token": token["access_token"]}
         )
         assert response.status_code == status.HTTP_200_OK
 
     async def test_reset_password(self, ac: AsyncClient):
-        code = await get_redis(key=USER_EMAIL)
+        code = await get_redis(key=TEST_USER_EMAIL)
         user_data = {
-            "email": USER_EMAIL,
+            "email": TEST_USER_EMAIL,
             "password": "new_password",
             "code_confirm": code["code"]
         }
@@ -47,7 +46,7 @@ class TestAuthPos:
         assert response.status_code == status.HTTP_200_OK
 
     async def test_logout(self, ac: AsyncClient):
-        token = await get_redis("token_test")
+        token = await get_redis("auth_token_test")
         response = await ac.patch("/auth/logout", cookies={"access_token": token["access_token"]})
         assert response.status_code == status.HTTP_200_OK
 
