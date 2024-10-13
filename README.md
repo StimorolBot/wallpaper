@@ -45,11 +45,8 @@ celery -A bg_task.setting:celery worker --loglevel=INFO --pool=solo
 ```bash
 celery -A bg_task.config:celery flower --loglevel=info
 ```
-### *Тесты:*
-```bash
-pytest -vv -s tests/test_auth.py::TestAuthPos 
-```
+
 # Ссылки:
-* [App](http://localhost:5173)
+* [App (localhost)](http://localhost:5173)
 * [Swagger](http://localhost:8000/docs)
 * [Flower](http://localhost:5555/)
