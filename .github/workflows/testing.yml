@@ -21,12 +21,10 @@ jobs:
           poetry config virtualenvs.in-project true
           poetry install
 
-      - name: venv activate
-        run: |
-          ls -la
-          source ./.venv/bin/activate
-
       - name: run auth_pos test
         run: |
+          ls -la
+          cd back
+          source ./.venv/bin/activate
           pip list
           pytest -vv -s tests/test_auth.py::TestAuthPos
