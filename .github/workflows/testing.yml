@@ -29,6 +29,9 @@ jobs:
           poetry config virtualenvs.in-project true
           poetry install
 
+      - name: create log dir
+        run: mkdir .log
+
       - name: run auth_pos test
         run: |
           cd back
