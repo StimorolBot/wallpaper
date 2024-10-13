@@ -7,6 +7,7 @@ from typing import AsyncGenerator
 from sqlalchemy.pool import NullPool
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from fastapi_pagination import add_pagination
 
 from tests.config import config_test
 
@@ -17,6 +18,7 @@ from src.db.get_session import get_async_session
 engine_test = create_async_engine(config_test.get_db_url, poolclass=NullPool)
 async_session_maker = sessionmaker(engine_test, class_=AsyncSession, expire_on_commit=False)
 Base.metadata.bind = engine_test
+TEST_USER_EMAIL = "user@example.com"
 
 
 async def get_test_async_session() -> AsyncGenerator[AsyncSession, None]:
@@ -25,6 +27,7 @@ async def get_test_async_session() -> AsyncGenerator[AsyncSession, None]:
 
 
 app.dependency_overrides[get_async_session] = get_test_async_session
+add_pagination(app)
 
 
 @pytest.fixture(autouse=True, scope="session")
