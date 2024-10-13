@@ -1,7 +1,7 @@
 from typing import Annotated
 from fastapi_cache.decorator import cache
 from fastapi_pagination import Page, paginate
-from fastapi import APIRouter, status, Depends, HTTPException, Cookie, Request, Response
+from fastapi import APIRouter, status, Depends, HTTPException, Cookie, Response
 
 from sqlalchemy import select, func, and_, case, desc
 from sqlalchemy.sql.functions import concat
@@ -90,9 +90,9 @@ async def get_all_img(
 
     data = [
         create_dict(
-            list_value=i,
+            list_value=item,
             list_key=list_key
-        ) for i in img_list
+        ) for item in img_list
     ]
 
     return paginate(data)
@@ -129,7 +129,7 @@ async def get_popular_img(
 
 @img_router.get("/wallpaper/{uuid_img}")
 @cache(expire=30)
-async def get_img(uuid_img: str, session: AsyncSession = Depends(get_async_session)):
+async def get_img_by_uuid(uuid_img: str, session: AsyncSession = Depends(get_async_session)):
     user_subquery = (
         select(AuthTable.user_name)
         .where(AuthTable.uuid_user == ImgTable.uuid_user)
