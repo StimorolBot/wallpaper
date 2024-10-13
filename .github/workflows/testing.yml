@@ -1,6 +1,14 @@
 name: test backend app
 on: push
 
+env:
+  MODE: ${{ secrets.MODE }}
+  DB_USER_TEST: ${{ secrets.DB_USER_TEST }}
+  DB_PASS_TEST: ${{ secrets.DB_PASS_TEST }}
+  DB_HOST_TEST: ${{ secrets.DB_HOST_TEST }}
+  DB_PORT_TEST: ${{ secrets.DB_PORT_TEST }}
+  DB_NAME_TEST: ${{ secrets.DB_NAME_TEST }}
+
 jobs:
   test:
     runs-on: ubuntu-24.04
@@ -23,8 +31,6 @@ jobs:
 
       - name: run auth_pos test
         run: |
-          ls -la
           cd back
           source ./.venv/bin/activate
-          pip list
           pytest -vv -s tests/test_auth.py::TestAuthPos
