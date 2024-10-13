@@ -3,10 +3,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends, status, HTTPException
 
 from core.crud import crud
-from core.mode import ModeRead
 from core.logger import auth_logger, smtp_logger
-from core.help import generate_code, set_redis, get_redis
 from src.db.get_session import get_async_session
+from core.help import generate_code, set_redis, get_redis, get_info_from_headers
 
 from src.app.auth.model import AuthTable
 from src.app.img.get_user import get_user_by_token
@@ -25,9 +24,16 @@ register_router = APIRouter(prefix="/auth", tags=["auth"])
 
 
 @register_router.post("/get-code", status_code=status.HTTP_200_OK)
-async def get_code_confirm(data: Email):
+async def get_code_confirm(data: Email, info_headers: list = Depends(get_info_from_headers)):
+    user_agent, origin, client_host = info_headers
     code = generate_code()
-    task = send_email.apply_async(args=(data.email, code), ignore_result=False)
+
+    task = send_email.apply_async(args=(
+        data.email,
+        code, user_agent,
+        origin, client_host
+    ),
+        ignore_result=False)
     celery.AsyncResult(task.id)
     await set_redis(name=data.email, value={"code": code}, ex=40)
     smtp_logger.info("Запрос на подтверждение учетной записи: %s", data.email)
@@ -35,10 +41,8 @@ async def get_code_confirm(data: Email):
 
 @register_router.post("/register", status_code=status.HTTP_201_CREATED, response_model=RegisterDTO)
 async def register(register_user: Register, session: AsyncSession = Depends(get_async_session)):
-    user = await crud.read(
-        table=AuthTable, session=session,
-        mode=ModeRead.ONE.value, field=AuthTable.email, value=register_user.email
-    )
+    user = await crud.read(table=AuthTable, session=session, email=register_user.email)
+
     if user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
