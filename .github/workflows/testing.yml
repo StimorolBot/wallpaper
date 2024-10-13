@@ -20,4 +20,5 @@ jobs:
           cd back
           poetry install
 
-      
+      - name: run auth_pos test
+        run: pytest -vv -s tests/test_auth.py::TestAuthPos
