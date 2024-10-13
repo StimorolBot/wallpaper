@@ -13,8 +13,8 @@ from bg_task.template import email_confirm, reset_password
 
 @celery.task(name="code-confirm", max_retries=3, default_retry_delay=3, limit=3)
 def send_email(
-        user_email: "ValidEmail", email_type: TypeEmail,
-        code: str, user_agent: str, origin: str, client_host: str
+        user_email: "ValidEmail", code: str, user_agent: str,
+        origin: str, client_host: str, email_type: TypeEmail = TypeEmail.CONFIRM.value
 ):
     email = EmailMessage()
     email["From"] = smtp_setting.ADMIN_EMAIL
