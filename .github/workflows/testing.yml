@@ -13,7 +13,7 @@ jobs:
           python-version: 3.12
 
       - name: install poetry
-        run: snok/install-poetry@v1
+        uses: snok/install-poetry@v1
 
       - name: install dependency
         run: |
