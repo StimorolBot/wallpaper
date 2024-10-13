@@ -18,6 +18,7 @@ jobs:
       - name: install dependency
         run: |
           cd back
+          poetry config virtualenvs.in-project true
           poetry install
 
       - name: run auth_pos test
