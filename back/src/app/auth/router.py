@@ -15,7 +15,7 @@ from src.app.auth.token.token_type import TokenType
 from src.app.auth.token.schemas import TokenSchemas
 from src.app.auth.password_auth import password_auth
 from src.app.auth.token.config import auth_jwt_setting
-from src.app.auth.schemas import Register, RegisterDTO, Login, Email, ResetPassword
+from src.app.auth.schemas import Register, RegisterDTO, Login, CodeConfirm, ResetPassword
 
 from bg_task.config import celery
 from bg_task.tasks import send_email
@@ -24,12 +24,13 @@ register_router = APIRouter(prefix="/auth", tags=["auth"])
 
 
 @register_router.post("/get-code", status_code=status.HTTP_200_OK)
-async def get_code_confirm(data: Email, info_headers: list = Depends(get_info_from_headers)):
+async def get_code_confirm(data: CodeConfirm, info_headers: list = Depends(get_info_from_headers)):
     user_agent, origin, client_host = info_headers
     code = generate_code()
 
     task = send_email.apply_async(args=(
         data.email,
+        data.email_type,
         code, user_agent,
         origin, client_host
     ),
