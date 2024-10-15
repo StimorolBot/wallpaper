@@ -3,11 +3,11 @@ import asyncio
 
 from httpx import AsyncClient
 from typing import AsyncGenerator
+from fastapi_pagination import add_pagination
 
 from sqlalchemy.pool import NullPool
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from fastapi_pagination import add_pagination
 
 from tests.config import config_test
 
@@ -30,7 +30,7 @@ app.dependency_overrides[get_async_session] = get_test_async_session
 add_pagination(app)
 
 
-@pytest.fixture(autouse=True, scope="session")
+@pytest.fixture(autouse=True, scope="module")
 async def prepare_database():
     assert config_test.MODE == "TEST"
     async with engine_test.begin() as conn:
@@ -40,14 +40,14 @@ async def prepare_database():
         await conn.run_sync(Base.metadata.drop_all)
 
 
-@pytest.fixture(autouse=True, scope="session")
+@pytest.fixture(autouse=True, scope="module")
 def event_loop(request):
     loop = asyncio.get_event_loop_policy().new_event_loop()
     yield loop
     loop.close()
 
 
-@pytest.fixture(autouse=True, scope="session")
+@pytest.fixture(autouse=True, scope="module")
 async def ac() -> AsyncGenerator[AsyncClient, None]:
     async with AsyncClient(app=app, base_url="http://test") as ac:
         yield ac
