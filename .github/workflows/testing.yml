@@ -67,10 +67,12 @@ jobs:
       - name: create log dir
         run: mkdir .log
 
-      - name: create private key
+      - name: create token
         run: |
           cd back/src/app/auth/token
-          openssl genrsa -out jwt-private.pem 2048 
+          openssl genrsa -out jwt-private.pem 2048
+          openssl rsa -in jwt-private.pem -outform PEM -pubout -out jwt-public.pem 
+          
 
       - name: run auth_pos test
         run: |
