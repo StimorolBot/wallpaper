@@ -64,8 +64,8 @@ def get_info_from_headers(request: Request) -> list:
     try:
         user_agent = request.headers["user-agent"]
         origin = request.headers["origin"]
-        client_host = request.client.host
-        return [user_agent, origin, client_host]
+        client_ip = request.headers["x-forwarded-for"]
+        return [user_agent, origin, client_ip]
     except KeyError:
         auth_logger.error("Не удалось получить данные из headers")
         raise HTTPException(
