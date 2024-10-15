@@ -18,6 +18,9 @@ env:
   API_KEY: ${{ secrets.API_KEY }}
   SECRET_KEY: ${{ secrets.SECRET_KEY }}
 
+  PASSWORD: ${{ secrets.PASSWORD }}
+  ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+
 
 jobs:
   test:
