@@ -30,7 +30,7 @@ async def get_code_confirm(data: CodeConfirm, info_headers: list = Depends(get_i
 
     task = send_email.apply_async(args=(
         data.email,
-        data.email_type,
+        data.email_type.value,
         code, user_agent,
         origin, client_host
     ),
