@@ -8,3 +8,4 @@ static
 .log
 poetry.lock
 jwt-private.pem
+jwt-public.pem
