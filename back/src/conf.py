@@ -1,3 +1,6 @@
 from redis import asyncio as aioredis
 
-redis = aioredis.Redis(host='localhost', port=6379, decode_responses=True, encoding="utf-8")
+redis = aioredis.from_url(
+    "redis://localhost:6379", encoding="utf-8",
+    decode_responses=True
+)

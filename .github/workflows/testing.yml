@@ -29,8 +29,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: install regis
-        uses: shogo82148/actions-setup-redis@v1
+#      - name: install regis
+ #       uses: shogo82148/actions-setup-redis@v1
 
       - run: redis-cli -h 127.0.0.1 -p 6379 ping
 
