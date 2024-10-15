@@ -2,6 +2,7 @@ import pytest
 from fastapi import status
 from httpx import AsyncClient
 
+from bg_task.type_email import TypeEmail
 from core.help import set_redis, get_redis
 from tests.conftest import ac, TEST_USER_EMAIL
 
@@ -9,8 +10,13 @@ from tests.conftest import ac, TEST_USER_EMAIL
 class TestAuthPos:
 
     async def test_get_code_confirm(self, ac: AsyncClient):
-        user_data = {"email": TEST_USER_EMAIL}
-        response = await ac.post("/auth/get-code", json=user_data)
+        headers = {
+            "user-agent": "test-user-agent",
+            "origin": "localhost",
+            "x-forwarded-for": "1.1.1.1"
+        }
+        user_data = {"email": TEST_USER_EMAIL, "email_type": TypeEmail.CONFIRM.value}
+        response = await ac.post("/auth/get-code", json=user_data, headers=headers)
         assert response.status_code == status.HTTP_200_OK
 
     async def test_register(self, ac: AsyncClient):
@@ -84,5 +90,5 @@ class TestAuthNeg:
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
     async def test_logout(self, ac: AsyncClient):
-        response = await ac.post("/auth/logout", cookies={"access_token": ""})
+        response = await ac.patch("/auth/logout", cookies={"access_token": ""})
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
