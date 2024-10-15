@@ -26,17 +26,13 @@ jobs:
   test:
     runs-on: ubuntu-24.04
 
-    services:
-      redis:
-        image: redis
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
     steps:
       - uses: actions/checkout@v4
+
+      - name: install regis
+        uses: shogo82148/actions-setup-redis@v1
+
+      - run: redis-cli -h 127.0.0.1 -p 6379 ping
 
       - name: install python
         uses: actions/setup-python@v5
