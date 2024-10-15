@@ -1,8 +1,9 @@
 from typing_extensions import Annotated
 from fastapi import status, HTTPException
+from pydantic import BaseModel, ConfigDict, WrapValidator
+
 from bg_task.type_email import TypeEmail
 from core.help import valid_forbidden_symbols, valid_len
-from pydantic import BaseModel, ConfigDict, WrapValidator
 
 
 def valid_name(name: str, handler) -> str:
@@ -20,12 +21,9 @@ def valid_password(password: str, handler) -> str:
 
 
 def valid_email(email: str, handler) -> str:
-    error = HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Некорректный формат почты")
 
-    if len(email.split("@")) != 2:
-        raise error
-    elif len(email.split(".")) != 2:
-        raise error
+    if len(email.split("@")) != 2 or len(email.split(".")) != 2:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Некорректный формат почты")
 
     valid_len(email, 10, 40)
     valid_forbidden_symbols(email, email=True)
