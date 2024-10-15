@@ -24,13 +24,11 @@ env:
   REDIS_HOST: redis
   REDIS_PORT: 6379
 
-  POSTGRES_PASSWORD: postgres
 
 jobs:
   test:
     runs-on: ubuntu-24.04
     services:
-
       redis:
         image: redis
         options: >-
@@ -39,14 +37,8 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
-      postgres:
-        image: postgres
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
     steps:
+      - uses: ikalnytskyi/action-setup-postgres@v6
       - uses: actions/checkout@v4
 
       - name: install python
