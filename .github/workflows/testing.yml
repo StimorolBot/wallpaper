@@ -40,10 +40,10 @@ jobs:
     steps:
       - uses: ikalnytskyi/action-setup-postgres@v6
         with:
-          username: postgres
-          password: postgres
-          database: test
-          port: 5432
+          username: ${{ secrets.DB_USER_TEST }}
+          password: ${{ secrets.DB_PASS_TEST }}
+          database: ${{ secrets.DB_NAME_TEST }}
+          port: ${{ secrets.DB_PORT }}
           postgres-version: "14"
           ssl: "on"
       - uses: actions/checkout@v4
