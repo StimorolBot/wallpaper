@@ -1,7 +1,8 @@
 from typing_extensions import Annotated
 from fastapi import status, HTTPException
-from src.app.img.enums.style_img import StyleImg
 from pydantic import BaseModel, WrapValidator
+
+from src.app.img.enums.style_img import StyleImg
 
 
 def valid_size_img(size: int, handler) -> int:
@@ -32,5 +33,8 @@ class ImageSchemas(BaseModel):
     height: ValidSizeImg = 1024
 
 
-
+class ImageSchemasDTO(BaseModel):
+    uuid_img: str
+    uuid_user: str
+    img_base64: str
 
