@@ -3,7 +3,6 @@ import { Link } from "react-router-dom"
 
 import "./header.sass"
 
-
 export function Header() {
     const token = cookies.get("access_token")
 
@@ -32,7 +31,7 @@ export function Header() {
                 <div className="header__auth-container">
                     <Link className="header__auth-link" to="/auth/login">
                         <img className={token === undefined ? "header__auth-img" : "header__auth-img header__auth-img_big" }
-                            src={token === undefined ? "/static/auth.svg" : "/static/user.svg" } alt="auth" />
+                            src={token === undefined ? "/static/login.svg" : "/static/user.svg" } alt="auth" />
                     </Link>
                 </div>
             </div>
