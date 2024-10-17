@@ -2,9 +2,11 @@ import pytest
 from fastapi import status
 from httpx import AsyncClient
 
+from tests.conftest import ac
 from bg_task.type_email import TypeEmail
 from core.help import set_redis, get_redis
-from tests.conftest import ac, TEST_USER_EMAIL
+
+TEST_USER_EMAIL = "user@example.com"
 
 
 class TestAuthPos:
