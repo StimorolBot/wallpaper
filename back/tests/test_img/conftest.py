@@ -32,5 +32,6 @@ async def login(ac: AsyncClient):
     token = response.json()
     await set_redis(
         name="img_token_test",
-        value={"access_token": token["access_token"]}
+        value={"access_token": token["access_token"]},
+        ex=120
     )
