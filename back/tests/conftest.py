@@ -18,7 +18,6 @@ from src.db.get_session import get_async_session
 engine_test = create_async_engine(config_test.get_db_url, poolclass=NullPool)
 async_session_maker = sessionmaker(engine_test, class_=AsyncSession, expire_on_commit=False)
 Base.metadata.bind = engine_test
-TEST_USER_EMAIL = "user@example.com"
 
 
 async def get_test_async_session() -> AsyncGenerator[AsyncSession, None]:
@@ -40,7 +39,7 @@ async def prepare_database():
         await conn.run_sync(Base.metadata.drop_all)
 
 
-@pytest.fixture(autouse=True, scope="module")
+@pytest.fixture(autouse=True, scope="session")
 def event_loop(request):
     loop = asyncio.get_event_loop_policy().new_event_loop()
     yield loop
