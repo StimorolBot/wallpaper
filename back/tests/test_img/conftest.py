@@ -7,11 +7,13 @@ from core.help import set_redis
 from src.app.auth.model import AuthTable
 from src.app.auth.password_auth import password_auth
 
+from tests.conftest import ac
 from tests.conftest import async_session_maker
-from tests.conftest import ac, TEST_USER_EMAIL
+
+TEST_USER_EMAIL = "user1@example.com"
 
 
-@pytest.fixture(autouse=True, scope="session")
+@pytest.fixture(autouse=True, scope="module")
 async def add_record_in_database():
     data = {
         "email": TEST_USER_EMAIL,
@@ -22,7 +24,7 @@ async def add_record_in_database():
         await crud.create(session=session, table=AuthTable, data=data)
 
 
-@pytest.fixture(autouse=True, scope="class")
+@pytest.fixture(autouse=True, scope="module")
 async def login(ac: AsyncClient):
     user_data = {"email": TEST_USER_EMAIL, "password": "password123"}
     response = await ac.post("/auth/login", json=user_data)
