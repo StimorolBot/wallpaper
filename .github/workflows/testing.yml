@@ -1,4 +1,4 @@
-name: test backend app
+name: testing app
 on: push
 
 env:
@@ -78,4 +78,5 @@ jobs:
         run: |
           cd back
           source ./.venv/bin/activate
-          pytest -vv -s tests/test_auth.py::TestAuthPos
+          pytest tests/test_auth.py
+          pytest tests/test_img/test_img.py
