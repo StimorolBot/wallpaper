@@ -5,6 +5,7 @@ from httpx import AsyncClient
 from tests.conftest import ac
 from core.help import get_redis
 from src.app.img.enums.style_img import StyleImg
+from src.app.img.enums.filter_time import FilterTime
 
 
 class TestImgPos:
@@ -18,8 +19,16 @@ class TestImgPos:
         response = await ac.get("/")
         assert response.status_code == status.HTTP_200_OK
 
-    async def test_get_popular_img(self, ac: AsyncClient):
-        ...
+    @pytest.mark.parametrize(
+        "filter_time",
+        (FilterTime.HOUR.value, FilterTime.DAY.value,
+         FilterTime.WEEK.value, FilterTime.MONTH.value,
+         FilterTime.YEAR.value, FilterTime.ALL.value
+         )
+    )
+    async def test_get_popular_img(self, ac: AsyncClient, filter_time: str):
+        response = await ac.get("/popular", params={"filter_time": filter_time})
+        assert response.status_code == status.HTTP_200_OK
 
     async def test_create_img(self, ac: AsyncClient):
         token = await get_redis("img_token_test")
@@ -86,3 +95,11 @@ class TestImgNeg:
 
         response = await ac.post("/create", json=data, cookies={"access_token": token["access_token"]})
         assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+    @pytest.mark.parametrize("filter_time", (" ", "ANY"))
+    async def test_get__bad_popular_img(self, ac: AsyncClient, filter_time: str):
+        response = await ac.get("/popular", params={"filter_time": filter_time})
+        assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+
+
+
