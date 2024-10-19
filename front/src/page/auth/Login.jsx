@@ -1,8 +1,8 @@
-import { api } from "../../api"
-import cookies from "../../cookie"
-
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
+
+import cookies from "../../cookie"
+import { api } from "../../api/config"
 import { BtnSend } from "../../components/ui/btn/BtnSend"
 import { AuthInput } from "../../components/ui/input/AuthInput"
 
@@ -54,7 +54,7 @@ export function Login(){
                     <AuthInput
                         id="password"
                         lblTitle="Пароль"
-                        password={true}
+                        inputType={"password"}
                         onChange={(event) => setAuthData({...authData, "password": event.target.value})}
                         />
                 </div>
@@ -79,4 +79,3 @@ export function Login(){
         </section>         
     )
 }
-
