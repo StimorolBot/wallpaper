@@ -9,3 +9,5 @@ static
 poetry.lock
 jwt-private.pem
 jwt-public.pem
+.pytest_cache
+.vscode
