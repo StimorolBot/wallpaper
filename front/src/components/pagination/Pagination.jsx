@@ -1,63 +1,39 @@
-import { api, refreshToken } from "../../api"
+import { useRef } from "react"
+
+import { api } from "../../api/config"
 import { Loader } from "../loader/Loader"
 import { useFetch } from "../hook/useFetch"
-import { useEffect, useRef, useState } from "react"
+import { useObserver } from "../hook/useObserver"
 import { CreateImgList } from "../img/CreateImgList"
 
 
 export function Pagination({path, itemList, setItemList, ...props}){
 
-    const page = useRef(1)    
-    const pages = useRef(1)
+    const pageRef = useRef(1)    
+    const pagesRef = useRef(1)
 
-    const observerRef = useRef(null)
     const lastElementRef = useRef(null)
     
     const [request, isLoading, error] = useFetch(
         async () => {
-            await api.get(path, { params: { size: 20, page: page.current, ...props["params"]}})
+            await api.get(path, { params: { size: 20, page: pageRef.current, ...props["params"]}})
                 .then((response) => {
                     setItemList([...itemList, ...response.data["items"]])
-                    page.current += 1
-                    pages.current = response.data["pages"]                    
+                    pageRef.current += 1
+                    pagesRef.current = response.data["pages"]                    
                 }
             )
         }
     )
-
-    if (error){
-        if (error.status === 400)
-            refreshToken() // перенести в api
-    }
     
-    useEffect( () => {(
-         async () => {
-            if (isLoading)
-                return
-
-            if (observerRef.current)
-                observerRef.current.disconnect()
-
-            const callback = async (entries, observer) => {
-                if (entries[0].isIntersecting && page.current <= pages.current){
-                    console.log("Загрузка страницы")
-                    await request()
-                }
-            }
-            
-            observerRef.current = new IntersectionObserver(callback)
-            observerRef.current.observe(lastElementRef.current)
-    
-        })()
-    }, [itemList])
+    useObserver(isLoading, pageRef, pagesRef, request, lastElementRef, itemList)
 
     return(
         <>
         <CreateImgList
             imgList={itemList}
             setImgList={setItemList}
-            isLoading={isLoading}
-            myRef={lastElementRef}
+            lastElementRef={lastElementRef}
         />
         {isLoading && <Loader/> }
         </>                        
