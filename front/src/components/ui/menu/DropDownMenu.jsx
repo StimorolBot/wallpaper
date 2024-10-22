@@ -4,11 +4,16 @@ import { useClickOutside } from "../../hook/useClickOutside"
 import "./style/drop_down_menu.sass"
 
 
-export function DropDownMenu({itemList, setFilterTime, title}){
+export function DropDownMenu({itemList, setFilter, title}){
     const clikRef = useRef(null)
     const [isShow, setIsShow] = useState(false)
 
     useClickOutside(clikRef, setIsShow)
+
+    const setValue = (e) => {
+        setFilter(e.target.getAttribute("value"))
+        setIsShow(false)
+    }
 
     return(
         <div className="dropdown" ref={clikRef}>
@@ -36,10 +41,10 @@ export function DropDownMenu({itemList, setFilterTime, title}){
                         <li
                             className="dropdown__item"
                             key={index}
-                            value={item["en"]}
-                            onClick={(e) => setFilterTime(e.target.getAttribute("value"))}
+                            value={item["back"]}
+                            onClick={(e) => setValue(e)}
                         >
-                            {item["ru"]}
+                            {item["front"]}
                         </li>
                     )
                 })}
