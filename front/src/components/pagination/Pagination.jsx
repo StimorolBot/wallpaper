@@ -6,36 +6,36 @@ import { useFetch } from "../hook/useFetch"
 import { useObserver } from "../hook/useObserver"
 import { CreateImgList } from "../img/CreateImgList"
 
+import "./style.sass"
+
 
 export function Pagination({path, itemList, setItemList, ...props}){
 
-    const pageRef = useRef(1)    
-    const pagesRef = useRef(1)
-
     const lastElementRef = useRef(null)
-    
     const [request, isLoading, error] = useFetch(
-        async () => {
-            await api.get(path, { params: { size: 20, page: pageRef.current, ...props["params"]}})
+        async (currentPage, setCurrentPage, setTotalPage) => {
+            await api.get(path, { params: { size: 2, page: currentPage, ...props["params"]}})
                 .then((response) => {
                     setItemList([...itemList, ...response.data["items"]])
-                    pageRef.current += 1
-                    pagesRef.current = response.data["pages"]                    
+                    setCurrentPage(currentPage+1)
+                    setTotalPage(response.data["pages"])                 
                 }
             )
         }
     )
-    
-    useObserver(isLoading, pageRef, pagesRef, request, lastElementRef, itemList)
+
+    useObserver(isLoading, request, lastElementRef, itemList, props["params"]?.filter_time)
 
     return(
         <>
-        <CreateImgList
-            imgList={itemList}
-            setImgList={setItemList}
-            lastElementRef={lastElementRef}
-        />
-        {isLoading && <Loader/> }
+        <div className="img__container">
+            <CreateImgList
+                imgList={itemList}
+                setImgList={setItemList}
+               lastElementRef={lastElementRef}
+            />
+        </div>
+        {isLoading && <Loader/>}
         </>                        
     )
 }
