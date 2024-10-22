@@ -12,7 +12,7 @@ export const useFetch = ( callback ) => {
             setIsLoading(true)
             await callback(...args)
         } catch (e) {
-            if (e.response.status === 401){
+            if (e.response?.status === 401){
                 await refreshToken()
                 await callback(...args)
             }
