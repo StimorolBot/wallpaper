@@ -6,16 +6,18 @@
     height: 25px
     width: 100%
     padding: 0 8px
-    font-size: 18px
+    font-size: 16px
     background-color: transparent
     transition: 0.3s
 
 .auth-input,
-.password-show
+.password-show,
+.code-input-img
     opacity: 0
 
 .auth-input_active,
-.password-show_active
+.password-show_active,
+.code-input-img_active
     opacity: 1
 
 .auth-lbl
@@ -26,7 +28,8 @@
 
 .auth-lbl_active
     transition: 0.3s
-    transform: translateY(-25px)
+    font-size: 12px
+    transform: translateY(-20px)
 
 .auth-border
     position: absolute
@@ -37,6 +40,7 @@
     background-color: #000
 
 .password-show,
+.code-input-img,
 .password-show_active
     position: absolute
     right: 0
