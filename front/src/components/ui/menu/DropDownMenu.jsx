@@ -4,7 +4,7 @@ import { useClickOutside } from "../../hook/useClickOutside"
 import "./style/drop_down_menu.sass"
 
 
-export function DropDownMenu({itemList, valueList, callback, title}){
+export function DropDownMenu({itemList, setFilterTime, title}){
     const clikRef = useRef(null)
     const [isShow, setIsShow] = useState(false)
 
@@ -18,21 +18,28 @@ export function DropDownMenu({itemList, valueList, callback, title}){
                 </p>
                 <img
                     className="dropdown-arrow"
-                    src={isShow ? "/static/arrow-up.svg" : "/static/arrow-down.svg"} // анимаи
+                    src={isShow ? "/static/arrow-up.svg" : "/static/arrow-down.svg"}
                     alt="arrow-down"
                     onClick={() => setIsShow((state) => !state)}
                 />
             </div>
             
-            <ul className={isShow ? "dropdown__container dropdown__container_active" : "dropdown__container"} ref={clikRef}>
+            <ul className={
+                isShow ? 
+                    "dropdown__container dropdown__container_active"
+                    : "dropdown__container"
+                } 
+                ref={clikRef}
+            >
                 {itemList?.map((item, index) => {
                     return(
                         <li
                             className="dropdown__item"
-                            key={index} 
-                            onClick={async (e) => await callback(e, valueList[index])}
+                            key={index}
+                            value={item["en"]}
+                            onClick={(e) => setFilterTime(e.target.getAttribute("value"))}
                         >
-                            {item}
+                            {item["ru"]}
                         </li>
                     )
                 })}
