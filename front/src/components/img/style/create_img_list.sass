@@ -1,8 +1,3 @@
-.img__container
-    column-count: 4
-    column-gap: 20px
-    padding: 10px 0
-
 .img__wrapper
     position: relative
     overflow: hidden
@@ -20,9 +15,13 @@
         scale: 1.1
         filter: brightness(65%)
 
-.img__item
+.img__item,
+.img__item_solo
     cursor: pointer
-    transition: 0.3s  
+    transition: 0.3s
+
+.img__item_solo
+    max-height: 520px
 
 .reaction-img__hov
     position: absolute
@@ -43,9 +42,6 @@
     &:hover
         filter: var(--reaction)
 
-
 .like_active,
 .dislike_active
     filter: var(--reaction)
-
-
