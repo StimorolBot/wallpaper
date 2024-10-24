@@ -1,13 +1,13 @@
+import React from "react"
 import "./style/about_img_card.sass"
 
 
 export function AboutImgCard({ imgInfo }){
-
     return(
         <div className="about-img__card">
-            { imgInfo.map((item, index) => {
-                return(
-                    <>
+            { imgInfo?.map((item, index) => {
+                 return(
+                    <React.Fragment key={index}>
                     <div className="about__card-container">
                         <dt className="about__card-dt">Автор:</dt>
                         <dd className="about__card-dd">{item.user_name}</dd>
@@ -23,7 +23,7 @@ export function AboutImgCard({ imgInfo }){
                     <div className="about__card-container">
                         <dt className="about__card-dt">Дата создания:</dt>
                         <dd className="about__card-dd">
-                            <time dateTime={imgInfo["create_date"]}>
+                            <time dateTime={item.create_date}>
                                 {item.create_date.split("T")[0]}
                             </time>
                         </dd>
@@ -49,7 +49,7 @@ export function AboutImgCard({ imgInfo }){
                             {item.prompt}
                         </dd>
                     </div>
-                    </>
+                </React.Fragment> 
                 )
             })}
         </div>
