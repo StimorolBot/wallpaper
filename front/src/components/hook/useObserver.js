@@ -9,6 +9,9 @@ export const useObserver = async (isLoading, request, lastElementRef, itemList, 
     const [totalPage, setTotalPage] = useState(1)
 
     useEffect(() => {
+        setTotalPage((state) => state = 1)
+        setCurrentPage((state) => state = 1)
+
         if (isLoading)
             return
     
