@@ -36,7 +36,7 @@ class JWTToken(JWTTokenABC):
         try:
             return jwt.decode(token, public_key, algorithms=algorithms)
         except ExpiredSignatureError:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Время жизни токена истекло")
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Время жизни токена истекло")
 
     def create(self, token_type: TokenType, token_data: dict, expire_timedelta: timedelta | None = None):
         jwt_payload = {"type": token_type}
@@ -54,9 +54,6 @@ class JWTToken(JWTTokenABC):
 
         except InvalidSignatureError:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Невалидный токен")
-
-        except ExpiredSignatureError:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Время жизни токена истекло")
 
     def refresh(self, refresh_token: str) -> str:
         payload = self.valid_type(token=refresh_token, token_type=TokenType.REFRESH.value)
