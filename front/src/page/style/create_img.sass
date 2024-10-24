@@ -1,14 +1,21 @@
-@keyframes rotate
-    from
-        transform: rotate(-360deg)
-
 @keyframes show
     0%
-        transform: translateX(-25%)        
+        transform: translateX(0%)        
     
     100%
-        transform: translateX(0%)
-   
+        transform: translateX(145px)
+
+@keyframes showLoader
+    0%
+        opacity: 0
+        position: absolute
+        visibility: hidden        
+    
+    100%
+        opacity: 1
+        visibility: visible
+        transform: translateX(-225px)
+
 .img-create-section
     flex: 1
     display: flex
@@ -17,35 +24,28 @@
 
 .img-create__container
     display: flex
-    overflow: hidden
     gap: 10px
+    align-items: center
 
-.img-wait__container
+.img-generate__container
     max-width: 370px
     margin-right: 10px
     opacity: 0
     position: absolute
     visibility: hidden
-
-.img-wait__container_active
+    
+.img-generate__container_active
+    animation: showLoader 0.5s linear
     opacity: 1
-    position: relative
     visibility: visible
-    transition: 1s
-
+    transform: translateX(-225px)
+   
 .form__create-img_active
     animation: show 0.4s linear
-    transform: translateX(0)
+    transform: translateX(145px)
 
 .img-generated
     border-radius: 10px
-    
-.gear-load
-    animation: rotate 40s linear infinite
-    opacity: 0.9
-
-.img-wait
-    text-align: center
 
 .img-container
     border-radius: 10px
@@ -73,12 +73,12 @@
     gap: 16px 15px
     padding-bottom: 11px
 
-.range-size
-    text-align: center
-
 .size__container
     display: flex
     justify-content: space-between
+    align-items: center
+    gap: 20px
+    flex-wrap: wrap
 
 .form__create-btn-container
     position: relative
