@@ -14,10 +14,15 @@ export function Pagination({path, itemList, setItemList, ...props}){
     const lastElementRef = useRef(null)
     const [request, isLoading, error] = useFetch(
         async (currentPage, setCurrentPage, setTotalPage) => {
-            await api.get(path, { params: { size: 2, page: currentPage, ...props["params"]}})
-                .then((response) => {
-                    setItemList([...itemList, ...response.data["items"]])
-                    setCurrentPage(currentPage+1)
+            await api.get(path, { params: { size: 15, page: currentPage, ...props["params"]}})
+                .then((response) => {                    
+                    if (currentPage === 1){
+                        setItemList((s) => s =[...response.data["items"]])
+                    }
+                    else{
+                        setItemList([...itemList, ...response.data["items"]])
+                    }    
+                    setCurrentPage(currentPage + 1)
                     setTotalPage(response.data["pages"])                 
                 }
             )
@@ -32,7 +37,7 @@ export function Pagination({path, itemList, setItemList, ...props}){
             <CreateImgList
                 imgList={itemList}
                 setImgList={setItemList}
-               lastElementRef={lastElementRef}
+                lastElementRef={lastElementRef}
             />
         </div>
         {isLoading && <Loader/>}
