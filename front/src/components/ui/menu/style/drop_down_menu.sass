@@ -3,21 +3,17 @@
     display: inline-block
     
 .dropdown-btn__container
-    background-color: #04AA6D
+    background-color: var(--main-color)
     border-radius: 8px
     max-width: 220px
-    padding: 9px 6px
+    padding: 5px 6px
     display: flex
     justify-content: space-between
     align-items: center
     overflow: hidden
-
-.dropdown-btn
-    color: white
-    cursor: default
+    cursor: pointer
 
 .dropdown-arrow
-    cursor: pointer
     height: 30px
     width: 30px
 
@@ -27,7 +23,7 @@
     opacity: 0
     visibility: hidden
     position: absolute
-    background-color: #f1f1f1
+    background-color: var(--navigate-color)
     width: 160px
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2)
     z-index: 1
@@ -39,9 +35,10 @@
     color: black
     padding: 9px 6px
     cursor: pointer
-
-.dropdown__item:hover
-    background-color: #ddd
+    transition: 0.2s
+    
+    &:hover
+        background-color: color-mix(in srgb, black, var(--navigate-color))
 
 .dropdown__container_active 
     display: block

@@ -1,5 +1,5 @@
 .header
-    background-color: #1E1E1E
+    background-color: var(--background-color)
 
 .wrapper-header
     display: flex
@@ -13,8 +13,8 @@
 .header__logo,
 .header__auth-img
     &:hover
-       filter: var(--hover-grey)
-       transition: 0.3s 
+       filter: var(--filter-grey)
+       transition: var(--main-transition) 
 
 .header__auth-container
     width: 30px
@@ -31,13 +31,12 @@
     padding: 0 10px
     
 .header__item-link
-    color: #fff
+    color: var(--navigate-color)
     font-size: 18px
     font-weight: 500
 
-    &:before,
-    &:after
-        background-color: #adadad
-        
+    &:hover
+        color: var(--gray)
+
 .header__auth-img_big
     scale: 1.4

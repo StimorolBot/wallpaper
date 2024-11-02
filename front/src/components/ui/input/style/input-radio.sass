@@ -6,18 +6,18 @@
     display: flex
     align-items: center
     cursor: pointer
-    background-color: #44944A
+    background-color: var(--main-color)
     height: 30px
     border-radius: 12px
     padding: 0 10px
-    transition: 0.3s
-    box-shadow: 0 6px #1E5945
+    transition: var(--main-transition)
+    box-shadow: 0 6px var(--main-shadow)
     border: 1px solid #000
 
     &:hover    
-        background-color: #47A76A
+        background-color: color-mix(in srgb, #B5B8B1, var(--main-color))
 
 .radio-input:checked ~ .radio-lbl
-        box-shadow: 0 4px #1E5945
-        background-color: #47A76A
+        box-shadow: 0 4px var(--main-shadow)
+        background-color: var(--main-color)
         transform: translateY(4px)

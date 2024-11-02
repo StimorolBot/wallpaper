@@ -9,7 +9,7 @@
         opacity: 1
         visibility: visible
         z-index: 2  
-        transition: 0.3s
+        transition: var(--main-transition)
 
     &:hover .img__item
         scale: 1.1
@@ -18,7 +18,7 @@
 .img__item,
 .img__item_solo
     cursor: pointer
-    transition: 0.3s
+    transition: var(--main-transition)
 
 .img__item_solo
     max-height: 520px
@@ -27,21 +27,21 @@
     position: absolute
     opacity: 0
     visibility: hidden
-    bottom: 0
+    bottom: 5px
     display: flex
     width: 100%
     justify-content: center
-    gap: 5%
+    gap: 5%    
 
 .like,
 .dislike
     cursor: pointer
     width: 35px
-    transition: 0.2s
+    filter: var(--filter-grey)
 
     &:hover
-        filter: var(--reaction)
+        filter: var(--filter-red)
 
 .like_active,
 .dislike_active
-    filter: var(--reaction)
+    filter: var(--filter-red)

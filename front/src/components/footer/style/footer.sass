@@ -1,5 +1,5 @@
 .footer
-    background-color: #1E1E1E
+    background-color: var(--background-color)
 
 .footer-info-_container
     display: flex
@@ -7,18 +7,14 @@
     align-items: center
 
 .footer-info__img
-    filter: var(--white)
+    filter: var(--navigate-color)
     width: 40px
     padding-right: 10px
 
 .footer-info__link
     align-self: center
-    color: #fff
-    transition: 0.3s
-
-    &:before,
-    &:after
-        background-color: #adadad
+    color: var(--navigate-color)
+    transition: var(--main-transition)
 
     &:hover
-        color: #adadad
+        color: var(--gray)
