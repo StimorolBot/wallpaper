@@ -33,7 +33,7 @@ class Text2ImageAPI:
             "width": width,
             "height": height,
             "generateParams": {
-                "query": f"{prompt}"
+                "query": prompt
             }
         }
 
@@ -75,7 +75,14 @@ class Text2ImageAPI:
         model_id = await self.get_model()
         uuid = await self.generate(prompt=prompt, model=model_id, style=style, width=width, height=height)
         images = await self.check_generation(uuid)
-        return images[0]
+        try:
+            return images[0]
+        except TypeError:
+            img_logger.error("Не удалось сгенерировать изображение.\n images->: %s", images)
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Не удалось сгенерировать изображение, пожалуйста повторите попытку позже"
+            )
 
 
 api = Text2ImageAPI(url=settings.BASE_URL, api_key=settings.API_KEY, secret_key=settings.SECRET_KEY)
