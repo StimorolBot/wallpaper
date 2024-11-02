@@ -1,21 +1,3 @@
-@keyframes show
-    0%
-        transform: translateX(0%)        
-    
-    100%
-        transform: translateX(145px)
-
-@keyframes showLoader
-    0%
-        opacity: 0
-        position: absolute
-        visibility: hidden        
-    
-    100%
-        opacity: 1
-        visibility: visible
-        transform: translateX(-225px)
-
 .img-create-section
     flex: 1
     display: flex
@@ -30,19 +12,12 @@
 .img-generate__container
     max-width: 370px
     margin-right: 10px
-    opacity: 0
-    position: absolute
-    visibility: hidden
-    
-.img-generate__container_active
-    animation: showLoader 0.5s linear
-    opacity: 1
-    visibility: visible
-    transform: translateX(-225px)
    
 .form__create-img_active
-    animation: show 0.4s linear
-    transform: translateX(145px)
+    opacity: 0
+    transition: var(--main-transition)
+    visibility: hidden
+    position: absolute
 
 .img-generated
     border-radius: 10px
@@ -51,6 +26,10 @@
     border-radius: 10px
     overflow: hidden
     align-self: center
+
+.img-container_empty
+    opacity: 0
+    visibility: hidden
 
 .img-create
     max-width: 540px
