@@ -10,7 +10,8 @@
     align-items: center
     justify-content: center
 
-    &:hover  .about__img-item
+.about__img-item    
+    &:hover
         scale: 1.1
         filter: brightness(65%)
         cursor: pointer
@@ -19,8 +20,4 @@
         opacity: 1
         visibility: visible
         z-index: 2  
-        transition: 0.3s
-
-.about__img-item
-    transition: 0.3s
-    object-fit: cover
+        transition: var(--main-transition)
