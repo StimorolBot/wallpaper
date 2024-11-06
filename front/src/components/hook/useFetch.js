@@ -16,6 +16,9 @@ export const useFetch = ( callback ) => {
                 await refreshToken()
                 await callback(...args)
             }
+            else if (e.response?.status === 404) {
+                window.location.pathname = window.location.pathname.split("/")[2]
+            }
             else
                 setError(e)
         } finally {
