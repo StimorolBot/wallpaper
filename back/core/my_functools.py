@@ -12,14 +12,6 @@ def generate_uuid() -> str:
     return uuid4().hex
 
 
-def create_dict(list_key: list, list_value: list) -> dict:
-    return dict(zip(list_key, list_value))
-
-
-def get_item(main_list) -> list:
-    return [item for items in main_list for item in items]
-
-
 def valid_forbidden_symbols(val: str, email: bool = False):
     symbols = {
         "[", "]", "\\", "^", "$", "|", "?", "*", "+", "(", ")",
@@ -64,7 +56,7 @@ def get_info_from_headers(request: Request) -> list:
     try:
         user_agent = request.headers["user-agent"]
         origin = request.headers["origin"]
-        client_ip = request.headers["x-forwarded-for"]
+        client_ip = "заглушка"
         return [user_agent, origin, client_ip]
     except KeyError:
         auth_logger.error("Не удалось получить данные из headers")
