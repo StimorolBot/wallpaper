@@ -76,8 +76,12 @@
 
 ### Установка зависимостей
 ```bash
-cd back
+# ./back
 poetry install
+```
+```bash
+# ./front
+npm install
 ```
 
 Также необходимо создать в корне проекта директорию  ```.log``` для логирования
@@ -93,7 +97,7 @@ poetry install
 
 * Celery:
   ```bash
-  celery -A back.bg_task.setting:celery worker --loglevel=INFO --pool=solo
+  celery -A back.bg_task.config:celery worker --loglevel=INFO --pool=solo
   ```
 
 * [Flower](http://localhost:5555/):
