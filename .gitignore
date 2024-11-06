@@ -1,6 +1,6 @@
 __pycache__
 .idea
-.venv
+venv
 .env
 node_modules
 package-lock.json
