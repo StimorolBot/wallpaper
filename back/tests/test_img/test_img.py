@@ -3,7 +3,7 @@ from fastapi import status
 from httpx import AsyncClient
 
 from tests.conftest import ac
-from core.help import get_redis
+from core.my_functools import get_redis
 from src.app.img.enums.style_img import StyleImg
 from src.app.img.enums.filter_time import FilterTime
 

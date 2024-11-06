@@ -4,7 +4,7 @@ from httpx import AsyncClient
 
 from tests.conftest import ac
 from bg_task.type_email import TypeEmail
-from core.help import set_redis, get_redis
+from core.my_functools import set_redis, get_redis
 
 TEST_USER_EMAIL = "user@example.com"
 
