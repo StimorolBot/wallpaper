@@ -2,23 +2,22 @@ from typing_extensions import Annotated
 from fastapi import status, HTTPException
 from pydantic import BaseModel, WrapValidator
 
+from core.my_functools import valid_len
 from src.app.img.enums.style_img import StyleImg
 
 
 def valid_size_img(size: int, handler) -> int:
-    if int(size) < 250 or int(size) > 1024:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Размер изображения должен быть в пределах от 250 до 1024")
-    return size
+    if size in [1024, 576, 680]:
+        return size
+
+    raise HTTPException(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        detail="Недопустимое значение для размера изображения"
+    )
 
 
 def valid_prompt_img(prompt: str, handler) -> str:
-    if len(prompt) >= 1000:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Промт должен содержать меньше 1000 символов"
-        )
+    valid_len(val=prompt, min_val=1, max_val=1000)
     return prompt
 
 
@@ -33,8 +32,7 @@ class ImageSchemas(BaseModel):
     height: ValidSizeImg = 1024
 
 
-class ImageSchemasDTO(BaseModel):
-    uuid_img: str
-    uuid_user: str
+class AllImageDTO(BaseModel):
     img_base64: str
-
+    uuid_img: str
+    reaction: bool | None = None
