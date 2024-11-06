@@ -3,7 +3,7 @@ from fastapi import status, HTTPException
 from pydantic import BaseModel, ConfigDict, WrapValidator
 
 from bg_task.type_email import TypeEmail
-from core.help import valid_forbidden_symbols, valid_len
+from core.my_functools import valid_forbidden_symbols, valid_len
 
 
 def valid_name(name: str, handler) -> str:
