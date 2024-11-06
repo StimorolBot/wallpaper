@@ -5,7 +5,7 @@ from sqlalchemy import func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from core.model import Base
-from core.help import generate_uuid
+from core.my_functools import generate_uuid
 
 if TYPE_CHECKING:
     from src.app.img.model import ImgTable

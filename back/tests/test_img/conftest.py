@@ -2,7 +2,7 @@ import pytest
 from httpx import AsyncClient
 
 from core.crud import crud
-from core.help import set_redis
+from core.my_functools import set_redis
 
 from src.app.auth.model import AuthTable
 from src.app.auth.password_auth import password_auth
