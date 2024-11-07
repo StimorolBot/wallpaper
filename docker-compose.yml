@@ -1,0 +1,22 @@
+
+services:
+  postgres:
+    image: postgres:14.13
+    restart: always
+    shm_size: 128mb
+    
+    environment:
+      POSTGRES_DB: PostgresSQL14
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - 5433:5432
+
+  pgadmin4:
+    image: dpage/pgadmin4:8.12
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - 5050:80
