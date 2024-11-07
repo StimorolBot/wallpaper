@@ -3,28 +3,26 @@ from fastapi_cache.decorator import cache
 from fastapi_pagination import Page, paginate
 from fastapi import APIRouter, status, Depends, HTTPException, Cookie, Response
 
-from sqlalchemy import select, func, and_, case, desc
+from sqlalchemy import select, func, and_, case, desc, distinct
 from sqlalchemy.sql.functions import concat
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.dialects.postgresql import INTERVAL
 
 from core.crud import crud
 from core.logger import img_logger
-from core.help import create_dict, get_item
-from src.db.get_session import get_async_session
-from src.app.auth.token.jwt_token import jwt_token
 
+from src.db.get_session import get_async_session
 from src.app.img.get_user import get_user_by_token
 
+from src.app.auth.model import AuthTable
 from src.app.img.model import ImgTable
 from src.app.img.generate_img import api
-from src.app.img.schemas import ImageSchemas, ImageSchemasDTO
 from src.app.img.enums.filter_time import FilterTime
 from src.app.img.enums.status_r import StatusReaction
 from src.app.img.reaction.model import ReactionTable
+from src.app.img.sql_request import get_info_about_img
 from src.app.img.reaction.schemas import ReactionSchemas
-
-from src.app.auth.model import AuthTable
+from src.app.img.schemas import ImageSchemas, AllImageDTO
 
 img_router = APIRouter(tags=["img"])
 
@@ -56,44 +54,10 @@ async def get_all_img(
         access_token: Annotated[str, Cookie()] = None,
         session: AsyncSession = Depends(get_async_session)
 ) -> Page:
-    list_key = ["uuid_img", "img_base64"]
-
-    if not access_token:
-        query = (
-            select(
-                ImgTable.uuid_img,
-                ImgTable.img_base64,
-            )
-        )
-
-    elif access_token:
-        list_key.append("reaction")
-        user = jwt_token.decode(token=access_token)
-
-        query = (
-            select(
-                ImgTable.uuid_img,
-                ImgTable.img_base64,
-                ReactionTable.reaction
-            ).join(
-                ReactionTable,
-                and_(
-                    ReactionTable.uuid_user == user["sub"],
-                    ReactionTable.uuid_img == ImgTable.uuid_img
-                ),
-                isouter=True
-            )
-        )
-
+    query = await get_info_about_img(access_token)
     res = await session.execute(query.order_by(desc(ImgTable.create_date)))
-    img_list = res.all()
-
-    data = [
-        create_dict(
-            list_value=item,
-            list_key=list_key
-        ) for item in img_list
-    ]
+    img_list = res.mappings().all()
+    data = [AllImageDTO.model_validate(item, from_attributes=True) for item in img_list]
 
     return paginate(data)
 
@@ -102,76 +66,58 @@ async def get_all_img(
 async def get_popular_img(
         response: Response,
         filter_time: FilterTime,
+        access_token: Annotated[str, Cookie()] = None,
         session: AsyncSession = Depends(get_async_session)
 ) -> Page:
+    query = await get_info_about_img(access_token)
     if filter_time.value not in FilterTime.ALL.value:
-        query = (
-            select(
-                ImgTable
-            )
-            .where(
-                ImgTable.create_date >= func.now()
-                -
-                func.cast(concat(1, f" {filter_time.value}"), INTERVAL)
-            )
-            .order_by(desc(ImgTable.create_date))
+        query = query.where(
+            ImgTable.create_date >= func.now()
+            -
+            func.cast(concat(1, f" {filter_time.value}"), INTERVAL)
         )
 
-    elif filter_time.value in FilterTime.ALL.value:
-        query = select(ImgTable).order_by(desc(ImgTable.create_date))
-
-    res = await session.execute(query)
-    dto = [ImageSchemasDTO.model_validate(item, from_attributes=True) for item in get_item(res)]
+    res = await session.execute(query.order_by(desc(ImgTable.create_date)))
+    img_list = res.mappings().all()
 
     response.headers["Filter-Time"] = filter_time.value
-    return paginate(dto)
+    data = [AllImageDTO.model_validate(item, from_attributes=True) for item in img_list]
+    return paginate(data)
 
 
 @img_router.get("/wallpaper/{uuid_img}")
-@cache(expire=30)
-async def get_img_by_uuid(uuid_img: str, session: AsyncSession = Depends(get_async_session)):
-    user_subquery = (
-        select(AuthTable.user_name)
-        .where(AuthTable.uuid_user == ImgTable.uuid_user)
-        .subquery("user_subquery")
+# @cache(expire=10)
+async def get_img_by_uuid(
+        uuid_img: str, access_token: Annotated[str, Cookie()] = None,
+        session: AsyncSession = Depends(get_async_session)
+):
+    like_subquery = (
+        select(func.count().label("like_count"))
+        .select_from(ReactionTable)
+        .filter_by(reaction=True, uuid_img=uuid_img)
+        .subquery("like_subquery")
     )
 
-    like_subquery = select(func.count().label("like_c")).filter(
-        ReactionTable.reaction == True,
-        ReactionTable.uuid_img == uuid_img
-    ).subquery("like_subquery")
-
-    dislike_subquery = select(func.count().label("dislike_c")).filter(
-        ReactionTable.reaction == False,
-        ReactionTable.uuid_img == uuid_img
-    ).subquery("dislike_subquery")
-
-    query = (
-        select(
-            ImgTable.prompt,
-            ImgTable.style,
-            ImgTable.create_date,
-            ImgTable.img_base64,
-            user_subquery,
-            like_subquery,
-            dislike_subquery
-        )
-        .distinct()
-        .where(ImgTable.uuid_img == uuid_img)
+    dislike_subquery = (
+        select(func.count().label("dislike_count"))
+        .select_from(ReactionTable)
+        .filter_by(reaction=False, uuid_img=uuid_img)
+        .subquery("dislike_subquery")
     )
 
-    res = await session.execute(query)
-    img_query = res.all()
+    query = await get_info_about_img(
+        access_token,
+        ImgTable.style, ImgTable.prompt, ImgTable.create_date, AuthTable.user_name, like_subquery, dislike_subquery,
+        uuid_img=uuid_img
+    )
+
+    res = await session.execute(query.distinct())
+    img_query = res.mappings().all()
 
     if not img_query:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Не удалось найти '{uuid_img}'")
 
-    img_data = create_dict(
-        list_key=["prompt", "style", "create_date", "img_base64", "user_name", "like", "dislike"],
-        list_value=get_item(img_query)
-    )
-
-    return img_data
+    return img_query
 
 
 @img_router.post("/set-reaction")
