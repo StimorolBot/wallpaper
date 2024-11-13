@@ -65,7 +65,9 @@ jobs:
           poetry install
 
       - name: create log dir
-        run: mkdir .log
+        run: |
+          cd back
+          mkdir .log
 
       - name: create token
         run: |

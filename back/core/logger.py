@@ -34,7 +34,7 @@ class CustomLogger(ColoredFormatter):
         self.logger.addHandler(self.file_log)
 
 
-PATH = f"{os.path.dirname(os.path.abspath(__file__))}/../../.log"
+PATH = f"{os.path.dirname(os.path.abspath(__file__))}/../.log"
 
 CustomLogger(loger_name="img_logger", path=f"{PATH}/img.log")
 CustomLogger(loger_name="auth_logger", path=f"{PATH}/auth.log")
