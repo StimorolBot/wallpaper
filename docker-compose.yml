@@ -1,51 +1,50 @@
 version: "v2.29.7-desktop.1"
 
 services:
-  back:
-    build: ./back/
-    container_name: back
-    depends_on:
-      - postgres
-      - front
-    command:
-      bash -c "while !< /dev/tcp/postgres/5432; do sleep 1; done; uvicorn src.main:app --host 0.0.0.0 --port 8000" 
+  postgres_container:
+    image: postgres:14.13
+    environment:
+      POSTGRES_PASSWORD: qwerty
+      POSTGRES_DB: wallpaper
+      POSTGRES_USER: postgres
     volumes:
-      - ./back:/wallpaper
-      - ./back:/wallpaper/.log
+      - ./back/.postgres:/var/lib/postgres/data
     ports:
-      - 8000:8000
+      - 6000:5432
     restart: always
 
-  postgres:
-    image: postgres:14.13
-    container_name: postgres   
-    shm_size: 128mb
-    environment:
-      POSTGRES_DB: PostgresSQL14
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    volumes:
-      - .postgres:/var/lib/postgres/data
-    ports:
-      - 5431:5432
-    restart: always
-    
   pgadmin:
     image: dpage/pgadmin4:8.12
-    container_name: pgadmin
     depends_on:
-      - postgres 
+      - postgres_container 
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: root
     ports:
-      - 5050:80
+      - 5000:80
+    restart: always
+
+  back:
+    build: ./back/
+    environment:
+      DB_HOST: postgres_container
+    depends_on:
+      - postgres_container
+    volumes:
+      - ./back:/.log
+    ports:
+      - 8000:80
     restart: always
 
   front:
     build: ./front/
     container_name: front
+    depends_on:
+      - back
     ports:
-      - 5173:5173
+      - 80:5173
     restart: always
+
+volumes:
+  .postgres:
   
