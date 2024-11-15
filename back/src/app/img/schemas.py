@@ -4,6 +4,7 @@ from pydantic import BaseModel, WrapValidator
 
 from core.my_functools import valid_len
 from src.app.img.enums.style_img import StyleImg
+from core.my_functools import valid_forbidden_symbols
 
 
 def valid_size_img(size: int, handler) -> int:
@@ -17,7 +18,8 @@ def valid_size_img(size: int, handler) -> int:
 
 
 def valid_prompt_img(prompt: str, handler) -> str:
-    valid_len(val=prompt, min_val=1, max_val=1000)
+    valid_len(val=prompt, min_val=4, max_val=1000)
+    valid_forbidden_symbols(prompt)
     return prompt
 
 
