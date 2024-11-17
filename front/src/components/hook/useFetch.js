@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { AxiosError } from "axios"
 
 import { refreshToken } from "../../api/auth"
 
@@ -18,6 +19,9 @@ export const useFetch = ( callback ) => {
             }
             else if (e.response?.status === 404) {
                 window.location.pathname = window.location.pathname.split("/")[2]
+            }
+            else if (e?.code === AxiosError.ERR_NETWORK) {
+                window.location.pathname = "/server-error"
             }
             else
                 setError(e)
