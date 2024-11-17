@@ -1,0 +1,35 @@
+.user-manual
+    font-variant: small-caps
+    
+#user-manual-input
+    display: none
+    opacity: 0
+    visibility: hidden
+
+.user-manual-lbl
+    font-size: 14px
+    position: relative
+    padding-left: 20px
+
+    &::before
+        content: ""
+        width: 12px
+        height: 12px
+        border-radius: 50%
+        border: 2px solid #FFBA00
+        cursor: pointer
+        position: absolute
+        top: -2px
+        left: 0
+    
+.user-manual-lbl_checked
+    &::after
+        content: ""
+        position: absolute
+        width: 7px
+        height: 7px
+        border-radius: 50%
+        background-color: #eaab01
+        top: 2px
+        left: 4px
+        
