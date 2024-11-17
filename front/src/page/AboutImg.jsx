@@ -19,7 +19,7 @@ export function AboutImg(){
         async () => {
             await api.get(`/wallpaper/${uuidImg}`)
                 .then((response) => {
-                    setImgInfo([response.data])
+                    setImgInfo([...response.data])
                 }
             )
         }
@@ -41,9 +41,8 @@ export function AboutImg(){
             <div className="wrapper">
                 <div className="about-img__container">
                     {isLoading
-                        ? <Loader/>
-                        :
-                        <div className="about-img__wrapper">
+                        ? <Loader align={false}/>
+                        : <div className="about-img__wrapper">
                             <div className="about__img">
                                 <CreateImgList imgList={imgInfo} setImgList={setImgInfo} flag={false}/>
                             </div>

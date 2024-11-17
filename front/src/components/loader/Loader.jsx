@@ -8,5 +8,5 @@ export function Loader({align = true}){
                 Пожалуйста подождите, идет загрузка...
             </p>
         </div>
-    );
+    )
 }

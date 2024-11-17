@@ -2,7 +2,7 @@ import { AuthInput } from "./AuthInput"
 import { useFetch } from "../../hook/useFetch"
 
 
-export function CodeInput({authData}){
+export function CodeInput({authData, setAuthData}){
     
     const [getCode, isLoadingCode, errorCode] = useFetch(
         async (event) => {

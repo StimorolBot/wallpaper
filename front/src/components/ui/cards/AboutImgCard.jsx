@@ -32,20 +32,20 @@ export function AboutImgCard({ imgInfo }){
                     <div className="about__card-container">
                         <dt className="about__card-dt">Лайков:</dt>
                         <dd className="about__card-dd about__list-promt">
-                            {item.like}
+                            {item.like_count}
                         </dd>
                     </div>
 
                     <div className="about__card-container">
                         <dt className="about__card-dt">Дизлайков:</dt>
                         <dd className="about__card-dd about__list-promt">
-                            {item.dislike}
+                            {item.dislike_count}
                         </dd>
                     </div>
                     
                     <div className="about__card-container">
                         <dt className="about__card-dt">Промт:</dt>
-                        <dd className="about__card-dd about__list-promt">
+                        <dd className="about__card-dd">
                             {item.prompt}
                         </dd>
                     </div>

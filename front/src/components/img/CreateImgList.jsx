@@ -18,7 +18,6 @@ export function CreateImgList({imgList, setImgList, lastElementRef, flag=true}){
             }
             else{
                 imgList[index].reaction = reaction
-                
             }
             setImgList([...imgList])         
             await api.post("/set-reaction", {"reaction": reaction, "img_uuid": item.uuid_img})
