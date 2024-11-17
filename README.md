@@ -25,6 +25,7 @@
 ---
 * [Подготовка](#подготовка)
 * [Запуск](#запуск)
+* [Docker](##Docker)
 
 ---
 
@@ -70,7 +71,7 @@
     ```
 * Публичного:
     ```bash
-    #./back/src/app/auth/token/
+    # ./back/src/app/auth/token/
     openssl rsa -in jwt-private.pem -outform PEM -pubout -out jwt-public.pem 
     ```
 
@@ -84,7 +85,7 @@ poetry install
 npm install
 ```
 
-Также необходимо создать в корне проекта директорию  ```.log``` для логирования
+Также необходимо создать директорию  ```./back/.log``` для логирования
 
 ---
 
@@ -109,3 +110,30 @@ npm install
   ```bash
   npm run dev
   ```
+ 
+## Docker
+### Dockerfile:
+* Для создания образа необходимо перейти в директорию с Dockerfile и выполнить:
+  ```bash
+    # ./front
+    docker build ./front --tag "wallpaper-front"
+  ```
+* Для запуска: 
+  ```bash
+    # ./front
+    docker run -p 5173:5173 "wallpaper-front"
+  ```
+* Или в корне проекта выполнить:
+  ```bash
+    make buildFront
+    make runFront
+  ```
+### Docker compose
+* Для создания контейнера и его запуска выполнить:
+  ```bash
+    docker compose up 
+  ```
+После запуска контейнера приложение откроется на:
+* [Frontend](http://127.0.0.1:80)
+* [Backend](http://127.0.0.1:8000)
+* [pgAdmin](http://127.0.0.1:5000)
