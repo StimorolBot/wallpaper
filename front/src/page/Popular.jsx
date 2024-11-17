@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useRef } from "react"
 
 import { Header } from "../components/header/Header"
 import { Footer } from "../components/footer/Footer"
@@ -7,8 +7,9 @@ import { DropDownMenu } from "../components/ui/menu/DropDownMenu"
 
 
 export function Popular() {
-    const [filterTime, setFilterTime] = useState("DAY")
+    const [filterTime, setFilterTime] = useState({"front": "День", "back": "DAY"})
     const [imgList, setImgList] = useState([])
+    const isAlignRef = useRef(true)
     
     return(
         <>
@@ -32,7 +33,11 @@ export function Popular() {
                     itemList={imgList}
                     setItemList={setImgList}
                     path={"/popular"}
-                    params={{"filter_time": filterTime}}
+                    params={{"filter_time": filterTime["back"]}}
+                    isAlignRef={isAlignRef}
+                    emptyListMsg={
+                        `За последней ${filterTime["front"].toLowerCase()} нет новый публикаций`
+                    }
                 />
             </div>
         </section>
