@@ -1,10 +1,13 @@
-import { useState } from "react"
+import { Link } from "react-router-dom"
+
+import { useState, useRef } from "react"
 import { Header } from "../components/header/Header"
 import { Footer } from "../components/footer/Footer"
 import { Pagination } from "../components/pagination/Pagination"
 
 
 export function Home(){
+    const isAlignRef = useRef(true)
     const [imgList, setImgList] = useState([])
 
     return(
@@ -18,7 +21,17 @@ export function Home(){
                 <Pagination
                     path={"/"}
                     itemList={imgList}
-                    setItemList={setImgList}    
+                    setItemList={setImgList}
+                    isAlignRef={isAlignRef}  
+                    emptyListMsg={
+                        <p className="empty-list__msg">
+                            На данный момент на сайте отсутствуют сгенерированные изображения. <br/>
+                            Для их генерации перейдите в раздел 
+                            <Link className="create-link" to={"/create"}>
+                                {` "Создать"`}
+                            </Link> 
+                        </p>
+                    }  
                 />
             </div>
         </section>
