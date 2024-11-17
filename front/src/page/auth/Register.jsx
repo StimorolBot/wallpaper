@@ -6,6 +6,8 @@ import { BtnSend } from "../../components/ui/btn/BtnSend"
 import { useFetch } from "../../components/hook/useFetch"
 import { AuthInput } from "../../components/ui/input/AuthInput"
 import { CodeInput } from "../../components/ui/input/CodeInput"
+import { CheckboxInput } from "../../components/ui/input/CheckboxInput"
+
 
 export function Register() {
     const [authData, setAuthData] = useState({
@@ -22,15 +24,12 @@ export function Register() {
             .then((response) => {
                 console.log(response.data)
             })
-            .catch((error) => {
-                console.log(error)
-            })
         }
     )
-    
+ 
     return (
         <section className="auth register">
-            <h2 className="hidden">Форма для регистраии</h2>
+            <h2 className="hidden">Форма для регистрации</h2>
             <form
                 className="auth__form auth__form_big"
                 onSubmit={(event) => sendData(event)}
@@ -53,11 +52,12 @@ export function Register() {
                             setAuthData({ ...authData, email: event.target.value })
                         }
                     />
-                    <CodeInput authData={authData}/>
+                    <CodeInput authData={authData} setAuthData={setAuthData}/>
                     <AuthInput
                         id={"password"}
                         lblTitle={"Пароль"}
                         inputType={"password"}
+                        minLength={8}
                         onChange={(event) =>
                             setAuthData({ ...authData, password: event.target.value })
                         }
@@ -66,34 +66,25 @@ export function Register() {
                         id="repeat-password"
                         lblTitle="Повторите пароль"
                         inputType={"password"}
+                        minLength={8}
                 />
             </div>
-                
-            <div className="user-manual">
-                <input
-                    className="user-manual-input"
-                    type="checkbox"
-                    id="user-manual-input"
-                    required
-                />
-                <label className="user-manual-lbl" htmlFor="user-manual-input">
-                    {"Мною прочитаны и приняты "}
-                    <Link className="auth__user-manual-link" to="#">
-                        {"Пользовательское соглашение "}
-                    </Link>
-                    и
-                    <Link className="auth__user-manual-link" to="#">
-                        {" Политика конфиденциальности"}
-                    </Link>
-                </label>
-            </div>            
+            <CheckboxInput>
+                {"Мною прочитаны и приняты "}
+                <Link className="auth__user-manual-link" to="#">
+                    {"Пользовательское соглашение "}
+                </Link>
+                и
+                <Link className="auth__user-manual-link" to="#">
+                    {" Политика конфиденциальности"}
+                </Link>
+            </CheckboxInput>
             <div className="auth-btn__container">
                 <BtnSend> Регистрация </BtnSend>
             </div>
-
             <div className="auth__login">
                 <Link className="auth__link" to="/auth/login">
-                Уже есть учетная запись?
+                    Уже есть учетная запись?
                 </Link>
             </div>
         </form>
