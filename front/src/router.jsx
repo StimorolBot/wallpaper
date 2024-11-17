@@ -56,6 +56,20 @@ const router = createBrowserRouter([
     ]},
 
     {
+        path: "/server-error",
+        element:
+            <Error
+                errorCode={500}
+                errorMsg={
+                    <p>
+                        Сервер временно недоступен. <br/>
+                        Пожалуйста, повторите попытку позже.
+                    </p>    
+                }
+            />,
+    },
+
+    {
         path: "*",
         element: <Error/>,
     },
