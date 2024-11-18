@@ -1,7 +1,7 @@
 version: "v2.29.7-desktop.1"
 
 services:
-  postgres_container:
+  postgres:
     image: postgres:14.13
     environment:
       POSTGRES_PASSWORD: qwerty
@@ -16,7 +16,7 @@ services:
   pgadmin:
     image: dpage/pgadmin4:8.12
     depends_on:
-      - postgres_container 
+      - postgres 
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: root
@@ -24,14 +24,24 @@ services:
       - 5000:80
     restart: always
 
+  redis:
+    image: redis:7.2.6
+    command: redis-server
+    ports:
+      - 6379:6379
+    restart: always
+
   back:
     build: ./back/
+    command: bash -c "uvicorn src.main:app --host=0.0.0.0 --port=80"
     environment:
-      DB_HOST: postgres_container
+      DB_HOST: postgres
     depends_on:
-      - postgres_container
+      - postgres
+      - redis
     volumes:
       - ./back:/.log
+      - ./back:/back
     ports:
       - 8000:80
     restart: always
@@ -39,12 +49,45 @@ services:
   front:
     build: ./front/
     container_name: front
+    volumes:
+      - ./front:/front
     depends_on:
       - back
     ports:
       - 80:5173
     restart: always
 
+  celery:
+    build: ./back/bg_task/
+    command: celery -A config:celery worker --loglevel=INFO --pool=solo
+    volumes:
+      - .:/back/bg_task
+    environment:
+      REDIS_HOST: redis
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/0
+    depends_on:
+      - redis
+      - back
+  
+  flower:
+    build: ./back/bg_task/
+    command: celery -A config:celery flower --loglevel=INFO
+    environment:
+      CELERY_BROKER_URL: redis://redis:6379
+      CELERY_RESULT_BACKEND: redis://redis:6379     
+    depends_on:
+      - redis
+      - celery
+      - back
+    ports:
+      - 5555:5555
+    restart: always
+    
 volumes:
   .postgres:
-  
+    driver: local
+  back:
+    driver: local
+  front:
+    driver: local
