@@ -9,7 +9,7 @@ from fastapi_pagination import add_pagination
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
 
-from src.conf import redis
+from src.config import redis
 from src.app.img.router import img_router
 from src.app.auth.router import register_router
 from src.app.auth.token.router import jwt_router
@@ -27,7 +27,12 @@ app.include_router(img_router)
 app.include_router(register_router)
 app.include_router(jwt_router)
 
-origins = ["http://localhost:5173", "http://127.0.0.1:80"]
+origins = [
+    "http://localhost:5173",
+    "http://localhost:80",
+    "http://127.0.0.1:80",
+    "http://127.0.0.1"
+]
 
 app.add_middleware(
     CORSMiddleware,
