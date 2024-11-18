@@ -22,7 +22,6 @@
 
 ## Содержание
 
----
 * [Подготовка](#подготовка)
 * [Запуск](#запуск)
 * [Docker](##Docker)
@@ -92,22 +91,26 @@ npm install
 ## Запуск:
 * Backend:
   ```bash
-  uvicorn back/src.main:app --reload
+  # ./back
+  uvicorn src.main:app --reload
   ```
   После запуска приложения в браузере можно открыть [swagger](http://localhost:8000/docs)
 
 * Celery:
   ```bash
-  celery -A back.bg_task.config:celery worker --loglevel=INFO --pool=solo
+  # ./back
+  celery -A bg_task.config:celery worker --loglevel=INFO --pool=solo
   ```
 
 * [Flower](http://localhost:5555/):
   ```bash
-  celery -A back.bg_task.config:celery flower --loglevel=info
+  # ./back
+  celery -A bg_task.config:celery flower --loglevel=INFO
   ```
 
 * [Frontend](http://localhost:5173): 
   ```bash
+  # ./front
   npm run dev
   ```
  
@@ -137,3 +140,4 @@ npm install
 * [Frontend](http://127.0.0.1:80)
 * [Backend](http://127.0.0.1:8000)
 * [pgAdmin](http://127.0.0.1:5000)
+* [Flower](http://127.0.0.1:5555)
