@@ -1,12 +1,8 @@
-from typing import TYPE_CHECKING
 from email.message import EmailMessage
-
-if TYPE_CHECKING:
-    from src.app.auth.schemas import ValidEmail
 
 
 def email_confirm(
-        email: EmailMessage, user_email: "ValidEmail",
+        email: EmailMessage, user_email: str,
         code: str, user_agent: str, origin: str,
         client_host: str
 ):
@@ -60,7 +56,7 @@ def email_confirm(
 
 
 def reset_password(
-        email: EmailMessage, user_email: "ValidEmail",
+        email: EmailMessage, user_email: str,
         code: str, user_agent: str, origin: str,
         client_host: str
 ):
