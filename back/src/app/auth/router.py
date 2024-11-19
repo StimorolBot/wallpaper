@@ -18,8 +18,8 @@ from src.app.auth.password_auth import password_auth
 from src.app.auth.token.config import auth_jwt_setting
 from src.app.auth.schemas import Register, RegisterDTO, Login, CodeConfirm, ResetPassword
 
-from bg_task.config import celery
-from bg_task.tasks import send_email
+from celery_task.config import celery
+from celery_task.tasks import send_email
 
 register_router = APIRouter(prefix="/auth", tags=["auth"])
 
