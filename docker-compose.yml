@@ -1,8 +1,7 @@
-version: "v2.29.7-desktop.1"
-
 services:
   postgres:
     image: postgres:14.13
+    container_name: postgres
     environment:
       POSTGRES_PASSWORD: qwerty
       POSTGRES_DB: wallpaper
@@ -15,6 +14,7 @@ services:
 
   pgadmin:
     image: dpage/pgadmin4:8.12
+    container_name: pgadmin 
     depends_on:
       - postgres 
     environment:
@@ -26,19 +26,35 @@ services:
 
   redis:
     image: redis:7.2.6
-    command: redis-server
+    container_name: redis
+    command: bash -c "redis-server"
     ports:
       - 6379:6379
     restart: always
 
+  celery:
+    build: ./back/celery_task/
+    container_name: celery 
+    command: bash -c "celery -A celery_task.config:celery worker --loglevel=INFO --pool=solo"
+    environment:
+      CELERY_HOST: redis
+    depends_on:
+      - redis
+    restart: always
+  
   back:
     build: ./back/
-    command: bash -c "uvicorn src.main:app --host=0.0.0.0 --port=80"
+    container_name: back
+    command: bash -c "alembic upgrade head && uvicorn src.main:app --host=0.0.0.0 --port=80"
     environment:
-      DB_HOST: postgres
+      POSTGRES_HOST: postgres
+      POSTGRES_DB: ${POSTGRES_DB}      
+      REDIS_HOST: redis
+      CELERY_HOST: redis
     depends_on:
       - postgres
       - redis
+      - celery
     volumes:
       - ./back:/.log
       - ./back:/back
@@ -56,34 +72,7 @@ services:
     ports:
       - 80:5173
     restart: always
-
-  celery:
-    build: ./back/bg_task/
-    command: celery -A config:celery worker --loglevel=INFO --pool=solo
-    volumes:
-      - .:/back/bg_task
-    environment:
-      REDIS_HOST: redis
-      CELERY_BROKER_URL: redis://redis:6379/0
-      CELERY_RESULT_BACKEND: redis://redis:6379/0
-    depends_on:
-      - redis
-      - back
-  
-  flower:
-    build: ./back/bg_task/
-    command: celery -A config:celery flower --loglevel=INFO
-    environment:
-      CELERY_BROKER_URL: redis://redis:6379
-      CELERY_RESULT_BACKEND: redis://redis:6379     
-    depends_on:
-      - redis
-      - celery
-      - back
-    ports:
-      - 5555:5555
-    restart: always
-    
+      
 volumes:
   .postgres:
     driver: local
