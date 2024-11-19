@@ -28,39 +28,34 @@
 
 ---
 
+
 ## Подготовка
-Перед запуском необходимо создать следующие файлы <code>.env</code> файлы:
-* ```dotenv
-   # ./back/src/db/.env
-   DB_USER=postgres
-   DB_PASS=postgres
-   DB_HOST=localhost
-   DB_PORT=5432
-   DB_NAME=postgres
-  ```
-* ```dotenv
-    # ./back/tests/.env
-    MODE=TEST
-    DB_USER_TEST=postgres
-    DB_PASS_TEST=postgres
-    DB_HOST_TEST=localhost
-    DB_PORT_TEST=5432
-    DB_NAME_TEST=postgres_test
-    ```
-  
-* Для получения ***API*** и ***SECRET KEY*** нужно зарегистрироваться на
+Для того чтобы подключится к базе данных, нужно создать два файла:
+<code>./back/src/db/.env</code> и <code>./back/tests.env</code>
+со следующими значениями:
+```dotenv
+MODE=DEV/TEST
+POSTGRES_PASSWORD=qwerty
+POSTGRES_DB=wallpaper/wallpaper_test
+POSTGRES_USER=postgres
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+``` 
+Для получения **API** и **SECRET_KEY** нужно зарегистрироваться на
 [fusionbrain.ai](https://auth.fusionbrain.ai/realms/FB/protocol/openid-connect/auth?client_id=fusion-web&scope=openid%20email%20profile&response_type=code&redirect_uri=https%3A%2F%2Ffusionbrain.ai%2Fapi%2Fauth%2Fcallback%2Fkeycloak&state=04mcBTVCvfO1WQMYRCZLtsH3V6lmzRLeq4XGinLefpE&code_challenge=sQ8_Hyu9ISLDSfxaMt-R-EMGeoqx5KvNJbKcdkS5bAg&code_challenge_method=S256)  
-    ```dotenv
-    # ./back/src/app/img/.env
-    API_KEY=API_KEY
-    SECRET_KEY=SECRET_KEY
-    ```
-  
-* ```dotenv
-    # ./back/bg_task/.env
-    PASSWORD=password
-    ADMIN_EMAIL=email.example.com
-    ```
+```dotenv
+# ./back/src/app/img/.env
+API_KEY=API_KEY
+SECRET_KEY=SECRET_KEY
+```
+Для создания приложения, необходимо авторизоваться в Google. </br>
+После чего в ***Пароли приложений*** создать свое приложение
+
+```dotenv
+# ./back/celery_task/smtp/.env
+PASSWORD=app_password
+ADMIN_EMAIL=email.example.com
+```
 
 ### Генерация токенов
 * Приватного:
@@ -99,13 +94,13 @@ npm install
 * Celery:
   ```bash
   # ./back
-  celery -A bg_task.config:celery worker --loglevel=INFO --pool=solo
+  celery -A celery_task.config:celery worker --loglevel=INFO --pool=solo
   ```
 
 * [Flower](http://localhost:5555/):
   ```bash
   # ./back
-  celery -A bg_task.config:celery flower --loglevel=INFO
+  celery -A celery_task.config:celery flower --loglevel=INFO
   ```
 
 * [Frontend](http://localhost:5173): 
