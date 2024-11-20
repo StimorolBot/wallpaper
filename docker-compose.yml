@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgres:14.13
+    image: postgres:14.14-alpine
     container_name: postgres
     environment:
       POSTGRES_PASSWORD: qwerty
@@ -14,9 +14,9 @@ services:
 
   pgadmin:
     image: dpage/pgadmin4:8.12
-    container_name: pgadmin 
+    container_name: pgadmin
     depends_on:
-      - postgres 
+      - postgres
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: root
@@ -34,21 +34,33 @@ services:
 
   celery:
     build: ./back/celery_task/
-    container_name: celery 
+    container_name: celery
     command: bash -c "celery -A celery_task.config:celery worker --loglevel=INFO --pool=solo"
     environment:
       CELERY_HOST: redis
     depends_on:
       - redis
     restart: always
-  
+
+  flower:
+    image: mher/flower:2.0
+    container_name: flower
+    depends_on:
+      - celery
+    environment:
+      CELERY_BROKER_URL: redis://redis
+      CELERY_RESULT_BACKEND: redis://redis
+    ports:
+      - 5555:5555
+    restart: always
+
   back:
     build: ./back/
     container_name: back
     command: bash -c "alembic upgrade head && uvicorn src.main:app --host=0.0.0.0 --port=80"
     environment:
       POSTGRES_HOST: postgres
-      POSTGRES_DB: ${POSTGRES_DB}      
+      POSTGRES_DB: ${POSTGRES_DB}
       REDIS_HOST: redis
       CELERY_HOST: redis
     depends_on:
@@ -56,7 +68,6 @@ services:
       - redis
       - celery
     volumes:
-      - ./back:/.log
       - ./back:/back
     ports:
       - 8000:80
@@ -72,7 +83,7 @@ services:
     ports:
       - 80:5173
     restart: always
-      
+
 volumes:
   .postgres:
     driver: local
