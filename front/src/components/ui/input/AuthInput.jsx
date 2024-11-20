@@ -14,7 +14,6 @@ export function AuthInput({id, lblTitle, inputType, getCode, ...props}){
                 autoComplete="off"
                 type={isShow === false ? "password" : "text"}
                 required
-                onClick={() => setIsActive(state => !state)}
                 { ...props }
             />
 
@@ -39,10 +38,13 @@ export function AuthInput({id, lblTitle, inputType, getCode, ...props}){
                     />
             }
 
-            <label className={isActive ? "auth-lbl auth-lbl_active" : "auth-lbl"} htmlFor={ id }>
+            <label
+                className={isActive ? "auth-lbl auth-lbl_active" : "auth-lbl"}
+                onClick={() => setIsActive(state => !state)}
+                htmlFor={ id }
+            >
                 { lblTitle }
             </label>
-            <span className="auth-border"></span>
         </div>
     )
 }

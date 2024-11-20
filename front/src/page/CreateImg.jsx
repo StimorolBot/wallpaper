@@ -29,7 +29,7 @@ export function CreateImg() {
     )
     
     const setSize = (value) => {
-        const [w, h] = value.split("x")
+        const [w, h] = value["back"].split("x")
         setImgParams({...imgParams, width: w, height: h})
     }
 
@@ -42,15 +42,10 @@ export function CreateImg() {
             </h2>
             <div className="wrapper">
                 <div className="img-create__container">
-                    <div className={ 
-                        img === null 
-                        ? "img-generate__container" 
-                        : "img-generate__container img-generate__container_active"
-                    }>
+                    <div className="img-generate__container">
                         { isLoading 
-                            ? 
-                            <Loader /> 
-                            : <div className="img-container">
+                            ? <Loader align={false}/> 
+                            : <div className={img ? "img-container" : "img-container img-container_empty"}>
                                 <img className="img-create"
                                     src={`data:image/jpeg;base64,${img}`} alt="img-ai"
                                 />
@@ -58,7 +53,7 @@ export function CreateImg() {
                         }
                     </div>
                     <form className={
-                            img !== null || isLoading
+                            isLoading
                             ? "form__create-img form__create-img_active"
                             : "form__create-img"
                         }
@@ -82,34 +77,29 @@ export function CreateImg() {
                             />
                         </div>
                         <div className="size__container">
-                            <div className="size-menu__container">
-                                <p className="range-size">
-                                    {imgParams["width"]}x{imgParams["height"]}
-                                </p>
-                                <DropDownMenu
-                                    itemList={[
-                                        {"front": "16:9", "back": "1024x576"},
-                                        {"front": "9:16", "back": "576x1024"},
-                                        {"front": "3:2", "back": "1024x680"},
-                                        {"front": "2:3", "back": "680x1024"},
-                                        {"front": "1:1", "back": "1024x1024"}
-                                    ]}
-                                    title={"Выберите соотношение..."}
-                                    setFilter={setSize}
-                                    
-                                />
-                            </div>    
-
-                        </div>
+                            <p className="range-size">
+                                {imgParams["width"]}x{imgParams["height"]}
+                            </p>
+                            <DropDownMenu
+                                itemList={[
+                                    {"front": "16:9", "back": "1024x576"},
+                                    {"front": "9:16", "back": "576x1024"},
+                                    {"front": "3:2", "back": "1024x680"},
+                                    {"front": "2:3", "back": "680x1024"},
+                                    {"front": "1:1", "back": "1024x1024"}
+                                ]}
+                                title={"Соотношение..."}
+                                setFilter={setSize}    
+                            />
+                        </div>    
                         <div className="prompt__container">
-                            <Textarea maxLength="1000" placeholder="Введите промт для генерации изображения" rows="7"
-                                onChange={(event)=> setImgParams({...imgParams, prompt: event.target.value})} 
+                            <Textarea maxLength="1000" placeholder="Введите промт для генерации изображения"
+                                value={imgParams} setValue={setImgParams} 
                             />
                         </div>
                         <div className="form__create-btn-container">
-                            <BtnSend disabled={isLoading ? true : false}>
-                                Сгенерировать
-                            </BtnSend>
+                            <BtnSend> Сгенерировать </BtnSend> 
+                            {/* disabled={isLoading ? true : false} */}
                         </div>
                     </form>
                 </div>    

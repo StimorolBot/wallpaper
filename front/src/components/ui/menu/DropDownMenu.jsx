@@ -11,21 +11,22 @@ export function DropDownMenu({itemList, setFilter, title}){
     useClickOutside(clikRef, setIsShow)
 
     const setValue = (e) => {
-        setFilter(e.target.getAttribute("value"))
+        setFilter({"front": e.target.innerHTML , "back": e.target.getAttribute("value")})
         setIsShow(false)
     }
 
     return(
         <div className="dropdown" ref={clikRef}>
-            <div className="dropdown-btn__container">
+            <div className="dropdown-btn__container"
+                onClick={() => setIsShow((state) => !state)}
+            >
                 <p className="dropdown-btn">
                     {title}
                 </p>
                 <img
                     className="dropdown-arrow"
                     src={isShow ? "/static/arrow-up.svg" : "/static/arrow-down.svg"}
-                    alt="arrow-down"
-                    onClick={() => setIsShow((state) => !state)}
+                    alt="arrow-down"        
                 />
             </div>
             
