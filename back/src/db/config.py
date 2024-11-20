@@ -5,17 +5,21 @@ PATH = f"{os.path.dirname(os.path.abspath(__file__))}/.env"
 
 
 class Setting(BaseSettings):
-    DB_USER: str
-    DB_PASS: str
-    DB_HOST: str
-    DB_PORT: str
-    DB_NAME: str
+    MODE: str
+    POSTGRES_USER: str
+    POSTGRES_PASSWORD: str
+    POSTGRES_HOST: str
+    POSTGRES_PORT: str
+    POSTGRES_DB: str
 
     model_config = SettingsConfigDict(env_file=PATH)
 
     @property
     def get_db_url(self) -> str:
-        return f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
+        return (
+            f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_HOST}:"
+            f"{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
+        )
 
 
 setting = Setting()

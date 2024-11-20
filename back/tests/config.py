@@ -4,22 +4,22 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 PATH = f"{os.path.dirname(os.path.abspath(__file__))}/.env"
 
 
-class SettingTest(BaseSettings):
+class Setting(BaseSettings):
     MODE: str
-    DB_USER_TEST: str
-    DB_PASS_TEST: str
-    DB_HOST_TEST: str
-    DB_PORT_TEST: str
-    DB_NAME_TEST: str
+    POSTGRES_USER: str
+    POSTGRES_PASSWORD: str
+    POSTGRES_HOST: str
+    POSTGRES_PORT: str
+    POSTGRES_DB: str
 
     model_config = SettingsConfigDict(env_file=PATH)
 
     @property
     def get_db_url(self) -> str:
         return (
-            f"postgresql+asyncpg://{self.DB_USER_TEST}:{self.DB_PASS_TEST}"
-            f"@{self.DB_HOST_TEST}:{self.DB_PORT_TEST}/{self.DB_NAME_TEST}"
+            f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_HOST}:"
+            f"{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
         )
 
 
-config_test = SettingTest()
+config_test = Setting()
