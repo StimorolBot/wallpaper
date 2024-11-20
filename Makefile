@@ -14,6 +14,11 @@ rmAllContainer:
 runUvicorn:
 	cd back && uvicorn src.main:app --reload
 runCelery:
-	cd back && celery -A bg_task.config:celery worker --loglevel=INFO --pool=solo
+	cd back && celery -A celery_task.config:celery worker --loglevel=INFO --pool=solo
 runFlower:
-	cd back && celery -A bg_task.config:celery flower --loglevel=INFO
+	cd back && celery -A celery_task.config:celery flower --loglevel=INFO
+
+runAuthTest:
+	cd back && pytest tests/test_auth.py -s -v
+runImgTest:
+	cd back && pytest tests/test_img/test_img.py -s -v
