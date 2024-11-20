@@ -1,0 +1,8 @@
+__pycache__
+.idea
+.pytest_cache
+Dockerfile
+venv
+.log
+poetry.lock
+pyproject.toml
