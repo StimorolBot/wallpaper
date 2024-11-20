@@ -28,7 +28,6 @@
 
 ---
 
-
 ## Подготовка
 Для того чтобы подключится к базе данных, нужно создать два файла:
 <code>./back/src/db/.env</code> и <code>./back/tests.env</code>
@@ -48,15 +47,13 @@ POSTGRES_PORT=5432
 API_KEY=API_KEY
 SECRET_KEY=SECRET_KEY
 ```
-Для создания приложения, необходимо авторизоваться в Google. </br>
+Для создания приложения, необходимо авторизоваться в **Google**. </br>
 После чего в ***Пароли приложений*** создать свое приложение
-
 ```dotenv
 # ./back/celery_task/smtp/.env
 PASSWORD=app_password
 ADMIN_EMAIL=email.example.com
 ```
-
 ### Генерация токенов
 * Приватного:
     ```bash
@@ -78,8 +75,8 @@ poetry install
 # ./front
 npm install
 ```
-
-Также необходимо создать директорию  ```./back/.log``` для логирования
+Также необходимо создать директорию  ```./back/.log``` для логирования. </br>
+\* Если вы используете **Windows**, то скачайте архив с [Redis](https://github.com/tporadowski/redis/releases). Разархивируйте его и запустите файл <code>redis-server.exe</code>
 
 ---
 
