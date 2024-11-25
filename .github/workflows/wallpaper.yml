@@ -1,0 +1,21 @@
+name: wallpaper app
+on: push
+
+stages:
+  - build
+  - tests
+  - deploy
+
+build-job:
+  stage: build
+  scripts:
+    - docker compose build
+
+test-job:
+  stage: tests
+  scripts: docker compose run --rm back pytest tests/test_auth.py -s -v && docker compose run --rm back pytest tests/test_img/test_img.py -s -v
+
+deploy-job:
+  stage: deploy
+  scripts:
+    - docker compose up -d
