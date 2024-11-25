@@ -33,7 +33,7 @@ def upgrade() -> None:
         ),
         sa.ForeignKeyConstraint(
             ["uuid_user"],
-            ["user_table.uuid_user"],
+            ["auth_table.uuid_user"],
         ),
         sa.PrimaryKeyConstraint("id"),
     )

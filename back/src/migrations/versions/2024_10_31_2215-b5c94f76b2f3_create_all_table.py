@@ -11,7 +11,7 @@ depends_on: Union[str, Sequence[str], None] = None
 
 def upgrade() -> None:
     op.create_table(
-        "user_table",
+        "auth_table",
         sa.Column("uuid_user", sa.String(), nullable=False),
         sa.Column("user_name", sa.String(), nullable=False),
         sa.Column("email", sa.String(), nullable=False),
@@ -28,7 +28,7 @@ def upgrade() -> None:
         sa.PrimaryKeyConstraint("uuid_user"),
     )
     op.create_index(
-        op.f("ix_user_table_email"), "user_table", ["email"], unique=True
+        op.f("ix_auth_table_email"), "auth_table", ["email"], unique=True
     )
     op.create_table(
         "img_table",
@@ -45,7 +45,7 @@ def upgrade() -> None:
         sa.Column("img_base64", sa.String(), nullable=False),
         sa.ForeignKeyConstraint(
             ["uuid_user"],
-            ["user_table.uuid_user"],
+            ["auth_table.uuid_user"],
         ),
         sa.PrimaryKeyConstraint("uuid_img"),
     )
@@ -56,5 +56,5 @@ def upgrade() -> None:
 def downgrade() -> None:
     op.drop_index(op.f("ix_img_table_uuid_img"), table_name="img_table")
     op.drop_table("img_table")
-    op.drop_index(op.f("ix_user_table_email"), table_name="user_table")
-    op.drop_table("user_table")
+    op.drop_index(op.f("ix_auth_table_email"), table_name="auth_table")
+    op.drop_table("auth_table")
