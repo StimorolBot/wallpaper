@@ -9,7 +9,7 @@ import { BtnSend } from "../components/ui/btn/BtnSend"
 import { useFetch } from "../components/hook/useFetch"
 import { Textarea } from "../components/ui/input/Textarea"
 import { InputRadio } from "../components/ui/input/InputRadio"
-import { DropDownMenu } from "../components/ui/menu/DropDownMenu"
+import { InputRange } from "../components/ui/input/InputRange"
 
 import "./style/create_img.sass"
 
@@ -18,7 +18,7 @@ export function CreateImg() {
     const [img, setImg] = useState(null)
     
     const [imgParams, setImgParams] = useState({
-        "prompt": "", "style": "DEFAULT", "width": 1024, "height": 1024
+        "prompt": "", "style": "DEFAULT", "width": 512, "height": 512
     })
 
     const [request, isLoading, error] = useFetch(
@@ -28,11 +28,6 @@ export function CreateImg() {
         }
     )
     
-    const setSize = (value) => {
-        const [w, h] = value["back"].split("x")
-        setImgParams({...imgParams, width: w, height: h})
-    }
-
     return(
         <>
         <Header/>
@@ -44,7 +39,7 @@ export function CreateImg() {
                 <div className="img-create__container">
                     <div className="img-generate__container">
                         { isLoading 
-                            ? <Loader align={false}/> 
+                            ? <Loader loaderMsg={"Пожалуйста подождите, идет генерация изображения..."}/> 
                             : <div className={img ? "img-container" : "img-container img-container_empty"}>
                                 <img className="img-create"
                                     src={`data:image/jpeg;base64,${img}`} alt="img-ai"
@@ -77,19 +72,15 @@ export function CreateImg() {
                             />
                         </div>
                         <div className="size__container">
-                            <p className="range-size">
-                                {imgParams["width"]}x{imgParams["height"]}
-                            </p>
-                            <DropDownMenu
-                                itemList={[
-                                    {"front": "16:9", "back": "1024x576"},
-                                    {"front": "9:16", "back": "576x1024"},
-                                    {"front": "3:2", "back": "1024x680"},
-                                    {"front": "2:3", "back": "680x1024"},
-                                    {"front": "1:1", "back": "1024x1024"}
-                                ]}
-                                title={"Соотношение..."}
-                                setFilter={setSize}    
+                            <InputRange
+                                titleLabel={"width"}  
+                                imgParams={imgParams}
+                                setImgParams={setImgParams}
+                            />
+                            <InputRange 
+                                titleLabel={"height"} 
+                                imgParams={imgParams}
+                                setImgParams={setImgParams}
                             />
                         </div>    
                         <div className="prompt__container">
@@ -97,9 +88,8 @@ export function CreateImg() {
                                 value={imgParams} setValue={setImgParams} 
                             />
                         </div>
-                        <div className="form__create-btn-container">
+                        <div className="form__create-btn-container hover">
                             <BtnSend> Сгенерировать </BtnSend> 
-                            {/* disabled={isLoading ? true : false} */}
                         </div>
                     </form>
                 </div>    
