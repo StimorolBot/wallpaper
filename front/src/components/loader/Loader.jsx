@@ -1,11 +1,11 @@
 import "./style/loader.sass"
 
-export function Loader({align = true}){
+export function Loader({loaderMsg=null}){
     return(
-        <div className={align ? "loader loader_align" : "loader"}>
+        <div className="loader">
             <img className="loader-img" src="/static/loader.svg" alt="loader" />
             <p className="loader-text">
-                Пожалуйста подождите, идет загрузка...
+                {loaderMsg}
             </p>
         </div>
     )
