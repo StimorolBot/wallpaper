@@ -27,7 +27,6 @@ export const useObserver = async (isLoading, request, lastElementRef, itemList, 
         
         observerRef.current = new IntersectionObserver(callback)
         observerRef.current.observe(lastElementRef.current)
-        
-    }, [itemList, filter])
+    }, [itemList.at(-1)?.img_base64, filter])
     
 }
