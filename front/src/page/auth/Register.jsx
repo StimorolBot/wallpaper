@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 import { api } from "../../api/config"
 import { BtnSend } from "../../components/ui/btn/BtnSend"
@@ -10,6 +10,7 @@ import { CheckboxInput } from "../../components/ui/input/CheckboxInput"
 
 
 export function Register() {
+    const navigate = useNavigate()
     const [authData, setAuthData] = useState({
         user_name: null,
         email: null,
@@ -22,7 +23,7 @@ export function Register() {
             event.preventDefault()
             await api.post("/auth/register", authData)
             .then((response) => {
-                console.log(response.data)
+                navigate("/auth/login")
             })
         }
     )
@@ -52,7 +53,7 @@ export function Register() {
                             setAuthData({ ...authData, email: event.target.value })
                         }
                     />
-                    <CodeInput authData={authData} setAuthData={setAuthData}/>
+                    <CodeInput authData={authData} setAuthData={setAuthData} emailType={"CONFIRM"}/>
                     <AuthInput
                         id={"password"}
                         lblTitle={"Пароль"}
@@ -70,23 +71,21 @@ export function Register() {
                 />
             </div>
             <CheckboxInput>
-                {"Мною прочитаны и приняты "}
+                {"Мною приняты: "}
                 <Link className="auth__user-manual-link" to="#">
-                    {"Пользовательское соглашение "}
+                    {" пользовательское соглашение "}
                 </Link>
                 и
                 <Link className="auth__user-manual-link" to="#">
-                    {" Политика конфиденциальности"}
+                    {" политика конфиденциальности"}
                 </Link>
             </CheckboxInput>
-            <div className="auth-btn__container">
-                <BtnSend> Регистрация </BtnSend>
+            <div className="auth-btn__container hover">
+                <BtnSend> Зарегистрироваться </BtnSend>
             </div>
-            <div className="auth__login">
-                <Link className="auth__link" to="/auth/login">
-                    Уже есть учетная запись?
-                </Link>
-            </div>
+            <Link className="auth__link" to="/auth/login">
+                Уже есть учетная запись?
+            </Link>
         </form>
     </section>
   )
