@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 
 class AuthTable(Base):
-    __tablename__ = "user_table"
+    __tablename__ = "auth_table"
 
     uuid_user: Mapped[str] = mapped_column(primary_key=True, default=generate_uuid)
     user_name: Mapped[str] = mapped_column()
