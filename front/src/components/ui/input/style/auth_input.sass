@@ -1,6 +1,14 @@
 .auth-input__item
     position: relative
 
+    &::before
+        content: " "    
+        position: absolute
+        bottom: 0
+        left: 0
+        border-bottom: 2px solid  #000
+        width: 100%
+
 .auth-input,
 .auth-input_active
     height: 25px
@@ -8,12 +16,14 @@
     padding: 0 8px
     font-size: 16px
     background-color: transparent
+    color: #fff
     transition: var(--main-transition)
 
 .auth-input,
 .password-show,
 .code-input-img
     opacity: 0
+    filter: var(--filter-grey)
 
 .auth-input_active,
 .password-show_active,
@@ -31,14 +41,6 @@
     transition: var(--main-transition)
     font-size: 12px
     transform: translateY(-20px)
-
-.auth-border
-    position: absolute
-    bottom: 0
-    left: 0
-    width: 100%
-    height: 2px
-    background-color: #000
 
 .password-show,
 .code-input-img,
