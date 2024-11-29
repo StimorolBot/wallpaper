@@ -16,10 +16,12 @@ class ImgTable(Base):
     __tablename__ = "img_table"
 
     uuid_img: Mapped[str] = mapped_column(primary_key=True, default=generate_uuid, index=True, unique=True)
-    uuid_user: Mapped[str] = mapped_column(ForeignKey("user_table.uuid_user"))
+    uuid_user: Mapped[str] = mapped_column(ForeignKey("auth_table.uuid_user"))
     style: Mapped[str] = mapped_column()
     create_date: Mapped[datetime] = mapped_column(server_default=func.CURRENT_TIMESTAMP())
     prompt: Mapped[str] = mapped_column()
+    img_tag: Mapped[str | None] = mapped_column()
+    is_public: Mapped[bool] = mapped_column(default=False)
     img_base64: Mapped[str] = mapped_column()
 
     user_relationship: Mapped["AuthTable"] = relationship(back_populates="img_relationship")
