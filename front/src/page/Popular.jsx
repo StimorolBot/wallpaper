@@ -9,7 +9,6 @@ import { DropDownMenu } from "../components/ui/menu/DropDownMenu"
 export function Popular() {
     const [filterTime, setFilterTime] = useState({"front": "День", "back": "DAY"})
     const [imgList, setImgList] = useState([])
-    const isAlignRef = useRef(true)
     
     return(
         <>
@@ -34,7 +33,6 @@ export function Popular() {
                     setItemList={setImgList}
                     path={"/popular"}
                     params={{"filter_time": filterTime["back"]}}
-                    isAlignRef={isAlignRef}
                     emptyListMsg={
                         `За последней ${filterTime["front"].toLowerCase()} нет новый публикаций`
                     }
