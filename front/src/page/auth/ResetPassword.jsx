@@ -49,8 +49,8 @@ export function ResetPassword(){
                             maxLength={ 32 }
                         />
                     </div>    
-                    <div className="auth-btn__container">
-                            <BtnSend> Восстановить </BtnSend>
+                    <div className="auth-btn__container hover">
+                        <BtnSend> Восстановить </BtnSend>
                     </div>                  
                 </form>
             </div>
