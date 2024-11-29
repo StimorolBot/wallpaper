@@ -39,7 +39,11 @@ PATH = f"{os.path.dirname(os.path.abspath(__file__))}/../.log"
 CustomLogger(loger_name="img_logger", path=f"{PATH}/img.log")
 CustomLogger(loger_name="auth_logger", path=f"{PATH}/auth.log")
 CustomLogger(loger_name="smtp_logger", path=f"{PATH}/smtp.log")
+CustomLogger(loger_name="rmq_logger", path=f"{PATH}/rmq.log")
+CustomLogger(loger_name="llama_logger", path=f"{PATH}/llama.log")
 
 img_logger = logging.getLogger("img_logger")
 auth_logger = logging.getLogger("auth_logger")
 smtp_logger = logging.getLogger("smtp_logger")
+rmq_logger = logging.getLogger("rmq_logger")
+llama_logger = logging.getLogger("llama_logger")
