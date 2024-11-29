@@ -11,12 +11,13 @@ class Crud(CrudAbs):
         stmt = table(**data)
         session.add(stmt)
         await session.commit()
+        return stmt
 
     @staticmethod
     async def read(session: AsyncSession, table: DeclarativeAttributeIntercept, **kwargs) -> list:
         stmt = select(table).filter_by(**kwargs)
-        results = await session.execute(stmt)
-        return results.unique().scalar_one_or_none()
+        result = await session.execute(stmt)
+        return result.unique().scalar_one_or_none()
 
     @staticmethod
     async def update(session: AsyncSession, table: DeclarativeAttributeIntercept, data: dict, **kwargs):
