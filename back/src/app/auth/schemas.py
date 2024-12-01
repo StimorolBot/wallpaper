@@ -1,42 +1,36 @@
 from typing_extensions import Annotated
-from fastapi import status, HTTPException
-from pydantic import BaseModel, ConfigDict, WrapValidator
+from pydantic import BaseModel, ConfigDict, WrapValidator, EmailStr
 
-from bg_task.type_email import TypeEmail
-from core.my_functools import valid_forbidden_symbols, valid_len
+from celery_task.smtp.type_email import TypeEmail
+from core.my_functools import valid_password as valid_password_symbol
+from core.my_functools import valid_isalnum, valid_len
 
 
 def valid_name(name: str, handler) -> str:
     valid_len(name, 4, 20)
-    valid_forbidden_symbols(name)
-
+    valid_isalnum(name)
     return name
 
 
 def valid_password(password: str, handler) -> str:
     valid_len(password, 8, 32)
-    valid_forbidden_symbols(password)
-
+    valid_password_symbol(password)
     return password
 
 
-def valid_email(email: str, handler) -> str:
-
-    if len(email.split("@")) != 2 or len(email.split(".")) != 2:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Некорректный формат почты")
-
-    valid_len(email, 10, 40)
-    valid_forbidden_symbols(email, email=True)
-    return email
+def valid_code_confirm(code_confirm: str, handler) -> str:
+    valid_len(code_confirm, min_val=5, max_val=7)
+    valid_isalnum(code_confirm)
+    return code_confirm
 
 
 ValidName = Annotated[str, WrapValidator(valid_name)]
-ValidEmail = Annotated[str, WrapValidator(valid_email)]
 ValidPassword = Annotated[str, WrapValidator(valid_password)]
+ValidCodeConfirm = Annotated[str, WrapValidator(valid_code_confirm)]
 
 
 class Email(BaseModel):
-    email: ValidEmail
+    email: EmailStr
 
 
 class CodeConfirm(Email):
@@ -49,7 +43,7 @@ class Login(Email):
 
 class Register(Login):
     user_name: ValidName
-    code_confirm: str
+    code_confirm: ValidCodeConfirm
     is_active: bool = False
     is_superuser: bool = False
     is_verified: bool = False
@@ -63,5 +57,4 @@ class RegisterDTO(Email):
 
 class ResetPassword(Email):
     password: ValidPassword
-    code_confirm: str
-
+    code_confirm: ValidCodeConfirm
