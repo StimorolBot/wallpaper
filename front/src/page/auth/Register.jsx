@@ -1,26 +1,24 @@
-import { useState } from "react"
+import { useForm } from "react-hook-form"
 import { Link, useNavigate } from "react-router-dom"
 
 import { api } from "../../api/config"
 import { Loader } from "../../components/loader/Loader"
 import { BtnSend } from "../../components/ui/btn/BtnSend"
 import { useFetch } from "../../components/hook/useFetch"
-import { AuthInput } from "../../components/ui/input/AuthInput"
+
 import { CodeInput } from "../../components/ui/input/CodeInput"
+import { EmailInput } from "../../components/ui/input/auth/EmailInput"
 import { CheckboxInput } from "../../components/ui/input/CheckboxInput"
+import { UserNameInput } from "../../components/ui/input/auth/UserNameInput"
+import { PasswordInput } from "../../components/ui/input/auth/PasswordInput"
 
 
 export function Register() {
     const navigate = useNavigate()
-    const [authData, setAuthData] = useState({
-        user_name: null,
-        email: null,
-        password: null,
-        code_confirm: null
-    })
+    const {register, handleSubmit, formState: {errors}, resetField, setError} = useForm({mode: "onChange"})
 
-    const [sendData, isLoadingDat, errorData] = useFetch(
-        async (event) => {
+    const [request, isLoading, error] = useFetch(
+        async (event, authData) => {
             event.preventDefault()
             await api.post("/auth/register", authData)
             .then((response) => {
@@ -28,46 +26,32 @@ export function Register() {
             })
         }
     )
+
+    const validForm = async (data, event) => {
+        if (data.password !== data.password_repeat){
+            setError("password", { type: "custom", message: "Пароли не совпадают" })
+            setError("password_repeat", { type: "custom", message: "Пароли не совпадают" })
+        }
+        else if (data.password === data.password_repeat ){
+            await request(event, data)
+            resetField("code_confirm")
+        }
+    }
  
     return (
         <section className="auth register">
             <h2 className="hidden">Форма для регистрации</h2>
-            { isLoadingDat
+            { isLoading
                 ? <Loader />
-                : <form className="auth__form auth__form_big" onSubmit={(event) => sendData(event)}>
+                : <form className="auth__form auth__form_big" onSubmit={handleSubmit(validForm)}>
                     <h2 className="auth-title">Регистрация</h2>
                     <div className="auth-input__container">
-                        <AuthInput
-                            id={"username-input"}
-                            type={"text"}
-                            lblTitle={"Имя пользователя"}
-                            onChange={(event) =>
-                                setAuthData({ ...authData, user_name: event.target.value })
-                            }
-                        />
-                        <AuthInput
-                            id={"email-input"}
-                            lblTitle={"Электронная почта"}
-                            type={"email"}
-                            onChange={(event) =>
-                                setAuthData({ ...authData, email: event.target.value })
-                            }
-                        />
-                        <CodeInput authData={authData} setAuthData={setAuthData} emailType={"CONFIRM"}/>
-                        <AuthInput
-                            id={"password"}
-                            lblTitle={"Пароль"}
-                            inputType={"password"}
-                            minLength={8}
-                            onChange={(event) =>
-                                setAuthData({ ...authData, password: event.target.value })
-                            }
-                        />
-                        <AuthInput
-                            id="repeat-password"
-                            lblTitle="Повторите пароль"
-                            inputType={"password"}
-                            minLength={8}
+                        <UserNameInput register={register} errors={errors}/>
+                        <EmailInput register={register} errors={errors}/>                             
+                        <CodeInput register={register} errors={errors} emailType={"CONFIRM"} handleSubmit={handleSubmit}/>
+                        <PasswordInput register={register} errors={errors}/>
+                        <PasswordInput register={register} errors={errors} 
+                            lblTitle="Повторите пароль" id={"password_repeat"}
                         />
                     </div>
                     <CheckboxInput>
