@@ -1,0 +1,23 @@
+.reaction-container
+    display: flex
+    position: absolute
+    left: 50%
+    bottom: 5px
+    opacity: 0
+    visibility: hidden
+    backdrop-filter: blur(5px)
+    transform: translateX(-50%)
+    border-radius: 12px
+
+.like,
+.dislike
+    cursor: pointer
+    scale: 0.7
+    filter: var(--filter-grey)
+
+    &:hover
+        filter: var(--filter-red)
+
+.like_active,
+.dislike_active
+    filter: var(--filter-red)
