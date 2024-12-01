@@ -2,9 +2,10 @@ import json
 import string
 import secrets
 from uuid import uuid4
+from pydantic import EmailStr
 from fastapi import status, HTTPException, Request
 
-from src.conf import redis
+from src.config import redis
 from core.logger import auth_logger
 
 
@@ -12,19 +13,19 @@ def generate_uuid() -> str:
     return uuid4().hex
 
 
-def valid_forbidden_symbols(val: str, email: bool = False):
+def valid_isalnum(val: str):
+    if val.isalnum() is False:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Поле может содержать только буквы и цифры")
+
+
+def valid_password(val: str):
     symbols = {
-        "[", "]", "\\", "^", "$", "|", "?", "*", "+", "(", ")",
-        "{", "}", "/", "#", "'", '"', "@", " ", "-", "!", "~",
-        "`", ".", ",", "%", "=", "№", "&"
+        "[", "]", "\\", "$", "|", "?", "*", "+",
+        "(", ")", "{", "}", "/", "#", "'", '"',
+        "@", " ", "!", "~", "`", "%", "=", "&"
     }
-
-    if email:
-        symbols.remove("@")
-        symbols.remove(".")
-
     if symbols & set(val):
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Поле не должно содержать: {symbols}")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Пароль но должен содержать: {symbols}")
 
 
 def valid_len(val: str, min_val: int, max_val: int):
@@ -35,12 +36,12 @@ def valid_len(val: str, min_val: int, max_val: int):
         )
 
 
-async def set_redis(name: str, value: dict, ex: int = 2):
+async def set_redis(name: EmailStr, value: dict, ex: int = 2):
     value_str = json.dumps(value)
     await redis.set(name=name, value=value_str, ex=ex)
 
 
-async def get_redis(key: str) -> dict | None:
+async def get_redis(key: EmailStr) -> dict | None:
     data_dict = await redis.get(key)
     if not data_dict:
         return None
@@ -53,10 +54,10 @@ def generate_code(code_len: int = 6) -> str:
 
 
 def get_info_from_headers(request: Request) -> list:
+    client_ip = request.client.host
     try:
         user_agent = request.headers["user-agent"]
         origin = request.headers["origin"]
-        client_ip = "заглушка"
         return [user_agent, origin, client_ip]
     except KeyError:
         auth_logger.error("Не удалось получить данные из headers")
