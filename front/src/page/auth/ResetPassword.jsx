@@ -1,58 +1,60 @@
-import { useState } from "react"
+import { useForm } from "react-hook-form"
+import { useNavigate } from "react-router-dom"
 
 import { api } from "../../api/config"
+import { useFetch } from "../../components/hook/useFetch"
 import { BtnSend } from "../../components/ui/btn/BtnSend"
-import { AuthInput } from "../../components/ui/input/AuthInput"
+import { Loader } from "../../components/loader/Loader"
+
 import { CodeInput } from "../../components/ui/input/CodeInput"
- 
+import { EmailInput } from "../../components/ui/input/auth/EmailInput"
+import { PasswordInput } from "../../components/ui/input/auth/PasswordInput"
+
 
 export function ResetPassword(){
-    const [authData, setAuthData] = useState({"email": null})
+    const navigate = useNavigate("")
+    const {register, handleSubmit, formState: {errors}, resetField, setError} = useForm({mode: "onChange"})
 
-    const resetPassword = async () => {
-
+    const [request, isLoading, error] = useFetch(
+        async (event, authData) => {
+            event.preventDefault()
+            await api.post("/auth/reset-password", authData)
+            navigate("/auth/login")
+        }
+    )
+    
+    const validForm = async (data, event) => {
+        if (data.password !== data.password_repeat){
+            setError("password", { type: "custom", message: "Пароли не совпадают" })
+            setError("password_repeat", { type: "custom", message: "Пароли не совпадают" })
+        }
+        else if (data.password === data.password_repeat ){
+            await request(event, data)
+            resetField("code_confirm")
+        }
     }
 
     return(
         <section className="auth reset-password">
-            <h2 className="hidden">
-                Восстановление пароля
-            </h2>
+            <h2 className="hidden">Восстановление пароля</h2>
             <div className="wrapper">
-                <form className="auth__form auth__form_small" onSubmit={(event) => resetPassword(event)}>
-                    <h2 className="auth-title">
-                        Восстановление пароля
-                    </h2>
-                    <div className="auth-input__container">
-                        <AuthInput
-                            id="email-input"
-                            lblTitle="Электронная почта"
-                            type="email"
-                            minLength={ 10 }
-                            maxLength={ 40 }
-                            onChange={(event) => setAuthData({...authData, "email": event.target.value})}
-                        />
-                        <CodeInput authData={authData}/>
-                        <AuthInput
-                            id="password-input"
-                            lblTitle="Пароль"
-                            inputType={"password"}
-                            minLength={ 8 }
-                            maxLength={ 32 }
-                            onChange={(event) => setAuthData({...authData, "password": event.target.value})}
-                        />
-                        <AuthInput
-                            id="repeat-password-input"
-                            lblTitle="Повторите пароль"
-                            inputType={"password"}
-                            minLength={ 8 }
-                            maxLength={ 32 }
-                        />
-                    </div>    
-                    <div className="auth-btn__container hover">
-                        <BtnSend> Восстановить </BtnSend>
-                    </div>                  
-                </form>
+                { isLoading
+                    ? <Loader/>
+                    : <form className="auth__form auth__form_small" onSubmit={handleSubmit(validForm)}>
+                        <h2 className="auth-title"> Восстановление пароля </h2>
+                        <div className="auth-input__container">
+                            <EmailInput register={register} errors={errors}/>
+                            <CodeInput register={register} errors={errors} emailType={"RESET"} handleSubmit={handleSubmit}/>
+                            <PasswordInput register={register} errors={errors}/>
+                            <PasswordInput register={register} errors={errors} 
+                                lblTitle="Повторите пароль" id={"password_repeat"}
+                            />                        
+                        </div>    
+                        <div className="auth-btn__container hover">
+                            <BtnSend> Восстановить </BtnSend>
+                        </div>                  
+                    </form>
+                }
             </div>
         </section>
     )
