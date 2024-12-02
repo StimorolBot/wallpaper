@@ -7,7 +7,6 @@ import { Pagination } from "../components/pagination/Pagination"
 
 
 export function Home(){
-    const isAlignRef = useRef(true)
     const [imgList, setImgList] = useState([])
 
     return(
@@ -21,8 +20,7 @@ export function Home(){
                 <Pagination
                     path={"/"}
                     itemList={imgList}
-                    setItemList={setImgList}
-                    isAlignRef={isAlignRef}  
+                    setItemList={setImgList}  
                     emptyListMsg={
                         <p className="empty-list__msg">
                             На данный момент на сайте отсутствуют сгенерированные изображения. <br/>
