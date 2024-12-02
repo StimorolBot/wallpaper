@@ -9,6 +9,8 @@ from src.db.get_session import get_async_session
 from core.my_functools import generate_code, set_redis, get_redis, get_info_from_headers
 
 from src.app.auth.model import AuthTable
+from src.app.user.model import UserTable
+from src.app.user.user_functools import get_avatar
 from src.app.img.get_user import get_user_by_token
 from src.app.auth.user_manager import user_manager
 from src.app.auth.token.jwt_token import jwt_token
@@ -56,9 +58,14 @@ async def register(register_user: Register, session: AsyncSession = Depends(get_
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Неверный код подтверждения")
 
     reg_dict_user = user_manager.user_config(auth_dict_user=register_user.model_dump())
-    await crud.create(session=session, table=AuthTable, data=reg_dict_user)
+    user_create = await crud.create(session=session, table=AuthTable, data=reg_dict_user)
 
-    auth_logger.info("Создание учетной записи: %s", reg_dict_user["email"])
+    avatar = await get_avatar()
+    await crud.create(
+        session=session, table=UserTable,
+        data={"uuid_user": user_create.uuid_user, "avatar_user": avatar}
+    )
+    auth_logger.info("Создание учетной записи: %s -> %s", user_create.uuid_user, user_create.email)
     return reg_dict_user
 
 
