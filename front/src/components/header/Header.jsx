@@ -1,13 +1,31 @@
-import cookies from "../../cookie"
 import { Link } from "react-router-dom"
+import { useEffect, useState } from "react"
+
+import cookies from "../../cookie"
+import { api } from "../../api/config"
 import { SubMenu } from "../ui/menu/SubMenu"
 import { MainSearch } from "../ui/input/MainSearch"
+import { useFetch } from "../hook/useFetch"
 
 import "./header.sass"
 
 
 export function Header() {
     const token = cookies.get("access_token")
+    const [userinfo, setUserInfo] = useState()
+
+    const [request, isLoading, error] = useFetch(
+        async (event) => {
+            event.preventDefault()
+            await api.get("/user").then((response) => {setUserInfo({...response.data})})
+        }
+    )
+    
+    useEffect(() => {
+        (async () => {
+            await request(event)
+        })()
+    }, [])
 
     return(
         <>
@@ -32,7 +50,10 @@ export function Header() {
                             ? <Link className="header__auth-link" to="/auth/login">
                                 <img className="header__auth-img" src="/static/user.svg" alt="auth" />
                             </Link> 
-                            : "Вывести аву"
+                            : <img
+                                className="user-avatar"
+                                src={"data:image/jpeg;base64," + userinfo?.avatar_user} alt="avatar"
+                            />
                         }
                     </div>
                 </div>
