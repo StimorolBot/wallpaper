@@ -5,10 +5,10 @@ import "./style/drop_down_menu.sass"
 
 
 export function DropDownMenu({itemList, setFilter, title}){
-    const clikRef = useRef(null)
+    const clickRef = useRef(null)
     const [isShow, setIsShow] = useState(false)
 
-    useClickOutside(clikRef, setIsShow)
+    useClickOutside(clickRef, setIsShow)
 
     const setValue = (e) => {
         setFilter({"front": e.target.innerHTML , "back": e.target.getAttribute("value")})
@@ -16,7 +16,7 @@ export function DropDownMenu({itemList, setFilter, title}){
     }
 
     return(
-        <div className="dropdown" ref={clikRef}>
+        <div className="dropdown" ref={clickRef}>
             <div className="dropdown-btn__container"
                 onClick={() => setIsShow((state) => !state)}
             >
@@ -35,7 +35,7 @@ export function DropDownMenu({itemList, setFilter, title}){
                     "dropdown__container dropdown__container_active"
                     : "dropdown__container"
                 } 
-                ref={clikRef}
+                ref={clickRef}
             >
                 {itemList?.map((item, index) => {
                     return(
