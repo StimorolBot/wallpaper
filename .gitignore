@@ -12,3 +12,4 @@ jwt-public.pem
 .pytest_cache
 .vscode
 .postgres
+.user_avatar
