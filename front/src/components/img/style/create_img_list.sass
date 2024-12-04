@@ -5,7 +5,7 @@
     margin-bottom: 20px
 
     &:hover .btn-download,
-    &:hover .reaction-img__hov
+    &:hover .reaction-container
         opacity: 1
         visibility: visible
         z-index: 2  
@@ -22,26 +22,3 @@
 
 .img__item_solo
     max-height: 520px
-
-.reaction-img__hov
-    position: absolute
-    opacity: 0
-    visibility: hidden
-    bottom: 5px
-    display: flex
-    width: 100%
-    justify-content: center
-    gap: 5%    
-
-.like,
-.dislike
-    cursor: pointer
-    width: 35px
-    filter: var(--filter-grey)
-
-    &:hover
-        filter: var(--filter-red)
-
-.like_active,
-.dislike_active
-    filter: var(--filter-red)
