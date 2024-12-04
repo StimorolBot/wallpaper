@@ -1,9 +1,8 @@
 from typing import Annotated
-from fastapi_cache.decorator import cache
 from fastapi_pagination import Page, paginate
 from fastapi import APIRouter, status, Depends, HTTPException, Cookie, Response
 
-from sqlalchemy import select, func, and_, case, desc, distinct
+from sqlalchemy import select, func, and_, case, desc
 from sqlalchemy.sql.functions import concat
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.dialects.postgresql import INTERVAL
@@ -22,7 +21,7 @@ from src.app.img.enums.status_r import StatusReaction
 from src.app.img.reaction.model import ReactionTable
 from src.app.img.sql_request import get_info_about_img
 from src.app.img.reaction.schemas import ReactionSchemas
-from src.app.img.schemas import ImageSchemas, AllImageDTO
+from src.app.img.schemas import ImageSchemas, AllImageDTO, PublishSchemas, ValidUuidImg
 
 img_router = APIRouter(tags=["img"])
 
@@ -32,7 +31,7 @@ async def create_img(
         image_schemas: ImageSchemas,
         session: AsyncSession = Depends(get_async_session),
         user: dict = Depends(get_user_by_token)
-) -> str:
+) -> dict:
     base64_img = await api.get_base64_img(
         prompt=image_schemas.prompt, style=image_schemas.style.value,
         width=image_schemas.width, height=image_schemas.height
@@ -41,12 +40,13 @@ async def create_img(
         "prompt": image_schemas.prompt,
         "img_base64": base64_img,
         "style": image_schemas.style.value,
-        "uuid_user": user["sub"]
+        "uuid_user": user["sub"],
+        "is_public": image_schemas.is_public
     }
-    await crud.create(session=session, data=data, table=ImgTable)
-    img_logger.debug("Изображение создано")
+    stmt = await crud.create(session=session, data=data, table=ImgTable)
+    img_logger.debug("Пользователь %s создал изображение %s", stmt.uuid_user, stmt.uuid_img)
 
-    return base64_img
+    return {"uuid_img": stmt.uuid_img, "base64_img": base64_img}
 
 
 @img_router.get("/", status_code=status.HTTP_200_OK)
@@ -54,7 +54,7 @@ async def get_all_img(
         access_token: Annotated[str, Cookie()] = None,
         session: AsyncSession = Depends(get_async_session)
 ) -> Page:
-    query = await get_info_about_img(access_token)
+    query = await get_info_about_img(access_token, is_public=True)
     res = await session.execute(query.order_by(desc(ImgTable.create_date)))
     img_list = res.mappings().all()
     data = [AllImageDTO.model_validate(item, from_attributes=True) for item in img_list]
@@ -86,9 +86,8 @@ async def get_popular_img(
 
 
 @img_router.get("/wallpaper/{uuid_img}")
-# @cache(expire=10)
 async def get_img_by_uuid(
-        uuid_img: str, access_token: Annotated[str, Cookie()] = None,
+        uuid_img: ValidUuidImg, access_token: Annotated[str, Cookie()] = None,
         session: AsyncSession = Depends(get_async_session)
 ):
     like_subquery = (
@@ -107,8 +106,9 @@ async def get_img_by_uuid(
 
     query = await get_info_about_img(
         access_token,
-        ImgTable.style, ImgTable.prompt, ImgTable.create_date, AuthTable.user_name, like_subquery, dislike_subquery,
-        uuid_img=uuid_img
+        ImgTable.style, ImgTable.prompt, ImgTable.create_date,
+        AuthTable.user_name, like_subquery, dislike_subquery,
+        uuid_img=uuid_img, is_public=True
     )
 
     res = await session.execute(query.distinct())
@@ -120,7 +120,7 @@ async def get_img_by_uuid(
     return img_query
 
 
-@img_router.post("/set-reaction")
+@img_router.post("/set-reaction", status_code=status.HTTP_200_OK)
 async def set_reaction(
         reaction: ReactionSchemas,
         session: AsyncSession = Depends(get_async_session),
@@ -158,6 +158,7 @@ async def set_reaction(
             table=ReactionTable,
             data={"uuid_user": user["sub"], "uuid_img": reaction.img_uuid, "reaction": reaction.reaction}
         )
+        img_logger.debug("Добавлена запись для %s", reaction.img_uuid)
         return
 
     match result[-1][0]:
@@ -187,3 +188,17 @@ async def set_reaction(
                 data={"uuid_user": user["sub"], "uuid_img": reaction.img_uuid, "reaction": reaction.reaction}
             )
             img_logger.debug("Реакция создана")
+
+
+@img_router.post("/publish")
+async def publish(
+        img: PublishSchemas,
+        user: dict = Depends(get_user_by_token),
+        session: AsyncSession = Depends(get_async_session)
+):
+    await crud.update(
+        session=session, table=ImgTable,
+        uuid_user=user["sub"], uuid_img=img.uuid_img,
+        data={"is_public": True}
+    )
+    img_logger.debug("Пользователь %s сделал изображение %s публичным", user["sub"], img.uuid_img)
