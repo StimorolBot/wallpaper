@@ -1,4 +1,4 @@
-import "./style/input-radio.sass"
+import "./style/input_radio.sass"
 
 export function InputRadio({id, name, text, ...props}){
     return(
