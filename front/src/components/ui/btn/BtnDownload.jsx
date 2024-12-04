@@ -1,4 +1,4 @@
-import "./style/btn-download.sass"
+import "./style/btn_download.sass"
 
 export function BtnDownload({href, name}){
     return(

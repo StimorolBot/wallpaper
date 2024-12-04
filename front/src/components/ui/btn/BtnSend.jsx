@@ -1,4 +1,4 @@
-import "./style/btn-send.sass"
+import "./style/btn_send.sass"
 
 
 export function BtnSend({ children, ...props }) {
