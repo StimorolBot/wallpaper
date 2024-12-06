@@ -8,52 +8,47 @@
     display: flex
     align-items: center
     justify-content: space-between
+    max-height: 100px
 
 .logo
     font-family: "Tourney", sans-serif
-    color: #fff
-    font-size: 22pt
+    color: var(--white)
+    font-size: clamp(10px, 10vw, 40px)
     cursor: pointer
-    transition: 0.2s 
+    transition: var(--main-transition)
 
     &:hover
-        color: #9e9d9d
-
+        color: var(--gray)
+            
 .header__container
-    display: grid
-    grid-auto-flow: column
-    grid-template-columns: 350px auto auto
-
-.header-menu__img
-    cursor: pointer
-    margin: 0 2px
+    display: flex
+    align-items: center
 
 .header-menu
     display: flex
     column-gap: 8px
-
-.header-menu__img,
+    
+.header-menu__svg,
 .header__auth-img
-    filter: var(--white)
-    transition: 0.2s
+    transition: var(--main-transition)
     cursor: pointer
+    fill: var(--white)
 
     &:hover
-       filter: var(--filter-grey)
-       transition: var(--main-transition)
-
-.header__auth-img
-    scale: 1.3
+        fill: var(--gray)
 
 .line
     width: 1px
-    background-color: #9e9d9d
+    height: 45px
+    background-color: var(--gray)
     margin: 0 20px
 
 .header__auth-container
-    width: 30px
-    height: 30px
     position: relative
 
 .user-avatar
+    max-width: 50px
     cursor: pointer
+
+.header__auth-img
+    scale: 1.2
