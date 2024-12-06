@@ -4,19 +4,18 @@
 .submenu__nav
     display: flex
     column-gap: 15px
+    flex-wrap: wrap
 
 .submenu__nav-img
     margin-right: 5px
         
 .submenu__nav-link
     display: flex
-    font-size: 18px
+    font-size: clamp(12px, 6vw, 18px)
     font-weight: 500
     align-items: center
-    color: var(--navigate-color)
+    color: var(--white)
+    transition: var(--main-transition)
 
     &:hover
         color: var(--gray)
-
-.submenu__nav-img
-    scale: 0.7
