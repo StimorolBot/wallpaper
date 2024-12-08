@@ -1,24 +1,38 @@
 .user-menu
     position: absolute
-    top: 35px
-    left: -155px
-    border: 2px solid #474343
+    top: 60px
+    left: -175px
+    border: 2px solid var(--gray)
     border-radius:  5px 
     background-color: #2c2c2c
     padding: 0 5px
     overflow: hidden
-    width: clamp(200px, 50%, 400px)
+    max-width: 220px
+    z-index: 9
 
 .user-menu__header,
 .user-menu__item,
 .user-menu__footer
     display: flex
     align-items: center
-    padding: 10px 0
+    padding: 4px 0
+    transition: var(--main-transition)
+    cursor: pointer
 
 .user-menu-avatar
     max-width: 40px
 
+.user-menu__item
+    border-radius: 4px
+    &:hover
+        background: var(--gray)
+
+.user-menu__link
+    padding: 0 8px
+
 .user-menu__footer
-    border-top: 1px solid #fff
-    justify-content: space-evenly   
+    border-top: 1px solid var(--gray)
+    justify-content: space-evenly
+
+.user-menu__footer-svg
+    fill: none
