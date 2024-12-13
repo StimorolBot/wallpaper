@@ -1,5 +1,6 @@
 .footer
     background-color: #2c2c2c
+    padding: 2px 0
 
 .footer-info-_container
     display: flex
@@ -7,13 +8,12 @@
     align-items: center
 
 .footer-info__img
-    filter: var(--navigate-color)
-    width: 40px
+    width: clamp(10px, 50%, 50px)
     padding-right: 10px
 
 .footer-info__link
     align-self: center
-    color: var(--navigate-color)
+    font-size: clamp(10px, 4vw, 25px)
     transition: var(--main-transition)
 
     &:hover
