@@ -1,57 +1,52 @@
-import React from "react"
+import { Link } from "react-router-dom"
+import { Copy } from "../copy/Copy"
+
 import "./style/about_img_card.sass"
 
-
 export function AboutImgCard({ imgInfo }){
+
     return(
-        <div className="about-img__card">
-            { imgInfo?.map((item, index) => {
-                 return(
-                    <React.Fragment key={index}>
-                    <div className="about__card-container">
-                        <dt className="about__card-dt">Автор:</dt>
-                        <dd className="about__card-dd">{item.user_name}</dd>
-                    </div>
-                    
-                    <div className="about__card-container">
-                        <dt className="about__card-dt">Стиль:</dt>
-                        <dd className="about__card-dd">
-                            {item.style}
-                        </dd>
-                    </div>
-                    
-                    <div className="about__card-container">
-                        <dt className="about__card-dt">Дата создания:</dt>
-                        <dd className="about__card-dd">
-                            <time dateTime={item.create_date}>
-                                {item.create_date.split("T")[0]}
-                            </time>
-                        </dd>
-                    </div>
-
-                    <div className="about__card-container">
-                        <dt className="about__card-dt">Лайков:</dt>
-                        <dd className="about__card-dd about__list-promt">
-                            {item.like_count}
-                        </dd>
-                    </div>
-
-                    <div className="about__card-container">
-                        <dt className="about__card-dt">Дизлайков:</dt>
-                        <dd className="about__card-dd about__list-promt">
-                            {item.dislike_count}
-                        </dd>
-                    </div>
-                    
-                    <div className="about__card-container">
-                        <dt className="about__card-dt">Промт:</dt>
-                        <dd className="about__card-dd">
-                            {item.prompt}
-                        </dd>
-                    </div>
-                </React.Fragment> 
-                )
-            })}
+        <div className="about-img">
+            <ul className="about-img__author about_bg">
+                <li className="about-img__author-item">
+                    <Link className="about-img__link" to={"/user/" + imgInfo?.uuid_user}>
+                        <img
+                            className="about-img__ava"
+                            src={"data:image/jpeg;base64," + imgInfo?.avatar_user} 
+                            alt="author-avatar"
+                        />
+                    </Link>
+                </li>
+                <li className="about-img__author-item">
+                    <span className="about__username">{imgInfo?.user_name}</span>
+                </li>
+                <li className="about-img__author-item">
+                    <img className="chat" src="/static/chat.svg" alt="chat" />
+                    <button className="add-user">Подписаться</button>
+                </li>                
+            </ul>
+            <ul className="about-img__tag about_bg">
+            </ul>
+            <ul className="about-img__info about_bg">
+                <li className="about-img__info-item">
+                    <dt className="about-img__dt">Стиль</dt>
+                    <dd className="about-img__dd">{": " + imgInfo?.style}</dd>
+                </li>
+                <li className="about-img__info-item">
+                    <dt className="about-img__dt">Дата создания</dt>
+                    <dd className="about-img__dd">
+                        <time dateTime={imgInfo?.create_date}>
+                            {": " + imgInfo?.create_date?.split("T")[0]}
+                        </time>
+                    </dd>
+                </li>
+                <li className="about-img__info-item">
+                    <dt className="about-img__dt">Промпт</dt>
+                    <dd className="about-img__dd">{": " + imgInfo?.prompt}</dd>
+                    <Copy buffer={imgInfo?.prompt}/>
+                </li>
+            </ul>
         </div>
     )
 }
+       
