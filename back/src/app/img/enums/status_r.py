@@ -1,7 +1,0 @@
-from enum import Enum
-
-
-class StatusReaction(Enum):
-    EQUAL_REACTIONS = "EQUAL_REACTIONS"
-    DIFFERENT_REACTIONS = "DIFFERENT_REACTIONS"
-    NO_REACTION = "NO_REACTION"
