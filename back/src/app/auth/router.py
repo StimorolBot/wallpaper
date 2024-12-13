@@ -45,7 +45,7 @@ async def get_code_confirm(data: CodeConfirm, info_headers: list = Depends(get_i
 
 @register_router.post("/register", status_code=status.HTTP_201_CREATED, response_model=RegisterDTO)
 async def register(register_user: Register, session: AsyncSession = Depends(get_async_session)):
-    user = await crud.read(table=AuthTable, session=session, email=register_user.email)
+    user = await crud.read(table=AuthTable.email, session=session, email=register_user.email)
 
     if user:
         raise HTTPException(
@@ -100,10 +100,10 @@ async def logout(user: dict = Depends(get_user_by_token), session: AsyncSession 
     await crud.update(
         session=session,
         table=AuthTable,
-        email=user["email"],
+        uuid_user=user["sub"],
         data={"is_active": False}
     )
-    auth_logger.info("Выход из учетной записи: %s", user["email"])
+    auth_logger.info("Выход из учетной записи: %s", user["sub"])
 
 
 @register_router.patch("/reset-password", status_code=status.HTTP_200_OK)
