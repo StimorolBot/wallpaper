@@ -9,6 +9,7 @@ from core.my_functools import generate_uuid
 
 if TYPE_CHECKING:
     from src.app.img.model import ImgTable
+    from src.app.user.model import UserTable
 
 
 class AuthTable(Base):
@@ -23,4 +24,5 @@ class AuthTable(Base):
     is_superuser: Mapped[bool] = mapped_column(default=False)
     is_verified: Mapped[bool] = mapped_column(default=False)
 
-    img_relationship: Mapped[List["ImgTable"]] = relationship(back_populates="user_relationship")
+    img_relationship: Mapped[List["ImgTable"]] = relationship(back_populates="auth_relationship")
+    user_relationship: Mapped["UserTable"] = relationship(back_populates="auth_relationship")
