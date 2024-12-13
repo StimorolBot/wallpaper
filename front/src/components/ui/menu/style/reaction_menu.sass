@@ -1,23 +1,38 @@
 .reaction-container
     display: flex
     position: absolute
+    align-items: center
     left: 50%
     bottom: 5px
     opacity: 0
     visibility: hidden
-    backdrop-filter: blur(5px)
+    backdrop-filter: invert(20%)
     transform: translateX(-50%)
     border-radius: 12px
+    padding: 0 10px
+
+@keyframes knock
+    0%
+        scale: 0.7
+    50%
+        scale: 0.8
+    100%
+        scale: 0.7
 
 .like,
 .dislike
     cursor: pointer
+    fill: none 
     scale: 0.7
-    filter: var(--filter-grey)
+    stroke: #000
+    transition: var(--main-transition)
 
+.like
     &:hover
-        filter: var(--filter-red)
+        stroke: #9B2D30
+        animation: knock 0.5s linear infinite
 
-.like_active,
-.dislike_active
-    filter: var(--filter-red)
+.like_active
+    fill:#9B2D30
+    stroke: none
+    transition: var(--main-transition)
