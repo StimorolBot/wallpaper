@@ -9,11 +9,18 @@
     gap: 10px
     align-items: center
 
+.tag__container
+    border: 2px solid red
+    border-radius: 12px
+    padding: 4px
+    display: flex
+    flex-wrap: wrap
+
 .img-generate__container
     max-width: 370px
     margin-right: 10px
    
-.form__create-img_active
+.img-form__create_hidden
     opacity: 0
     transition: var(--main-transition)
     visibility: hidden
@@ -27,7 +34,7 @@
     overflow: hidden
     align-self: center
 
-.img-container_empty
+.img-container_hidden
     opacity: 0
     visibility: hidden
 
@@ -35,15 +42,14 @@
     max-width: 540px
     max-height: 400px
     
-.form__create-img
+.img-form__create
     border: 2px solid #000
     border-radius: 10px
-    max-width: 540px
+    max-width: 590px
     display: flex
     flex-direction: column
     justify-content: space-between
-    backdrop-filter: blur(2px)
-    padding: 35px
+    padding: 15px
     row-gap: 10px
 
 .checkbox-style__container
@@ -54,11 +60,9 @@
 
 .size__container
     display: flex
-    justify-content: space-between
-    align-items: center
-    gap: 20px
-    flex-wrap: wrap
+    flex-direction: column
+    row-gap: 10px
 
 .form__create-btn-container
-    position: relative
-    margin: 0 auto
+    display: flex
+    justify-content: space-evenly
