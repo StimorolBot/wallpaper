@@ -1,7 +1,7 @@
 import json
 import string
 import secrets
-from uuid import uuid4
+from uuid import uuid4, UUID
 from pydantic import EmailStr
 from fastapi import status, HTTPException, Request
 
@@ -34,6 +34,13 @@ def valid_len(val: str, min_val: int, max_val: int):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"Поле должно быть в пределах от {min_val} до {max_val} символов"
         )
+
+
+def valid_uuid(uuid: str, handler, version: int = 4) -> str:
+    try:
+        return UUID(uuid, version=version).hex
+    except ValueError:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Некорректный uuid")
 
 
 async def set_redis(name: EmailStr, value: dict, ex: int = 2):
