@@ -12,15 +12,12 @@ import "./style/about_img.sass"
 
 
 export function AboutImg(){
-    const [imgInfo, setImgInfo] = useState()
+    const [response, setResponse] = useState([{}])
     const uuidImg = window.location.pathname.split("wallpaper/")[1]
     
     const [request, isLoading, error] = useFetch(
         async () => {
-            await api.get(`/wallpaper/${uuidImg}`)
-                .then((response) => {
-                    setImgInfo([...response.data])
-                }
+            await api.get(`/wallpaper/${uuidImg}`).then((r) => {setResponse([...r.data])}
             )
         }
     )
@@ -41,12 +38,12 @@ export function AboutImg(){
             <div className="wrapper">
                 <div className="about-img__container">
                     {isLoading
-                        ? <Loader align={false}/>
+                        ? <Loader/>
                         : <div className="about-img__wrapper">
                             <div className="about__img">
-                                <CreateImgList imgList={imgInfo} setImgList={setImgInfo} flag={false}/>
+                                <CreateImgList imgList={response} setImgList={setResponse} flag={false}/>
                             </div>
-                            <AboutImgCard imgInfo={ imgInfo } uuidImg={ uuidImg }/>
+                            <AboutImgCard imgInfo={response[0]} />
                         </div>
                     }
                 </div>
