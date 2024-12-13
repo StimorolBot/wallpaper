@@ -1,26 +1,57 @@
-.about-img__card
-    backdrop-filter: blur(2px)
-    border: 2px solid #000
-    padding: 10px
-    border-radius: 10px
-    margin: 0 20px 20px 20px
-    max-width: 460px
-    width: 100%
-    
-.about__card-container
+.about-img
     display: flex
-    overflow: hidden
+    flex-direction: column
+    margin: 0 20px 20px 20px
+    width: clamp(200px, 50%, 600px)
+
+.about_bg
+    border-radius: 10px
+    padding: 10px
+    background-color: #2c2c2c
+
+.about-img__author
+    display: flex
+    align-items: center
+
+// .about-img__author-item
+
+.about-img__ava
+    max-width: 70px
+
+// .about__username
+
+// .about__status
+
+// .chat
+
+// .add-user
+
+.about-img__tag
+    margin: 15px 0
+
+.about-img__info-container
+    display: flex
     padding: 10px 0
 
-.about__card-dt
+.about-img__info-item
+    display: flex
+    margin: 10px 0
+    position: relative
+
+.about-img__dt
     align-self: center
     font-weight: 700
     max-width: 145px
 
-.about__card-dd
-    padding: 0 0 0 8px
-    word-break: break-word
-    display: -webkit-box
-    -webkit-line-clamp: 3
-    -webkit-box-orient: vertical
-    overflow: hidden
+
+// .about-img__dd
+
+    
+
+// .about__card-dd
+//     padding: 0 0 0 8px
+//     word-break: break-word
+//     display: -webkit-box
+//     -webkit-line-clamp: 3
+//     -webkit-box-orient: vertical
+//     overflow: hidden
