@@ -24,12 +24,12 @@ class CustomLogger(ColoredFormatter):
         self.format = "%(levelname)-7s:   %(module)15s:%(lineno)-3d   %(asctime)s -> %(message)s"
 
         self.terminal_log = logging.StreamHandler()
-        self.terminal_log.setLevel(logging.DEBUG)
+        self.terminal_log.setLevel(lvl)
         self.terminal_log.setFormatter(ColoredFormatter())
         self.logger.addHandler(self.terminal_log)
 
         self.file_log = logging.FileHandler(filename=self.path)
-        self.file_log.setLevel(logging.INFO)
+        self.file_log.setLevel(lvl)
         self.file_log.setFormatter(logging.Formatter(self.format))
         self.logger.addHandler(self.file_log)
 
@@ -40,10 +40,12 @@ CustomLogger(loger_name="img_logger", path=f"{PATH}/img.log")
 CustomLogger(loger_name="auth_logger", path=f"{PATH}/auth.log")
 CustomLogger(loger_name="smtp_logger", path=f"{PATH}/smtp.log")
 CustomLogger(loger_name="rmq_logger", path=f"{PATH}/rmq.log")
-CustomLogger(loger_name="llama_logger", path=f"{PATH}/llama.log")
+CustomLogger(loger_name="os_logger", path=f"{PATH}/os.log")
+CustomLogger(loger_name="user_logger", path=f"{PATH}/user.log")
 
 img_logger = logging.getLogger("img_logger")
 auth_logger = logging.getLogger("auth_logger")
 smtp_logger = logging.getLogger("smtp_logger")
 rmq_logger = logging.getLogger("rmq_logger")
-llama_logger = logging.getLogger("llama_logger")
+os_logger = logging.getLogger("os_logger")
+user_logger = logging.getLogger("user_logger")
