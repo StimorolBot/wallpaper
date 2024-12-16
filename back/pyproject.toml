@@ -31,6 +31,8 @@ pydantic = {version = "2.9.2", extras = ["email"]}
 llama-index = "^0.12.1"
 ollama = "^0.4.1"
 aio-pika = "^9.5.0"
+python-multipart = "^0.0.19"
+websockets = "^14.1"
 
 
 [build-system]
