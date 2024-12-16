@@ -2,7 +2,7 @@ from typing import Annotated
 from fastapi_pagination import Page, paginate
 from fastapi import APIRouter, status, Depends, HTTPException, Cookie, Response
 
-from sqlalchemy import select, func, and_, case, desc
+from sqlalchemy import select, func, desc
 from sqlalchemy.sql.functions import concat
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.dialects.postgresql import INTERVAL
@@ -13,15 +13,17 @@ from core.logger import img_logger
 from src.db.get_session import get_async_session
 from src.app.img.get_user import get_user_by_token
 
-from src.app.auth.model import AuthTable
 from src.app.img.model import ImgTable
+from src.app.user.model import UserTable
+from src.app.auth.model import AuthTable
 from src.app.img.generate_img import api
 from src.app.img.enums.filter_time import FilterTime
-from src.app.img.enums.status_r import StatusReaction
+from src.app.img.enums.operation_type import Operation
 from src.app.img.reaction.model import ReactionTable
-from src.app.img.sql_request import get_info_about_img
+from src.app.img.query import get_info_about_img
 from src.app.img.reaction.schemas import ReactionSchemas
-from src.app.img.schemas import ImageSchemas, AllImageDTO, PublishSchemas, ValidUuidImg
+from src.app.img.schemas import ImageSchemas, AllImageDTO, PublishSchemas, AboutImgDTO
+from core.validator import ValidUuid
 
 img_router = APIRouter(tags=["img"])
 
@@ -54,7 +56,7 @@ async def get_all_img(
         access_token: Annotated[str, Cookie()] = None,
         session: AsyncSession = Depends(get_async_session)
 ) -> Page:
-    query = await get_info_about_img(access_token, is_public=True)
+    query = get_info_about_img(access_token)
     res = await session.execute(query.order_by(desc(ImgTable.create_date)))
     img_list = res.mappings().all()
     data = [AllImageDTO.model_validate(item, from_attributes=True) for item in img_list]
@@ -69,7 +71,7 @@ async def get_popular_img(
         access_token: Annotated[str, Cookie()] = None,
         session: AsyncSession = Depends(get_async_session)
 ) -> Page:
-    query = await get_info_about_img(access_token)
+    query = get_info_about_img(access_token)
     if filter_time.value not in FilterTime.ALL.value:
         query = query.where(
             ImgTable.create_date >= func.now()
@@ -87,37 +89,31 @@ async def get_popular_img(
 
 @img_router.get("/wallpaper/{uuid_img}")
 async def get_img_by_uuid(
-        uuid_img: ValidUuidImg, access_token: Annotated[str, Cookie()] = None,
+        uuid_img: ValidUuid, access_token: Annotated[str, Cookie()] = None,
         session: AsyncSession = Depends(get_async_session)
 ):
-    like_subquery = (
-        select(func.count().label("like_count"))
-        .select_from(ReactionTable)
-        .filter_by(reaction=True, uuid_img=uuid_img)
-        .subquery("like_subquery")
-    )
+    subquery = get_info_about_img(
+        access_token, True,
+        ImgTable.style, ImgTable.prompt,
+        ImgTable.uuid_user, ImgTable.uuid_user,
+        ImgTable.img_tag, ImgTable.negative_prompt,
+        uuid_img=uuid_img
+    ).subquery("base_select")
 
-    dislike_subquery = (
-        select(func.count().label("dislike_count"))
-        .select_from(ReactionTable)
-        .filter_by(reaction=False, uuid_img=uuid_img)
-        .subquery("dislike_subquery")
-    )
-
-    query = await get_info_about_img(
-        access_token,
-        ImgTable.style, ImgTable.prompt, ImgTable.create_date,
-        AuthTable.user_name, like_subquery, dislike_subquery,
-        uuid_img=uuid_img, is_public=True
+    query = (
+        select(subquery, UserTable.avatar_user, AuthTable.user_name)
+        .select_from(subquery)
+        .join(UserTable, UserTable.uuid_user == subquery.c.uuid_user)
+        .join(AuthTable, AuthTable.uuid_user == subquery.c.uuid_user)
     )
 
     res = await session.execute(query.distinct())
-    img_query = res.mappings().all()
+    img_list = res.mappings().all()
 
-    if not img_query:
+    if not img_list:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Не удалось найти '{uuid_img}'")
 
-    return img_query
+    return [AboutImgDTO.model_validate(item, from_attributes=True) for item in img_list]
 
 
 @img_router.post("/set-reaction", status_code=status.HTTP_200_OK)
@@ -126,52 +122,17 @@ async def set_reaction(
         session: AsyncSession = Depends(get_async_session),
         user: dict = Depends(get_user_by_token)
 ):
-    query_case = (
-        case(
-            (ReactionTable.uuid_user == user["sub"],
-             case(
-                 (ReactionTable.uuid_img == reaction.img_uuid,
-                  case(
-                      (ReactionTable.reaction == reaction.reaction, StatusReaction.EQUAL_REACTIONS.value),
-                      else_=StatusReaction.DIFFERENT_REACTIONS.value
-                  )),
-                 else_=StatusReaction.NO_REACTION.value
-             )),
-            else_=StatusReaction.NO_REACTION.value,
-        )
-    )
-
-    query = (
-        select(query_case)
-        .where(and_(
-            ReactionTable.uuid_user == user["sub"],
-            ReactionTable.uuid_img == reaction.img_uuid)
-        )
-    )
-
-    result = await session.execute(query)
-    result = result.unique().all()
-
-    if not result:
-        await crud.create(
-            session=session,
-            table=ReactionTable,
-            data={"uuid_user": user["sub"], "uuid_img": reaction.img_uuid, "reaction": reaction.reaction}
-        )
-        img_logger.debug("Добавлена запись для %s", reaction.img_uuid)
-        return
-
-    match result[-1][0]:
-        case StatusReaction.EQUAL_REACTIONS.value:
-            await crud.delite(
-                session=session,
-                table=ReactionTable,
-                uuid_user=user["sub"],
-                uuid_img=reaction.img_uuid
-            )
-            img_logger.debug("Реакция удалена")
-
-        case StatusReaction.DIFFERENT_REACTIONS.value:
+    match reaction.operation_type.value:
+        case Operation.CREATE.value:
+            check_rec = await crud.read(session=session, table=ReactionTable,)
+            if not check_rec:  # вставить через EXIST
+                await crud.create(
+                    session=session,
+                    table=ReactionTable,
+                    data={"uuid_user": user["sub"], "uuid_img": reaction.img_uuid, "reaction": reaction.reaction}
+                )
+            img_logger.debug("Добавлена реакция для %s", reaction.img_uuid)
+        case Operation.UPDATE.value:
             await crud.update(
                 session=session,
                 table=ReactionTable,
@@ -180,14 +141,14 @@ async def set_reaction(
                 data={"reaction": reaction.reaction}
             )
             img_logger.debug("Реакция обновлена")
-
-        case StatusReaction.NO_REACTION.value:
-            await crud.create(
+        case Operation.DELETE.value:
+            await crud.delite(
                 session=session,
                 table=ReactionTable,
-                data={"uuid_user": user["sub"], "uuid_img": reaction.img_uuid, "reaction": reaction.reaction}
+                uuid_user=user["sub"],
+                uuid_img=reaction.img_uuid
             )
-            img_logger.debug("Реакция создана")
+            img_logger.debug("Реакция удалена")
 
 
 @img_router.post("/publish")
