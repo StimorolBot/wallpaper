@@ -1,6 +1,8 @@
+import { ws } from "../../api/ws"
 import "./style/footer.sass"
 
 export function Footer(){
+    ws()
     return(
         <footer className="footer">
             <div className="wrapper">
