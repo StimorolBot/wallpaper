@@ -13,21 +13,72 @@
     display: flex
     align-items: center
 
-// .about-img__author-item
+.about-img__author-item
+    display: flex
+
+.about-img__author-item_column
+    flex-direction: column
+    align-items: flex-start
+    margin: 0 10px
+
+.about-img__author-item_left
+    margin-left: auto
+    column-gap: 20px
+
+.circle-online
+    width: 10px
+    height: 10px
+    border-radius: 50%
+    background-color: #227257
 
 .about-img__ava
     max-width: 70px
 
-// .about__username
+.chat-user-link
+    background-color: #202125
+    transition: var(--main-transition)
+    &:hover
+        background-color: #20212566
+        .chat__svg
+           fill: #0649ff
 
-// .about__status
+.chat__svg
+    fill: #1a3683
+    transition: var(--main-transition)
 
-// .chat
+.add-user__svg
+    stroke: #9B2D30
+    transition: var(--main-transition)
 
-// .add-user
+.add-user-btn
+    background-color: #221e1e
+    transition: var(--main-transition)
+
+    &:hover
+        background-color: #221e1e59
+        .add-user__svg
+            stroke: #ff0007
+
+.chat-user-link,
+.add-user-btn
+    border-radius: 50%
+    width: 50px
+    height: 50px
+    overflow: hidden
+    display: flex
+    justify-content: center
+    align-items: center
 
 .about-img__tag
     margin: 15px 0
+    display: flex
+    flex-wrap: wrap
+
+.tag-item
+    margin: 3px
+    transition: var(--main-transition)
+    &:hover
+        color: var(--gray)
 
 .about-img__info-container
     display: flex
@@ -42,16 +93,3 @@
     align-self: center
     font-weight: 700
     max-width: 145px
-
-
-// .about-img__dd
-
-    
-
-// .about__card-dd
-//     padding: 0 0 0 8px
-//     word-break: break-word
-//     display: -webkit-box
-//     -webkit-line-clamp: 3
-//     -webkit-box-orient: vertical
-//     overflow: hidden
