@@ -9,17 +9,13 @@ import { CreateImgList } from "../img/CreateImgList"
 import "./style.sass"
 
 
-export function Pagination({path, itemList, setItemList, isAlignRef, emptyListMsg, ...props}){
+export function Pagination({path, itemList, setItemList, emptyListMsg, ...props}){
 
     const lastElementRef = useRef(null)
-
-    if (itemList.length > 0) {
-        isAlignRef.current = false
-    }
         
     const [request, isLoading, error] = useFetch(
         async (currentPage, setCurrentPage, setTotalPage) => {
-            await api.get(path, { params: { size: 15, page: currentPage, ...props["params"]}})
+            await api.get(path, { params: { size: 20, page: currentPage, ...props["params"]}})
                 .then((response) => {
                     if (currentPage === 1){
                         setItemList((s) => s =[...response.data["items"]])
@@ -50,7 +46,7 @@ export function Pagination({path, itemList, setItemList, isAlignRef, emptyListMs
                 lastElementRef={lastElementRef}
             />
         </div>
-        {isLoading && <Loader align={isAlignRef.current}/>}
+        {isLoading && <Loader loaderMsg={"Пожалуйста подождите, идет загрузка..."}/>}
         </>                        
     )
 }
