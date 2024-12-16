@@ -5,7 +5,15 @@ from fastapi import HTTPException
 from pydantic import WrapValidator
 from typing_extensions import Annotated
 
-from core.my_functools import valid_password as valid_password_symbol
+
+def valid_forbidden_char(val: str):
+    symbols = {
+        "\\", "$", "|", "?", "*",
+        "/", "#", "'", '"', "@",
+        " ", "!", "`", "%", "&"
+    }
+    if symbols & set(val):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Пароль но должен содержать: {symbols}")
 
 
 def valid_size_img(size: int, handler) -> int:
@@ -31,7 +39,7 @@ def valid_name(name: str, handler) -> str:
 
 def valid_password(password: str, handler) -> str:
     valid_len(password, 8, 32)
-    valid_password_symbol(password)
+    valid_forbidden_char(password)
     return password
 
 
