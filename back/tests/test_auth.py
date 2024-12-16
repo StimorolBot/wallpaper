@@ -4,7 +4,7 @@ from httpx import AsyncClient
 
 from tests.conftest import ac
 from celery_task.smtp.type_email import TypeEmail
-from core.my_functools import set_redis, get_redis
+from src.redis.redis_func import get_redis, set_redis
 
 TEST_USER_EMAIL = "user@example.com"
 
