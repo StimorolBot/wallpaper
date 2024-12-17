@@ -10,11 +10,17 @@
     align-items: center
 
 .tag__container
-    border: 2px solid red
-    border-radius: 12px
-    padding: 4px
+    border: 2px solid var(--gray)    
+    border-bottom-right-radius: 10px
+    border-bottom-left-radius: 10px
+    padding: 4px 6px
     display: flex
     flex-wrap: wrap
+    color: var(--white)
+
+.tag__item
+    margin-right: 10px
+    cursor: pointer
 
 .img-generate__container
     max-width: 370px
@@ -22,7 +28,7 @@
    
 .img-form__create_hidden
     opacity: 0
-    transition: var(--main-transition)
+    // transition: var(--main-transition)
     visibility: hidden
     position: absolute
 
