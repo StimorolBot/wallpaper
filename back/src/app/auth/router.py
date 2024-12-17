@@ -6,7 +6,8 @@ from fastapi import APIRouter, Depends, status, HTTPException
 from core.crud import crud
 from core.logger import auth_logger, smtp_logger
 from src.db.get_session import get_async_session
-from core.my_functools import generate_code, set_redis, get_redis, get_info_from_headers
+from core.my_functools import generate_code, get_info_from_headers
+from src.redis.redis_func import get_redis, set_redis
 
 from src.app.auth.model import AuthTable
 from src.app.user.model import UserTable
