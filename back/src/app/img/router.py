@@ -124,14 +124,17 @@ async def set_reaction(
 ):
     match reaction.operation_type.value:
         case Operation.CREATE.value:
-            check_rec = await crud.read(session=session, table=ReactionTable,)
+            check_rec = await crud.read(
+                session=session, table=ReactionTable,
+                uuid_user=user["sub"], uuid_img=reaction.img_uuid
+            )
             if not check_rec:  # вставить через EXIST
                 await crud.create(
                     session=session,
                     table=ReactionTable,
                     data={"uuid_user": user["sub"], "uuid_img": reaction.img_uuid, "reaction": reaction.reaction}
                 )
-            img_logger.debug("Добавлена реакция для %s", reaction.img_uuid)
+                img_logger.debug("Добавлена реакция для %s", reaction.img_uuid)
         case Operation.UPDATE.value:
             await crud.update(
                 session=session,
