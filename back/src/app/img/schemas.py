@@ -1,33 +1,13 @@
-from typing_extensions import Annotated
-from fastapi import status, HTTPException
-from pydantic import BaseModel, WrapValidator
+from datetime import datetime
+from pydantic import BaseModel, Field
 
+from core.validator import ValidSizeImg, ValidPromptImg, ValidUuid, ValidName
 from src.app.img.enums.style_img import StyleImg
-from core.my_functools import valid_len, valid_uuid
-
-
-def valid_size_img(size: int, handler) -> int:
-    if 249 < int(size) or int(size) > 1024:
-        return size
-
-    raise HTTPException(
-        status_code=status.HTTP_400_BAD_REQUEST,
-        detail="Недопустимое значение для размера изображения"
-    )
-
-
-def valid_prompt_img(prompt: str, handler) -> str:
-    valid_len(val=prompt, min_val=4, max_val=1000)
-    return prompt
-
-
-ValidSizeImg = Annotated[int, WrapValidator(valid_size_img)]
-ValidPromptImg = Annotated[str, WrapValidator(valid_prompt_img)]
-ValidUuidImg = Annotated[str, WrapValidator(valid_uuid)]
 
 
 class ImageSchemas(BaseModel):
     prompt: ValidPromptImg
+    negative_prompt: ValidPromptImg | None = None
     style: StyleImg
     width: ValidSizeImg = 1024
     height: ValidSizeImg = 1024
@@ -36,8 +16,23 @@ class ImageSchemas(BaseModel):
 
 class AllImageDTO(BaseModel):
     img_base64: str
-    uuid_img: ValidUuidImg
-    reaction: bool | None = None
+    uuid_img: ValidUuid
+    dislike_count: int = Field(default=0, ge=0)
+    like_count: int = Field(default=0, ge=0)
+    is_like: int = Field(default=0, ge=0)
+    is_dislike: int = Field(default=0, ge=0)
+
+
+class AboutImgDTO(AllImageDTO):
+    avatar_user: str
+    user_name: ValidName
+    uuid_user: ValidUuid
+    img_tag: str | None = None
+    style: StyleImg
+    create_date: datetime
+    prompt: ValidPromptImg
+    negative_prompt: ValidPromptImg | None
+
 
 class PublishSchemas(BaseModel):
-    uuid_img: ValidUuidImg
+    uuid_img: ValidUuid
