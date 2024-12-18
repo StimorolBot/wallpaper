@@ -95,8 +95,8 @@ async def get_img_by_uuid(
     subquery = get_info_about_img(
         access_token, True,
         ImgTable.style, ImgTable.prompt,
-        ImgTable.uuid_user, ImgTable.uuid_user,
-        ImgTable.img_tag, ImgTable.negative_prompt,
+        ImgTable.uuid_user, ImgTable.img_tag,
+        ImgTable.negative_prompt,
         uuid_img=uuid_img
     ).subquery("base_select")
 
