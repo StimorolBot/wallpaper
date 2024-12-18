@@ -33,7 +33,7 @@ def check_reaction(uuid: str, reaction: bool = True, label: str = "is_like"):
 
 def get_info_about_img(access_token=None, is_public: bool = True, *args, **filter_kwargs) -> Select:
     if not access_token:
-        return base_select(is_public, **filter_kwargs)
+        return base_select(is_public, *args, **filter_kwargs)
 
     user = jwt_token.decode(access_token)
     is_like = check_reaction(user["sub"])
