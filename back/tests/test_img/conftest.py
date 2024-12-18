@@ -9,6 +9,7 @@ from src.app.auth.model import AuthTable
 from src.app.auth.password_auth import password_auth
 
 from src.app.img.model import ImgTable
+from src.app.user.model import UserTable
 from src.app.img.enums.style_img import StyleImg
 
 from tests.conftest import ac
@@ -24,10 +25,19 @@ async def create_img(session: AsyncSession):
         "uuid_img": "a4c687d2dde54c1aa39385d23f2fcc9d",
         "style": StyleImg.ANIME.value,
         "prompt": "hello word!",
-        "img_base64": "/9j/4AAQSkZJRgABAQAAAQABAAD...KXFFACUtFFAH/9k="
+        "img_base64": "/9j/4AAQSkZJRgABAQAAAQABAAD...KXFFACUtFFAH/9k=",
+        "is_public": True
     }
 
     await crud.create(session=session, table=ImgTable, data=data)
+
+
+async def set_info_user(session: AsyncSession):
+    data = {
+        "uuid_user": TEST_UUID_USER,
+        "avatar_user": "/9j/4AAQSkZJRgABAQAAAQABAAD..."
+    }
+    await crud.create(session=session, table=UserTable, data=data)
 
 
 @pytest.fixture(autouse=True, scope="module")
@@ -41,6 +51,7 @@ async def create_user():
     async with async_session_maker() as session:
         await crud.create(session=session, table=AuthTable, data=data)
         await create_img(session)
+        await set_info_user(session)
 
 
 @pytest.fixture(autouse=True, scope="module")
@@ -49,8 +60,4 @@ async def login(ac: AsyncClient):
     response = await ac.post("/auth/login", json=user_data)
 
     token = response.json()
-    await set_redis(
-        name="img_token_test",
-        value={"access_token": token["access_token"]},
-        ex=120
-    )
+    await set_redis(name="img_token_test", value={"access_token": token["access_token"]}, ex=120)
