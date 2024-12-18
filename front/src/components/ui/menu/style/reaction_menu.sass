@@ -29,10 +29,15 @@
 
 .like
     &:hover
-        stroke: #9B2D30
-        animation: knock 0.5s linear infinite
+        animation: knock 0.6s ease-in-out infinite
 
 .like_active
     fill:#9B2D30
-    stroke: none
-    transition: var(--main-transition)
+
+.dislike
+    &:hover
+        scale: 0.9
+        transition: var(--main-transition)
+
+.dislike_active
+    fill: #23aeae
