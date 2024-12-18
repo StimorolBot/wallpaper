@@ -1,10 +1,10 @@
-import { ws } from "../../api/ws"
+import { Ws } from "../../api/ws"
 import "./style/footer.sass"
 
 export function Footer(){
-    ws()
     return(
         <footer className="footer">
+            <Ws/>
             <div className="wrapper">
                 <div className="footer-info-_container">
                     <svg
