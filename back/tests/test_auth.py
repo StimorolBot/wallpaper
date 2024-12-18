@@ -15,7 +15,6 @@ class TestAuthPos:
         headers = {
             "user-agent": "test-user-agent",
             "origin": "localhost",
-            "x-forwarded-for": "1.1.1.1" # получить ip на сервере !
         }
         user_data = {"email": TEST_USER_EMAIL, "email_type": TypeEmail.CONFIRM.value}
         response = await ac.post("/auth/get-code", json=user_data, headers=headers)
