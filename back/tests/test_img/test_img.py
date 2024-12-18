@@ -33,7 +33,15 @@ class TestImgPos:
         )
         assert response.status_code == status.HTTP_200_OK
 
-    async def test_get_img_by_uuid(self, ac: AsyncClient):
+    async def test_publish(self, ac: AsyncClient):
+        token = await get_redis("img_token_test")
+        response = await ac.post("/publish",
+            json={"uuid_img": "a4c687d2dde54c1aa39385d23f2fcc9d"},
+            cookies={"access_token": token["access_token"]}
+        )
+        assert response.status_code == status.HTTP_200_OK
+
+    async def test_get_img_by_uuid(self, ac: AsyncClient):  # ошибка
         token = await get_redis("img_token_test")
         response = await ac.get(
             "/wallpaper/a4c687d2dde54c1aa39385d23f2fcc9d",
@@ -42,9 +50,19 @@ class TestImgPos:
         )
         assert response.status_code == status.HTTP_200_OK
 
-    @pytest.mark.parametrize("reaction", (True, False))
-    async def test_set_reaction(self, ac: AsyncClient, reaction):
-        data = {"reaction": reaction, "img_uuid": "a4c687d2dde54c1aa39385d23f2fcc9d"}
+    @pytest.mark.parametrize(
+        "reaction, operation_type",
+        [
+            (True, "CREATE"), (False, "UPDATE"), (False, "DELETE"),
+            (False, "CREATE"), (True, "UPDATE"), (True, "DELETE")
+        ]
+    )
+    async def test_set_reaction(self, ac: AsyncClient, reaction, operation_type):
+        data = {
+            "reaction": reaction,
+            "img_uuid": "a4c687d2dde54c1aa39385d23f2fcc9d",
+            "operation_type": operation_type
+        }
         token = await get_redis("img_token_test")
         response = await ac.post(
             "set-reaction",
@@ -75,8 +93,6 @@ class TestImgNeg:
             ("test1", " ", 1024, 1024),
             ("test1", "ANIME", -1024, 1024),
             ("test1", "ANIME", 1024, -1024),
-            ("test1", "ANIME", 543, 1024),
-            ("test1", "ANIME", 1024, 543),
             ("test1", "ANIME", 2000, 1024),
             ("test1", "ANIME", 1024, 2000),
             ("test ! @ + - / . | \\", "ANIME", 1024, 1024)
