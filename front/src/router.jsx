@@ -1,19 +1,21 @@
 import { createBrowserRouter } from "react-router-dom"
 
 import { Home } from "./page/Home"
-import { Error } from "./page/Error"
 import { Popular } from "./page/Popular"
-import { Login } from "./page/auth/Login"
 import { AboutImg } from "./page/AboutImg"
 import { CreateImg } from "./page/CreateImg"
+
+import { Login } from "./page/auth/Login"
 import { Register } from "./page/auth/Register"
 import { ResetPassword } from "./page/auth/ResetPassword"
+
+import { Error } from "./page/Error"
 
 
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <Home/>
+        element: <Home/>  
     },
 
     {
@@ -48,31 +50,12 @@ const router = createBrowserRouter([
             path: "reset-password",
             element: <ResetPassword/>
         },
-
-        {
-            path: "",
-            element: <Error/>
-        }
     ]},
-
-    {
-        path: "/server-error",
-        element:
-            <Error
-                errorCode={500}
-                errorMsg={
-                    <p>
-                        Сервер временно недоступен. <br/>
-                        Пожалуйста, повторите попытку позже.
-                    </p>    
-                }
-            />,
-    },
-
+    
     {
         path: "*",
         element: <Error/>,
-    },
+    }
 ])
 
 export default router
