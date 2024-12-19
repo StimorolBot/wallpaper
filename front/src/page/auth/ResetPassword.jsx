@@ -50,7 +50,7 @@ export function ResetPassword(){
                                 lblTitle="Повторите пароль" id={"password_repeat"}
                             />                        
                         </div>    
-                        <div className="auth-btn__container hover">
+                        <div className="auth-btn__container">
                             <BtnSend> Восстановить </BtnSend>
                         </div>                  
                     </form>

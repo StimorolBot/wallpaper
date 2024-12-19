@@ -61,7 +61,7 @@ export function Login(){
                             </Link>
                         </li>
                     </ul>
-                    <div className="auth-btn__container hover">
+                    <div className="auth-btn__container">
                         <BtnSend> Войти </BtnSend>
                     </div>               
                 </form>

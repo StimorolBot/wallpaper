@@ -64,7 +64,7 @@ export function Register() {
                             {" политика конфиденциальности"}
                         </Link>
                     </CheckboxInput>
-                    <div className="auth-btn__container hover">
+                    <div className="auth-btn__container">
                         <BtnSend> Зарегистрироваться </BtnSend>
                     </div>
                     <Link className="auth__link" to="/auth/login">
