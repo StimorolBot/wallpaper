@@ -1,6 +1,6 @@
 from typing import Annotated
 from fastapi_pagination import Page, paginate
-from fastapi import APIRouter, status, Depends, HTTPException, Cookie, Response
+from fastapi import APIRouter, status, Depends, HTTPException, Cookie
 
 from sqlalchemy import select, func, desc
 from sqlalchemy.sql.functions import concat
@@ -8,6 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.dialects.postgresql import INTERVAL
 
 from core.crud import crud
+from core.my_functools import get_unc_now
 from core.logger import img_logger
 
 from src.db.get_session import get_async_session
@@ -66,7 +67,6 @@ async def get_all_img(
 
 @img_router.get("/popular")
 async def get_popular_img(
-        response: Response,
         filter_time: FilterTime,
         access_token: Annotated[str, Cookie()] = None,
         session: AsyncSession = Depends(get_async_session)
@@ -74,7 +74,7 @@ async def get_popular_img(
     query = get_info_about_img(access_token)
     if filter_time.value not in FilterTime.ALL.value:
         query = query.where(
-            ImgTable.create_date >= func.now()
+            ImgTable.create_date >= get_unc_now()
             -
             func.cast(concat(1, f" {filter_time.value}"), INTERVAL)
         )
@@ -82,14 +82,13 @@ async def get_popular_img(
     res = await session.execute(query.order_by(desc(ImgTable.create_date)))
     img_list = res.mappings().all()
 
-    response.headers["Filter-Time"] = filter_time.value
     data = [AllImageDTO.model_validate(item, from_attributes=True) for item in img_list]
     return paginate(data)
 
 
 @img_router.get("/wallpaper/{uuid_img}")
 async def get_img_by_uuid(
-        uuid_img: ValidUuid, access_token: Annotated[str, Cookie()] = None,
+        uuid_img: str, access_token: Annotated[str, Cookie()] = None,
         session: AsyncSession = Depends(get_async_session)
 ):
     subquery = get_info_about_img(
