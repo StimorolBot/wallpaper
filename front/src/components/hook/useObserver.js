@@ -1,32 +1,35 @@
 import { useEffect, useRef, useState } from "react"
 
 
-export const useObserver = async (isLoading, request, lastElementRef, itemList, filter) => {
+export const useObserver = async (isLoading, request, lastElementRef, itemList, time) => {
     const observerRef = useRef(null)
-    const prevFilterState = useRef(undefined)
-    
-    const [currentPage, setCurrentPage] = useState(1)
-    const [totalPage, setTotalPage] = useState(1)
+    let [prevTimeState, setPrevTimeState] = useState("DAY")
+
+    const [page, setPage] = useState({"currentPage": 1, "totalPage": 1})
 
     useEffect(() => {
-        setTotalPage((state) => state = 1)
-        setCurrentPage((state) => state = 1)
-
+        setPage({"currentPage": 1, "totalPage": 1})
+        
         if (isLoading)
             return
     
         if (observerRef.current)
             observerRef.current.disconnect()
+        
+        if (prevTimeState !== time)
+            setPage({"currentPage": 1, "totalPage": 1})
+        else
+            setPage({...page, currentPage: page.currentPage + 1})
 
         const callback = async (entries, observer) => {
-            if (prevFilterState.current !== filter || entries[0].isIntersecting && currentPage <= totalPage){
-                await request(currentPage, setCurrentPage, setTotalPage)
-                prevFilterState.current = filter
+            if ((itemList.length === 0) || ((entries[0].isIntersecting) || (page.currentPage <= page.totalPage))){
+                await request(page, setPage)
+                setPrevTimeState(time)
             }
         }
-        
+
         observerRef.current = new IntersectionObserver(callback)
         observerRef.current.observe(lastElementRef.current)
-    }, [itemList.at(-1)?.img_base64, filter])
+    }, [itemList.at(-1)?.img_base64, time])
     
 }
