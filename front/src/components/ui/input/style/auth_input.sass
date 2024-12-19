@@ -17,13 +17,29 @@
     font-size: 16px
     background-color: transparent
     color: #fff
+    opacity: 0
     transition: var(--main-transition)
 
-.auth-input,
 .password-show,
 .code-input-img
-    opacity: 0
-    filter: var(--filter-grey)
+    opacity: 0  
+    transition: var(--main-transition)
+    cursor: pointer
+    position: absolute
+    right: 0
+    top: -10px
+    
+  
+    
+.password-show
+    fill: var(--gray)
+    &:hover
+        fill: var(--white)
+
+.code-input-img
+    stroke: var(--gray)
+    &:hover
+        stroke: var(--white)
 
 .auth-input_active,
 .password-show_active,
@@ -42,16 +58,6 @@
     font-size: 12px
     transform: translateY(-25px)
 
-.password-show,
-.code-input-img,
-.password-show_active
-    position: absolute
-    right: 0
-    top: -10px
-    width: 30px
-    cursor: pointer
-    transition: 0.3s
-
 .error-msg
-    color: red
+    color: #9B2D30
     font-size: 14px

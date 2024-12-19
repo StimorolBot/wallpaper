@@ -7,19 +7,41 @@
     padding: 0 20px
 
 .error__code
-    font-size: 70px
+    font-size: clamp(20px, 10vw, 80px)
+    font-family: monospace 
 
 .error__msg
-    font-size: 20px    
-    padding: 20px 0
+    font-size: clamp(10px, 5vw, 20px)    
+    padding: 15px 0
     line-height: 30px
+    white-space: nowrap
+    overflow: hidden
+    text-overflow: ellipsis
 
 .back-home
     position: relative
+    color: var(--gray)
+    font-size: clamp(10px, 5vw, 20px)
+    transition: var(--main-transition)
 
-    &::before
+    &::before,
+    &::after
         content: " "
         position: absolute
         bottom: -3px
-        border-bottom: 2px solid black
-        width: 100%
+        width: 0
+        border-bottom: 3px solid var(--gray)
+        transition: var(--main-transition)
+    
+    &::before
+        left: 50%
+
+    &::after
+        right: 50%
+        
+    &:hover
+        color: var(--white)
+
+        &::before,
+        &::after
+            width: 50%
