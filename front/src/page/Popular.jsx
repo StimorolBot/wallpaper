@@ -1,41 +1,34 @@
-import { useState, useRef } from "react"
+import { useState} from "react"
 
 import { Header } from "../components/header/Header"
 import { Footer } from "../components/footer/Footer"
 import { Pagination } from "../components/pagination/Pagination"
-import { DropDownMenu } from "../components/ui/menu/DropDownMenu"
+import { CustomSelect } from "../components/ui/select/CustomSelect"
 
 
 export function Popular() {
-    const [filterTime, setFilterTime] = useState({"front": "День", "back": "DAY"})
+    const [time, setTime] = useState({value: "DAY", label: "День"})
     const [imgList, setImgList] = useState([])
-    
+
+    const createEmptyMsg = (time) => {
+        if (time === "неделю")
+            return `За последнюю ${time} нет новый публикаций :(`
+        return `За последний ${time} нет новый публикаций :(`
+    }
+
     return(
         <>
         <Header/>
         <section className="popular flex">
             <h2 className="hidden">Популярное</h2>
             <div className="wrapper">                
-                <DropDownMenu
-                    title={"Популярное за..."}
-                    setFilter={setFilterTime}
-                    itemList={[
-                        {"front": "Час", "back": "HOUR"},
-                        {"front": "День", "back": "DAY"},
-                        {"front": "Неделю", "back": "WEEK"},
-                        {"front": "Месяц", "back": "MONTH"},
-                        {"front": "Год", "back": "YEAR"},
-                        {"front": "Все время", "back": "ALL"}
-                    ]}
-                />
+                <CustomSelect time={time} setTime={setTime}/>
                 <Pagination
                     itemList={imgList}
                     setItemList={setImgList}
                     path={"/popular"}
-                    params={{"filter_time": filterTime["back"]}}
-                    emptyListMsg={
-                        `За последней ${filterTime["front"].toLowerCase()} нет новый публикаций`
-                    }
+                    params={{"filter_time": time.value}}
+                    emptyListMsg={createEmptyMsg(time.label.toLowerCase())}
                 />
             </div>
         </section>
