@@ -35,7 +35,7 @@ class UserManager(UserManagerABC):
         auth_dict_user["hash_password"] = password_auth.get_hash_password(auth_dict_user["password"])
         auth_dict_user["is_active"] = False
         auth_dict_user["is_superuser"] = False
-        auth_dict_user["is_verified"] = False
+        auth_dict_user["is_verified"] = True
 
         del auth_dict_user["password"]
         del auth_dict_user["code_confirm"]
