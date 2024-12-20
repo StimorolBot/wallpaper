@@ -5,7 +5,7 @@ import { Loader } from "../components/loader/Loader"
 import { Header } from "../components/header/Header"
 import { Footer } from "../components/footer/Footer"
 import { useFetch } from "../components/hook/useFetch"
-import { CreateImgList } from "../components/img/CreateImgList"
+import { IsFilterImg } from "../components/img/isFilterImg"
 import { AboutImgCard } from "../components/ui/cards/AboutImgCard"
 
 import "./style/about_img.sass"
@@ -41,7 +41,7 @@ export function AboutImg(){
                         ? <Loader/>
                         : <div className="about-img__wrapper">
                             <div className="about__img">
-                                <CreateImgList imgList={response} setImgList={setResponse} flag={false}/>
+                                <IsFilterImg imgList={response} setImgList={setResponse} isFilter={false}/>
                             </div>
                             <AboutImgCard imgInfo={response[0]} />
                         </div>
