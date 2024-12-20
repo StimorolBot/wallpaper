@@ -1,0 +1,97 @@
+.custom-select
+
+    &__control
+        background-color: transparent !important
+        border-radius: 0 !important
+        border-style: none !important
+        border-bottom: 2px solid var(--gray) !important
+        cursor: pointer !important
+        margin-bottom: 20px !important
+
+        &--is-focused
+            box-shadow: none !important
+
+    &__input-container
+        color: var(--white) !important
+
+    &__indicator-separator
+        display: none !important
+    
+    &__single-value
+        color: var(--white) !important
+
+    &__menu
+        top: 45px !important
+        background-color: var(--background-color) !important
+        border: 3px solid #2c2c2c !important
+        border-radius: 8px !important
+        color: var(--white) !important
+
+    &__option
+        background-color: transparent !important
+        cursor: pointer !important
+        transition: var(--main-transition)
+
+        &:hover
+            background-color: #2c2c2c !important
+
+.custom-select_multi
+    &__control
+        background-color: transparent !important
+        max-width: 400px !important
+        min-width: 250px !important
+        border-radius: 0 !important
+        border-style: none !important
+        border-bottom: 2px solid var(--gray) !important
+        cursor: text !important
+        margin-bottom: 20px !important
+        
+        &--is-focused
+            box-shadow: none !important
+    
+    &__value-container
+        flex-wrap: nowrap !important
+
+    &__multi-value
+        min-width: min-content !important
+        background-color: #2c2c2c !important
+        border-radius: 4px !important
+        
+        &__label
+            color: var(--white) !important
+            padding: 3px 5px !important
+
+        &__remove
+            cursor: pointer !important
+            transition: var(--main-transition) !important
+            
+            &:hover
+                background-color: rgb(155, 45, 48) !important
+
+            svg
+                fill: var(--background-color) !important
+            
+    &__input-container
+        color: var(--white) !important
+
+    &__indicator-separator
+        display: none !important
+
+    &__indicator
+        padding: 0 !important
+        svg
+            cursor: pointer !important
+    &__menu
+        top: 45px !important
+        background-color: var(--background-color) !important
+        border: 3px solid #2c2c2c !important
+        border-radius: 8px !important
+        color: var(--white) !important
+
+    &__option
+        background-color: transparent !important
+        cursor: pointer !important
+        transition: var(--main-transition)
+
+        &:hover
+            background-color: #2c2c2c !important
