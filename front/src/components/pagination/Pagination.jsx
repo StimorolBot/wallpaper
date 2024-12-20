@@ -4,7 +4,7 @@ import { api } from "../../api/config"
 import { Loader } from "../loader/Loader"
 import { useFetch } from "../hook/useFetch"
 import { useObserver } from "../hook/useObserver"
-import { CreateImgList } from "../img/CreateImgList"
+import { IsFilterImg } from "../img/isFilterImg"
 
 import "./style.sass"
 
@@ -36,11 +36,7 @@ export function Pagination({path, itemList, setItemList, emptyListMsg, ...props}
             <div className="empty-list">{emptyListMsg}</div>
         }
         <div className="img__container">
-            <CreateImgList
-                imgList={itemList}
-                setImgList={setItemList}
-                lastElementRef={lastElementRef}
-            />
+            <IsFilterImg imgList={itemList} lastElementRef={lastElementRef}/>
         </div>
         {isLoading && <Loader loaderMsg={"Пожалуйста подождите, идет загрузка..."}/>}
         </>                        
