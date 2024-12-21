@@ -51,11 +51,24 @@
     
     &__value-container
         flex-wrap: nowrap !important
+        overflow-x: auto !important
+
+        &::-webkit-scrollbar
+            width: 0px
+            height: 4px
+
+        &::-webkit-scrollbar-track 
+            background-color: #1E1E1E
+        
+        &::-webkit-scrollbar-thumb 
+            background-color: var(--gray) 
+            border-radius: 10px !important
+            cursor: pointer
 
     &__multi-value
         min-width: min-content !important
         background-color: #2c2c2c !important
-        border-radius: 4px !important
+        border-radius: 4px !important        
         
         &__label
             color: var(--white) !important
@@ -87,6 +100,18 @@
         border: 3px solid #2c2c2c !important
         border-radius: 8px !important
         color: var(--white) !important
+
+        &-list::-webkit-scrollbar
+            width: 4px
+            height: 0px
+
+        &-list::-webkit-scrollbar-track 
+            background-color: #1E1E1E
+            
+        &-list::-webkit-scrollbar-thumb 
+            background-color: var(--gray) 
+            border-radius: 10px !important
+            cursor: pointer
 
     &__option
         background-color: transparent !important
