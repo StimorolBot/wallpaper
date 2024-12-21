@@ -12,8 +12,7 @@ import "./style/about_img_card.sass"
 
 export function AboutImgCard({ imgInfo }){
     const [lastVisit, setLastVisit] = useState()
-    const tagList = imgInfo?.img_tag?.split(" ")
-    
+
     const [request, isLoading, error] = useFetch(
         async () => {
             if (imgInfo["uuid_user"]){
@@ -30,12 +29,17 @@ export function AboutImgCard({ imgInfo }){
         const utcDate = new Date(date)
         
         utcDate.setHours(utcDate.getHours() - currentOffset)
-        const localDate = utcDate.toLocaleString().split(", ")
-        
+        const localDate = utcDate.toLocaleString().split(" ")
+
         if ((Math.floor((now-utcDate)/3600000)-currentOffset) > 24){
             return localDate[0]
         }
+        else
+            return localDate[1]
     }
+
+    const lastVisitDate = convertData(lastVisit?.last_visit)
+    const imgCreateDate = convertData(imgInfo?.create_date)
 
     useEffect(() => {(
         async () => {
@@ -60,7 +64,9 @@ export function AboutImgCard({ imgInfo }){
                         ? <LoaderV2 /> 
                         : lastVisit?.last_visit === "Online"
                             ? <span className="circle-online"></span>
-                            : <span>{convertData(lastVisit?.last_visit)}</span>
+                            : <time dateTime={lastVisitDate}>
+                                {lastVisitDate}
+                            </time>
                     }
                     <span className="about__username">{imgInfo?.user_name}</span>
                 </li>
@@ -88,19 +94,17 @@ export function AboutImgCard({ imgInfo }){
                     </button>
                 </li>                
             </ul>
-            { tagList &&
-                <ul className="about-img__tag about_bg">
-                    { tagList.map((tag, index) => {
-                        return(
-                            <li className="tag-item" key={index}>
-                                <Link className="" to={"#"} >
-                                    {tag}
-                                </Link>
-                            </li>
-                        )
-                    })}    
-                </ul>
-            }
+            <ul className="about-img__tag about_bg">
+                { imgInfo?.img_tag?.map((tag, index) => {
+                    return(
+                        <li className="tag-item" key={index}>
+                            <Link className="" to={"#"} >
+                                {tag}
+                            </Link>
+                        </li>
+                    )
+                })}    
+            </ul>
             <ul className="about-img__info about_bg">
                 <li className="about-img__info-item">
                     <dt className="about-img__dt">Стиль:</dt>
@@ -109,8 +113,8 @@ export function AboutImgCard({ imgInfo }){
                 <li className="about-img__info-item">
                     <dt className="about-img__dt">Дата создания:</dt>
                     <dd className="about-img__dd">
-                        <time dateTime={convertData(imgInfo?.create_date)}>
-                            {convertData(imgInfo?.create_date)}
+                        <time dateTime={imgCreateDate}>
+                            {imgCreateDate}
                         </time>
                     </dd>
                 </li>
