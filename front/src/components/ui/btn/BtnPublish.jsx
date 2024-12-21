@@ -6,9 +6,9 @@ import { LoaderV2 } from "../../loader/LoaderV2"
 import "./style/btn_publish.sass"
 
 
-export function BtnPublish({uuidImg}){
+export function BtnPublish({uuidImg, tagList}){
     const isPublic = useRef(false)
-    
+
     const [request, isLoading, error] = useFetch(
         async (event) => {
             event.preventDefault()
@@ -16,11 +16,18 @@ export function BtnPublish({uuidImg}){
         }
     )
     return(
-        <button className="btn-publish hover" onClick={async (event) => await request(event)}> 
-            { isLoading
-                ? <LoaderV2/>
-                : isPublic.current ? "Изображение опубликовано" : "Опубликовать"
-            }            
-        </button>
+        <>
+        { isLoading
+            ? <LoaderV2/>
+            : isPublic.current
+                ?<p className="btn-publish btn-publish_pub">Изображение опубликовано</p>
+                :<button 
+                    className="btn-publish" onClick={async (event) => await request(event)}
+                    disabled={tagList ? false : true}
+                >
+                    Опубликовать
+                </button> 
+        }
+        </>
     )
 }
