@@ -13,7 +13,7 @@ export const useFetch = ( callback ) => {
             setIsLoading(true)
             await callback(...args)
         } catch (e) {
-            if (e.response?.status === 401){
+            if ((e.response?.status === 401) && (window.location.pathname !== "/auth/login")){
                 await refreshToken()
                 await callback(...args)
             }
@@ -21,10 +21,12 @@ export const useFetch = ( callback ) => {
                 window.location.pathname = window.location.pathname.split("/")[2]
             }
             else if (e?.code === AxiosError.ERR_NETWORK) {
-                window.location.pathname = "/server-error"
+                window.location.pathname = "/error"
             }
-            else
+            else{
+                console.log(e)
                 setError(e)
+            } 
         } finally {
             setIsLoading(false)
         }
