@@ -1,25 +1,31 @@
 import { Link } from "react-router-dom"
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState, useRef, useContext } from "react"
 
 import { api } from "../../api/config"
 import { useFetch } from "../hook/useFetch"
+import { useClickOutside } from "../hook/useClickOutside"
+
 import { SubMenu } from "../ui/menu/SubMenu"
 import { LoaderV2 } from "../loader/LoaderV2"
 import { UserMenu } from "../ui/menu/UserMenu"
 import { MainSearch } from "../ui/input/MainSearch"
-import { useClickOutside } from "../hook/useClickOutside"
+import { TagContext } from "../../context/tagContext"
 
 import "./header.sass"
 
 
 export function Header() {
     const clickRef = useRef(null)
+    const {tag, setTeg} = useContext(TagContext)
     const [response, setResponse] = useState()
     const [isShowMenu, setIsShowMenu] = useState(false)
 
     const [request, isLoading, error] = useFetch(
         async () => {
-            await api.get("/user").then((r) => {setResponse(...r.data)})
+            await api.get("/user").then((r) => {
+                if (r.data)
+                    setResponse(...r.data)
+            })
         }
     )
 
@@ -32,13 +38,14 @@ export function Header() {
     useClickOutside(clickRef, setIsShowMenu)
 
     return(
+        <>
         <header className="header">
             <div className="wrapper wrapper-header">
                 <Link className="logo" to="/">
                     Wallpaper
                 </Link>
                 <div className="header__container">
-                    <MainSearch/>
+                    <MainSearch value={tag} setValue={setTeg}/>
                     <ul className="header-menu"> 
                         <li className="header-menu__item">
                             <svg 
@@ -90,7 +97,8 @@ export function Header() {
                     </div>
                 </div>
             </div>
-            <SubMenu />
         </header>
+        <SubMenu />
+        </>
     )
 }
