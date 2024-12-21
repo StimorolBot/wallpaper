@@ -17,4 +17,4 @@ class ReactionTable(Base):
     uuid_img: Mapped[str] = mapped_column(ForeignKey("img_table.uuid_img"))
     reaction: Mapped[bool] = mapped_column()
 
-    img_reaction_relationship: Mapped["ImgTable"] = relationship(back_populates="reaction_relationship")
+    img_relationship: Mapped["ImgTable"] = relationship(back_populates="reaction_relationship")
