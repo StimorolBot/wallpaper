@@ -21,9 +21,9 @@ class ImgTable(Base):
     create_date: Mapped[datetime] = mapped_column(default=get_unc_now)
     prompt: Mapped[str] = mapped_column()
     negative_prompt: Mapped[str | None] = mapped_column()
-    img_tag: Mapped[str | None] = mapped_column()
+    pg_rating: Mapped[str] = mapped_column(default="all")
     is_public: Mapped[bool] = mapped_column(default=False)
     img_base64: Mapped[str] = mapped_column()
 
     auth_relationship: Mapped["AuthTable"] = relationship(back_populates="img_relationship")
-    reaction_relationship: Mapped["ReactionTable"] = relationship(back_populates="img_reaction_relationship")
+    reaction_relationship: Mapped["ReactionTable"] = relationship(back_populates="img_relationship")
