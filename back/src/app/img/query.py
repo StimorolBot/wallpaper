@@ -1,16 +1,28 @@
 from sqlalchemy import select, func, case, and_
-from sqlalchemy.sql.selectable import Select
+from sqlalchemy.sql.selectable import Select, Subquery
 
 from src.app.img.model import ImgTable
+from src.app.img.tag.model import TagTable, TagBufferTable
 from src.app.auth.token.jwt_token import jwt_token
 from src.app.img.reaction.model import ReactionTable
 
 
+def select_tag_subquery() -> Subquery:
+    return (
+        select(func.array_agg(TagTable.tag).label("img_tag"))
+        .select_from(TagTable)
+        .where(TagBufferTable.tag_id == TagTable.id)
+        .subquery("img_tag_subquery")
+    )
+
+
 def base_select(is_public, *args, **filter_kwargs):
+    img_tag_subquery = select_tag_subquery()
     return (
         select(
             ImgTable.uuid_img,
             ImgTable.img_base64,
+            img_tag_subquery,
             ImgTable.create_date,
             func.count(case((ReactionTable.reaction == True, ""))).label("like_count"),
             func.count(case((ReactionTable.reaction == False, ""))).label("dislike_count"),
@@ -20,7 +32,7 @@ def base_select(is_public, *args, **filter_kwargs):
         .select_from(ImgTable)
         .filter_by(is_public=is_public, **filter_kwargs)
         .join(ReactionTable, ImgTable.uuid_img == ReactionTable.uuid_img, isouter=True)
-        .group_by(ImgTable.uuid_img, ImgTable.img_base64, ImgTable.create_date)
+        .group_by(ImgTable.uuid_img, img_tag_subquery, ImgTable.create_date, ImgTable.img_base64)
     )
 
 
