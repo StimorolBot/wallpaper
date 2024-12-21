@@ -24,7 +24,6 @@ from src.app.img.reaction.model import ReactionTable
 from src.app.img.query import get_info_about_img
 from src.app.img.reaction.schemas import ReactionSchemas
 from src.app.img.schemas import ImageSchemas, AllImageDTO, PublishSchemas, AboutImgDTO
-from core.validator import ValidUuid
 
 img_router = APIRouter(tags=["img"])
 
@@ -92,9 +91,9 @@ async def get_img_by_uuid(
         session: AsyncSession = Depends(get_async_session)
 ):
     subquery = get_info_about_img(
-        access_token, True,
+        access_token, True, False,
         ImgTable.style, ImgTable.prompt,
-        ImgTable.uuid_user, ImgTable.img_tag,
+        ImgTable.uuid_user,
         ImgTable.negative_prompt,
         uuid_img=uuid_img
     ).subquery("base_select")
