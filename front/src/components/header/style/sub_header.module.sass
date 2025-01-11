@@ -1,0 +1,27 @@
+@import "/base_style/color.sass"
+    
+    
+.subheader
+    background-color: $sub-black
+    
+.subheader__list
+    display: flex
+    column-gap: 45px
+    flex-wrap: wrap
+    align-items: center
+
+.subheader__item
+    svg
+        max-height: 26px
+        max-width: 26px
+
+.subheader__svg
+    margin-right: 12px
+ 
+.subheader__link
+    display: flex
+    align-items: center
+    transition: color 0.3s 
+
+    &:hover
+        color: $gray
