@@ -1,3 +1,6 @@
+@import "/base_style/color.sass"
+    
+    
 .btn-download
     position: absolute
     right: 4px
@@ -6,3 +9,16 @@
     visibility: hidden
     border-radius: 8px
     backdrop-filter: invert(20%)
+    cursor: pointer
+    z-index: 2
+    transition: opacity 0.3s, visibility 0.3s
+
+    svg
+        width: 32px
+        height: 32px
+        stroke: $white
+        transition: stroke 0.3s
+
+        &:hover
+            stroke: $gray
+
