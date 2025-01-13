@@ -1,24 +1,17 @@
+@import "/base_style/color.sass"
+    
+
 .radio-input
     display: none
     position: absolute
 
 .radio-lbl
     cursor: pointer
-    font-size: 18px
+    -color: $white
+    transition: color 0.3s
 
     &:hover
-        background: linear-gradient(to right, #FFBA00 -40%,   #000 -20%, #000 50%, #FFBA00 50%)
-        background-size: 200% auto
-        background-clip: text
-        text-fill-color: transparent
-        -webkit-background-clip: text
-        -webkit-text-fill-color: transparent
-        animation: shine 2s linear infinite
+        color: $gray
 
 .radio-input:checked ~ .radio-lbl
-    -webkit-text-fill-color:  #FFBA00
-
-@keyframes shine 
-    to 
-        background-position: -200% 
-    
+    color: $gray
