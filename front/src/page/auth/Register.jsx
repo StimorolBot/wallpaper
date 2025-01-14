@@ -1,16 +1,20 @@
 import { useForm } from "react-hook-form"
 import { Link, useNavigate } from "react-router-dom"
 
+import { Header } from "../../components/header/Header"
+import { Footer } from "../../components/footer/Footer"
+
+import { InputUserName } from "../../components/ui/input/InputUserName"
+import { InputEmail } from "../../components/ui/input/InputEmail"
+import { InputPassword } from "../../components/ui/input/InputPassword"
+import { InputCode } from "../../components/ui/input/InputCode"
+import { InputCheckbox } from "../../components/ui/input/InputCheckbox"
+
+import { BtnSend } from "../../components/ui/btn/BtnSend"
+
 import { api } from "../../api/config"
 import { Loader } from "../../components/loader/Loader"
-import { BtnSend } from "../../components/ui/btn/BtnSend"
 import { useFetch } from "../../components/hook/useFetch"
-
-import { CodeInput } from "../../components/ui/input/CodeInput"
-import { EmailInput } from "../../components/ui/input/auth/EmailInput"
-import { CheckboxInput } from "../../components/ui/input/CheckboxInput"
-import { UserNameInput } from "../../components/ui/input/auth/UserNameInput"
-import { PasswordInput } from "../../components/ui/input/auth/PasswordInput"
 
 
 export function Register() {
@@ -37,41 +41,41 @@ export function Register() {
             resetField("code_confirm")
         }
     }
- 
+
     return (
-        <section className="auth register">
-            <h2 className="hidden">Форма для регистрации</h2>
-            { isLoading
-                ? <Loader />
-                : <form className="auth__form auth__form_big" onSubmit={handleSubmit(validForm)}>
-                    <h2 className="auth-title">Регистрация</h2>
-                    <div className="auth-input__container">
-                        <UserNameInput register={register} errors={errors}/>
-                        <EmailInput register={register} errors={errors}/>                             
-                        <CodeInput register={register} errors={errors} emailType={"CONFIRM"} handleSubmit={handleSubmit}/>
-                        <PasswordInput register={register} errors={errors}/>
-                        <PasswordInput register={register} errors={errors} 
-                            lblTitle="Повторите пароль" id={"password_repeat"}
-                        />
-                    </div>
-                    <CheckboxInput>
-                        {"Мною приняты: "}
-                        <Link className="auth__user-manual-link" to="#">
-                            {" пользовательское соглашение "}
-                        </Link>
-                        и
-                        <Link className="auth__user-manual-link" to="#">
-                            {" политика конфиденциальности"}
-                        </Link>
-                    </CheckboxInput>
-                    <div className="auth-btn__container">
-                        <BtnSend> Зарегистрироваться </BtnSend>
-                    </div>
-                    <Link className="auth__link" to="/auth/login">
-                        Уже есть учетная запись?
-                    </Link>
-                </form>
-            }
-        </section>
+        <div className="wrapper">
+            <Header/>
+            <main className="main main_flex">
+                <h1 className="title-page">Форма регистрации</h1>
+                <div className="container">
+                    {isLoading
+                        ? <Loader/>
+                        :<form className="form__auth" onSubmit={handleSubmit(validForm)}>
+                            <h3 className="form__title">Регистрация</h3>
+                            <div className="form-input__container">
+                                <InputUserName register={register} errors={errors}/>
+                                <InputEmail register={register} errors={errors}/>
+                                <InputCode register={register} errors={errors} handleSubmit={handleSubmit} setError={setError}/>
+                                <InputPassword register={register} errors={errors}/>
+                                <InputPassword id={"password_repeat"} lblText={"Повторите пароль"} register={register} errors={errors}/>
+                            </div>
+                            <InputCheckbox>
+                                Мною приняты:
+                                <Link className="form__manual-link" to="#"> пользовательское соглашение </Link>
+                                и
+                                <Link className="form__manual-link" to="#"> политика конфиденциальности</Link>
+                            </InputCheckbox>
+                            <div className="form__btn">
+                                <BtnSend type="submit"> Зарегистрироваться </BtnSend>
+                            </div>
+                            <Link className="form__link" to="/auth/login">
+                                Уже есть учетная запись?
+                            </Link>
+                        </form>
+                    }
+                </div>
+            </main>
+            <Footer/>
+        </div>
     )
 }
