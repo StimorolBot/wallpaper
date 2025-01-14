@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom"
 
-import { Home } from "./page/Home"
+import { Main } from "./page/Main"
 import { Popular } from "./page/Popular"
 import { AboutImg } from "./page/AboutImg"
 import { CreateImg } from "./page/CreateImg"
@@ -15,7 +15,7 @@ import { Error } from "./page/Error"
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <Home/>  
+        element: <Main/>
     },
 
     {
