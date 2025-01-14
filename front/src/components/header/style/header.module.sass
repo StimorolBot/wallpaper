@@ -1,0 +1,49 @@
+@import "/base_style/color.sass" 
+    
+.header
+    position: sticky
+    top: 0
+    z-index: 999
+    background-color: $black
+    border-bottom: 4px solid $sub-black
+
+.logo
+    font-family: "Tourney", sans-serif
+    font-size: 45px
+    cursor: pointer
+    transition: color 0.3s 
+
+    &:hover
+        color: $gray
+
+.header__inner
+    display: flex
+    justify-content: space-between
+    align-items: center
+    position: relative
+
+.header__list
+    display: flex
+    align-items: center
+    column-gap: 20px
+
+    svg
+        max-width: 32px
+        max-height: 32px
+        cursor: pointer
+        fill: $white
+        transition: fill 0.3s
+
+        &:hover
+            fill: $gray
+
+.header__separation
+    width: 1px
+    height: 45px
+    display: block
+    background-color: $gray
+
+.header__avatar
+    width: 55px
+    height: 55px
+    cursor: pointer
