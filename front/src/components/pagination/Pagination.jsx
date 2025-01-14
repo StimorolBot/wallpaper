@@ -1,44 +1,48 @@
-import { useRef } from "react"
+import { useContext, useRef } from "react"
 
 import { api } from "../../api/config"
-import { Loader } from "../loader/Loader"
 import { useFetch } from "../hook/useFetch"
 import { useObserver } from "../hook/useObserver"
-import { IsFilterImg } from "../img/isFilterImg"
+import { TagContext } from "../../context/tagContext"
 
-import "./style.sass"
+import { CreateItemImg } from "../img/CreateItemImg"
+import { Loader } from "../loader/Loader"
+
+import style from "./style.module.sass"
 
 
-export function Pagination({path, itemList, setItemList, emptyListMsg, ...props}){
-
+export function Pagination({path, itemList, setItemList, emptyImgListMsg=null, ...props}){
     const lastElementRef = useRef(null)
-        
+    const {tag, setTag} = useContext(TagContext)
+
     const [request, isLoading, error] = useFetch(
         async (page, setPage) => {
             await api.get(path, { params: { size: 20, page: page.currentPage, ...props["params"]}})
                 .then((response) => {
                     if (page.currentPage === 1)
                         setItemList(response.data["items"])
-                    else{
+                    else
                         setItemList([...itemList, ...response.data["items"]])
-                    }
                     setPage({...page, totalPage: response.data["pages"]})
                 }
             )
         }
     )
-
+   
     useObserver(isLoading, request, lastElementRef, itemList, props["params"]?.filter_time)
 
     return(
         <>
         { itemList.length === 0 && isLoading == false && 
-            <div className="empty-list">{emptyListMsg}</div>
+            <div className={style.emptyImgListMsg}>{emptyImgListMsg}</div>
         }
-        <div className="img__container">
-            <IsFilterImg imgList={itemList} lastElementRef={lastElementRef}/>
-        </div>
-        {isLoading && <Loader loaderMsg={"Пожалуйста подождите, идет загрузка..."}/>}
-        </>                        
+        <ul className={style.createImg__list}>
+            { itemList.filter(i => i.img_tag.join(" ").includes(tag)).map((item, index) => {
+                return <CreateItemImg key={index} item={item}/>    
+            })}
+            <li ref={lastElementRef}></li>
+        </ul>
+        {isLoading && <Loader loaderMsg={"Пожалуйста подождите, идет загрузка..."}/>}        
+    </>                        
     )
 }
