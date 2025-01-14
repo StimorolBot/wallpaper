@@ -1,7 +1,10 @@
+@import "/base_style/color.sass"
+    
+    
 .input-range__container
     display: flex
     flex-direction: column
-    color: #fff
+    color: $white
 
 #input-range 
     -webkit-appearance: none
@@ -15,7 +18,7 @@
         cursor: pointer
         -webkit-appearance: none
         appearance: none
-        background-color: #333637
+        background-color: $sub-black
         border-radius: 50%
         height: 18px
         width: 18px
@@ -24,9 +27,6 @@
         clip-path: polygon(100% 0, 2px 0, 0 7px, -100vmax 7px, -100vmax 11px, 0 11px, 2px 100%,100% 100%) 
 
     &::-webkit-slider-runnable-track
-        height: 4px
-        background-color: #d7d7d7
+        height: 3px
+        background-color: $gray
 
-
-.input-range-lbl
-    padding: 4px 0 
