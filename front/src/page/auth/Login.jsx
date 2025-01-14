@@ -1,14 +1,17 @@
 import { useForm } from "react-hook-form"
 import { Link, useNavigate } from "react-router-dom"
 
+import { Footer } from "../../components/footer/Footer"
+import { Header } from "../../components/header/Header"
+
 import cookies from "../../cookie"
 import { api } from "../../api/config"
 import { useFetch } from "../../components/hook/useFetch"
 import { BtnSend } from "../../components/ui/btn/BtnSend"
 import { Loader } from "../../components/loader/Loader"
 
-import { EmailInput } from "../../components/ui/input/auth/EmailInput"
-import { PasswordInput } from "../../components/ui/input/auth/PasswordInput"
+import { InputEmail } from "../../components/ui/input/InputEmail"
+import { InputPassword } from "../../components/ui/input/InputPassword"
 
 
 export function Login(){
@@ -32,40 +35,46 @@ export function Login(){
             })
         }
     )
-                 
+      
     const validForm = async (data, event) => {
         await request(event, data)
         reset()
     }
 
     return (
-        <section className="auth login">
-            <h2 className="hidden">Форма для входа</h2>
-            {isLoading
-                ? <Loader/>
-                : <form className="auth__form" onSubmit={handleSubmit(validForm)}>
-                    <h2 className="auth-title"> Вход </h2>
-                    <div className="auth-input__container">
-                        <EmailInput register={register} errors={errors}/>
-                        <PasswordInput register={register} errors={errors}/>  
-                    </div>
-                    <ul className="login__info">
-                        <li className="auth__reset-password">
-                            <Link className="auth__link" to="/auth/reset-password">
-                                Восстановить пароль
-                            </Link>
-                        </li>
-                        <li className="auth__register">
-                            <Link className="auth__link" to="/auth/register">
-                                Зарегистрироваться
-                            </Link>
-                        </li>
-                    </ul>
-                    <div className="auth-btn__container">
-                        <BtnSend> Войти </BtnSend>
-                    </div>               
-                </form>
-            }
-        </section>         
+        <div className="wrapper">
+            <Header/>
+            <main className="main main_flex">
+                <h1 className="title-page">Форма входа</h1>
+                <div className="container">
+                { isLoading 
+                    ?<Loader/>
+                    :<form className="form__auth" onSubmit={handleSubmit(validForm)}>
+                        <h3 className="form__title"> Вход </h3>
+                        <div className="form-input__container">
+                            <InputEmail register={register} errors={errors}/>
+                            <InputPassword register={register} errors={errors}/>
+                        </div>
+                        <ul className="form__list">
+                            <li className="form__item">
+                                <Link className="form__link" to="/auth/reset-password">
+                                    Восстановить пароль
+                                </Link>
+                            </li>
+                            <li className="form__item">
+                                <Link className="form__link" to="/auth/register">
+                                    Зарегистрироваться
+                                </Link>
+                            </li>
+                        </ul>
+                        <div className="form__btn">
+                            <BtnSend> Войти </BtnSend>
+                        </div> 
+                    </form>
+                }
+                </div>
+                </main>
+            <Footer/>
+        </div>
     )
 }
