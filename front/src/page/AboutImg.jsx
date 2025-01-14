@@ -1,20 +1,25 @@
 import { useEffect, useState } from "react"
 
 import { api } from "../api/config"
-import { Loader } from "../components/loader/Loader"
+import { useFetch } from "../components/hook/useFetch"
+
 import { Header } from "../components/header/Header"
 import { Footer } from "../components/footer/Footer"
-import { useFetch } from "../components/hook/useFetch"
-import { IsFilterImg } from "../components/img/isFilterImg"
-import { AboutImgCard } from "../components/ui/cards/AboutImgCard"
 
-import "./style/about_img.sass"
+import { Loader } from "../components/loader/Loader"
+import { CreateItemImg } from "../components/img/CreateItemImg"
+import { ImgInfo } from "../components/img/ImgInfo"
+
+import style from "./style/about_img.module.sass"
 
 
 export function AboutImg(){
-    const [response, setResponse] = useState([{}])
+    const [response, setResponse] = useState([{
+        "avatar_user": null, "user_name": null, "uuid_user": null, "img_tag": null, "style": null, 
+        "create_date": null, "prompt": null, "negative_prompt": null, "img_base64": null, "uuid_img": null,
+        "dislike_count": null, "like_count": null, "is_like": null, "is_dislike": null
+    }])
     const uuidImg = window.location.pathname.split("wallpaper/")[1]
-    
     const [request, isLoading, error] = useFetch(
         async () => {
             await api.get(`/wallpaper/${uuidImg}`).then((r) => {setResponse([...r.data])}
@@ -29,27 +34,21 @@ export function AboutImg(){
     }, [])
 
     return(
-        <>
-        <Header/>
-        <section className="about-img-section">
-            <h2 className="hidden">
-                Информация о изображении
-            </h2>
-            <div className="wrapper">
-                <div className="about-img__container">
+        <div className="wrapper">
+            <Header/>
+            <main className="main main_flex">
+                <h1 className="title-page">Информация о изображении</h1>
+                <div className="container">
                     {isLoading
-                        ? <Loader/>
-                        : <div className="about-img__wrapper">
-                            <div className="about__img">
-                                <IsFilterImg imgList={response} setImgList={setResponse} isFilter={false}/>
-                            </div>
-                            <AboutImgCard imgInfo={response[0]} />
+                        ?<Loader/>
+                        :<div className={style.about__inner}>
+                            <CreateItemImg item={response[0]} index={1}/>
+                            <ImgInfo item={response[0]} />
                         </div>
                     }
                 </div>
-            </div>
-        </section>
-        <Footer/>
-        </>
+            </main>
+            <Footer/>
+        </div>
     )
 }
