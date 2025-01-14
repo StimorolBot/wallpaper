@@ -2,10 +2,10 @@ import { useEffect, useState } from "react"
 
 import { api } from "../../../api/config.js"
 import { useFetch } from "../../hook/useFetch.js"
-import { CustomSelect } from "../select/CustomSelect.jsx"
+import { CustomSelect } from "../input/CustomSelect.jsx"
 
 
-export function MainSearch({value, setValue}) {
+export function CustomSearch({value, setValue, isMulti, placeholder="#Поиск", isSearchable=false}) {
     const [options, setOptions] = useState([])
     
     const [request, isLoading, error] = useFetch(
@@ -23,10 +23,10 @@ export function MainSearch({value, setValue}) {
         })()
     }, [])
     
-    return(        
+    return(   
         <CustomSelect
-            options={options} placeholder={"#ПопулярныеТеги"} 
-            value={value} setValue={setValue} isMulti={true} isSearchable={true}
+            options={options} placeholder={placeholder} 
+            value={value} setValue={setValue} isMulti={isMulti} isSearchable={isSearchable}
             isLoading={isLoading ? true : false}
         />        
     )
