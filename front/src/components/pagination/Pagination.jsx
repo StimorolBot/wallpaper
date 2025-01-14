@@ -33,7 +33,7 @@ export function Pagination({path, itemList, setItemList, emptyImgListMsg=null, .
 
     return(
         <>
-        { itemList.length === 0 && isLoading == false && 
+        { isLoading == false && itemList.length === 0 &&  
             <div className={style.emptyImgListMsg}>{emptyImgListMsg}</div>
         }
         <ul className={style.createImg__list}>
