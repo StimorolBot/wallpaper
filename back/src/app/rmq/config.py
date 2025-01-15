@@ -6,7 +6,7 @@ class Settings(BaseSettings):
     PORT: int = 5672
     LOGIN: str = "guest"
     PASSWORD: str = "guest"
-    ROUTING_KEY: str = "img"
+    ROUTING_KEY: str = "friend"
 
 settings = Settings()
 
