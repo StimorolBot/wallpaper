@@ -27,15 +27,15 @@
     align-items: center
     column-gap: 20px
 
-    svg
-        max-width: 32px
-        max-height: 32px
-        cursor: pointer
-        fill: $white
-        transition: fill 0.3s
+.header__svg
+    max-width: 32px
+    max-height: 32px
+    cursor: pointer
+    fill: $white
+    transition: fill 0.3s
 
-        &:hover
-            fill: $gray
+    &:hover
+        fill: $gray
 
 .header__separation
     width: 1px
@@ -47,3 +47,19 @@
     width: 55px
     height: 55px
     cursor: pointer
+
+.header__item_notification
+    position: relative
+    
+    &::before
+        content: ""
+        position: absolute
+        top: 1px
+        right: 5px
+        width: 10px
+        height: 10px
+        border-radius: 50%
+        background-color: $error
+
+// .notification__container
+//     position: relative
