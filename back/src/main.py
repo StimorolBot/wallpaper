@@ -9,7 +9,7 @@ from fastapi_pagination import add_pagination
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
 
-from src.redis.config import redis
+from src.app.redis.config import redis
 from src.app.img.router import img_router
 from src.app.auth.router import register_router
 from src.app.auth.token.router import jwt_router
