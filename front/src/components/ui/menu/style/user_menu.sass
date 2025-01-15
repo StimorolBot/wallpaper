@@ -1,14 +1,20 @@
+@import "/base_style/color.sass"
+    
 .user-menu
     position: absolute
+    font-size: 18px
     top: 60px
-    left: -175px
-    border: 2px solid var(--gray)
-    border-radius:  5px 
-    background-color: #2c2c2c
-    padding: 0 5px
+    transform: translateX(-100%)
+    border: 2px solid $gray
+    border-radius: 6px 
+    background-color: $sub-black
+    padding: 5px
     overflow: hidden
     max-width: 220px
     z-index: 9
+
+.user-menu__list
+    padding: 10px 0
 
 .user-menu__header,
 .user-menu__item,
@@ -16,23 +22,27 @@
     display: flex
     align-items: center
     padding: 4px 0
-    transition: var(--main-transition)
-    cursor: pointer
+    transition: background-color 0.3s
 
 .user-menu-avatar
     max-width: 40px
 
 .user-menu__item
     border-radius: 4px
+    
     &:hover
-        background: var(--gray)
+        background-color: $gray
+
+.user-menu__item + .user-menu__item
+    margin-bottom: 5px
+
+.user-menu__svg_stroke
+    stroke: $error
 
 .user-menu__link
     padding: 0 8px
 
 .user-menu__footer
-    border-top: 1px solid var(--gray)
+    padding-top: 10px
+    border-top: 1px solid $gray
     justify-content: space-evenly
-
-.user-menu__footer-svg
-    fill: none
