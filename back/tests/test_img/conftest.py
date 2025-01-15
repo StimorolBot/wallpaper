@@ -3,7 +3,7 @@ from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.crud import crud
-from src.redis.redis_func import set_redis
+from src.app.redis.redis_func import set_redis
 
 from src.app.auth.model import AuthTable
 from src.app.auth.password_auth import password_auth
