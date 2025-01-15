@@ -8,7 +8,7 @@ from core.model import Base
 from core.my_functools import generate_uuid, get_unc_now
 
 if TYPE_CHECKING:
-    from src.app.auth.model import AuthTable
+    from src.app import AuthTable
     from src.app.img.reaction.model import ReactionTable
 
 
