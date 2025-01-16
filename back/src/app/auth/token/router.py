@@ -1,7 +1,7 @@
 from src.app.auth.token.jwt_token import jwt_token
 from src.app.auth.token.schemas import TokenSchemas
 
-from fastapi import APIRouter, status, HTTPException, Cookie, Depends
+from fastapi import APIRouter, status, HTTPException, Cookie
 
 jwt_router = APIRouter(prefix="/auth/jwt", tags=["jwt"])
 
