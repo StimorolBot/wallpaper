@@ -14,15 +14,15 @@ import style from "./style/about_img.module.sass"
 
 
 export function AboutImg(){
-    const [response, setResponse] = useState([{
+    const [response, setResponse] = useState({
         "avatar_user": null, "user_name": null, "uuid_user": null, "img_tag": null, "style": null, 
         "create_date": null, "prompt": null, "negative_prompt": null, "img_base64": null, "uuid_img": null,
         "dislike_count": null, "like_count": null, "is_like": null, "is_dislike": null
-    }])
+    })
     const uuidImg = window.location.pathname.split("wallpaper/")[1]
     const [request, isLoading, error] = useFetch(
         async () => {
-            await api.get(`/wallpaper/${uuidImg}`).then((r) => {setResponse([...r.data])}
+            await api.get(`/wallpaper/${uuidImg}`).then((r) => setResponse(...r.data)
             )
         }
     )
@@ -42,8 +42,8 @@ export function AboutImg(){
                     {isLoading
                         ?<Loader/>
                         :<div className={style.about__inner}>
-                            <CreateItemImg item={response[0]} index={1}/>
-                            <ImgInfo item={response[0]} />
+                            <CreateItemImg item={response} index={1}/>
+                            <ImgInfo item={response} />
                         </div>
                     }
                 </div>
