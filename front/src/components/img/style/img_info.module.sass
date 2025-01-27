@@ -1,0 +1,82 @@
+@import "/base_style/color.sass"
+    
+    
+.imgInfo
+    margin: 0 10px
+    flex-basis: 575px
+
+.imgAuthor__list
+    display: flex
+    align-items: center
+    background-color: $sub-black
+    border-radius: 10px
+    padding: 5px 10px
+    justify-content: space-between
+
+.imgAuthor__item
+    display: flex
+
+.authorAvatar
+    max-width: 65px
+    max-height: 65px 
+
+.imgAuthor__info
+    align-self: center
+    margin-left: 10px
+
+    time
+        font-size: 14px
+
+.imgAuthor__name
+    margin-top: 5px
+
+.imgInfo__chat,
+.imgInfo__addUser
+    max-width: 32px
+    max-height: 32px
+
+.imgInfo__addUser
+    stroke: color-mix(in srgb, $black 40%, $error 60%)
+    transition: stroke 0.3s 
+    
+    &:hover
+        stroke: $error
+
+.imgInfo__chat
+    margin-right: 5px
+    fill: color-mix(in srgb, $black 40%, $blue 60%)
+    transition: fill 0.3s 
+
+    &:hover
+        fill: $blue
+
+.imgInfo__list
+    margin: 20px 0 
+    background-color: $sub-black
+    border-radius: 10px
+    padding: 10px
+
+.imgInfo__item
+    display: flex
+    position: relative
+
+    .copy__container
+        position: absolute
+        right: 0
+        top: 0
+
+.imgInfo__item + .imgInfo__item
+    margin-top: 20px
+
+.imgInfo__dd
+    padding-left: 10px
+
+.tag__list
+    display: flex
+    flex-wrap: wrap
+    background-color: $sub-black
+    border-radius: 10px
+    padding: 10px
+
+.tag__item
+    cursor: pointer
