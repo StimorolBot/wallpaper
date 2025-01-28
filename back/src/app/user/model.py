@@ -25,7 +25,7 @@ class FriendTable(Base):
     __tablename__ = "friend_table"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    user_uuid: Mapped[str] = mapped_column(ForeignKey("user_table.uuid_user"))
+    uuid_user: Mapped[str] = mapped_column(ForeignKey("user_table.uuid_user"))
     subscriber_uuid: Mapped[str] = mapped_column(ForeignKey("user_table.uuid_user"))
     is_friend: Mapped[bool] = mapped_column()
     date_add: Mapped[datetime] = mapped_column(default=get_unc_now)
