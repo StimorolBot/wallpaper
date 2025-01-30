@@ -17,6 +17,7 @@ class ImageSchemas(BaseModel):
 class AllImageDTO(BaseModel):
     img_base64: str
     uuid_img: ValidUuid
+    img_tag: list[int | str]
     dislike_count: int = Field(default=0, ge=0)
     like_count: int = Field(default=0, ge=0)
     is_like: int = Field(default=0, ge=0)
@@ -27,7 +28,7 @@ class AboutImgDTO(AllImageDTO):
     avatar_user: str
     user_name: ValidName
     uuid_user: ValidUuid
-    img_tag: str | None = None
+    img_tag: list[str]
     style: StyleImg
     create_date: datetime
     prompt: ValidPromptImg

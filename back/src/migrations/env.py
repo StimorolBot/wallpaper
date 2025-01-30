@@ -6,11 +6,6 @@ from sqlalchemy import pool
 from alembic import context
 
 from src.db.config import setting
-from src.app.img.model import ImgTable
-from src.app.auth.model import AuthTable
-from src.app.user.model import UserTable
-from src.app.img.tag.model import TagTable
-from src.app.img.reaction.model import ReactionTable
 from core.model import Base
 
 # this is the Alembic Config object, which provides

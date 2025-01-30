@@ -25,7 +25,7 @@ export function ImgInfo({ item }){
     const [submitUser, isLoadingUser, errorUser] = useFetch(
         async () => {
             await api.post("/user/subscribe", 
-                {uuid_user: item.uuid_user, user_name: item.user_name, operation: "FRIEND_REQUEST"}
+                {"uuid_user": item.uuid_user, "user_name": item.user_name, "operation": "FRIEND_REQUEST"}
             )
             .then((r) => {
             })

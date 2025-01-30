@@ -17,7 +17,7 @@ def valid_forbidden_char(val: str):
 
 
 def valid_size_img(size: int, handler) -> int:
-    if 249 < int(size) and int(size) > 1024:
+    if 250 <= int(size) or int(size) > 1024:
         return size
 
     raise HTTPException(
@@ -27,7 +27,7 @@ def valid_size_img(size: int, handler) -> int:
 
 
 def valid_prompt_img(prompt: str, handler) -> str:
-    valid_len(val=prompt, min_val=4, max_val=1000)
+    valid_len(val=prompt, min_val=2, max_val=1000)
     return prompt
 
 
