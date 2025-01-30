@@ -1,4 +1,5 @@
 import json
+import base64
 from typing import Annotated
 from jwt.exceptions import DecodeError
 
@@ -18,17 +19,19 @@ from src.app.img.get_user import get_user_by_token
 from src.app.auth.model import AuthTable
 from src.app.user.model import UserTable, FriendTable
 
+from src.app.redis.name_space import NameSpace
+from src.app.redis.config import fast_api_cache
 from src.app.redis.operation_type import Operation
 from src.app.redis.redis_func import get_redis, del_redis
 from src.app.user.ws_manager import ws_manager
 
-from src.app.user.schemas import ActionRequest, AddUserSchema
+from src.app.user.schemas import ActionRequestSchema, AddUserSchema, ChangeAvatarSchema
 
 user_router = APIRouter(tags=["user"], prefix="/user")
 
 
 @user_router.get("/info")
-@cache(expire=120)
+@cache(expire=120, namespace=NameSpace.USER_INFO.value)
 async def get_user_info(
         access_token: Annotated[str | None, Cookie()] = None,
         session: AsyncSession = Depends(get_async_session)
@@ -72,7 +75,7 @@ async def get_last_visit(uuid_user: str, session: AsyncSession = Depends(get_asy
 
 
 @user_router.post("/subscribe")
-async def subscribe_user(friend_request: ActionRequest, subscriber: dict = Depends(get_user_by_token)) -> dict:
+async def subscribe_user(friend_request: ActionRequestSchema, subscriber: dict = Depends(get_user_by_token)) -> dict:
     data = {
         "uuid_user": friend_request.uuid_user, "user_name": friend_request.user_name,
         "subscriber_uuid": subscriber["sub"], "operation": friend_request.operation.value
@@ -86,7 +89,7 @@ async def subscribe_user(friend_request: ActionRequest, subscriber: dict = Depen
 async def get_notification(user: dict = Depends(get_user_by_token)):
     data = await get_redis(user["sub"])
     if data:
-        return ActionRequest.model_validate(data, from_attributes=True)
+        return ActionRequestSchema.model_validate(data, from_attributes=True)
 
 
 @user_router.patch("/add-friend")
@@ -98,9 +101,23 @@ async def add_friend(
     await del_redis(name=f"{user["sub"]}/{Operation.FRIEND_REQUEST.value}")
     if user_data.is_add:
         await crud.update(
-            table=FriendTable,
-            session=session,
-            data={"is_friend": True},
-            uuid_user=user["sub"],
-            subscriber_uuid=user_data.subscriber_uuid
+            table=FriendTable, session=session, data={"is_friend": True},
+            uuid_user=user["sub"], subscriber_uuid=user_data.subscriber_uuid
         )
+
+
+@user_router.post("/change-avatar")
+async def change_avatar(
+        img: UploadFile = File(...),
+        user: dict = Depends(get_user_by_token),
+        session: AsyncSession = Depends(get_async_session)
+) -> dict:
+    ChangeAvatarSchema(img_size=img.size, content_type=img.headers.get("content-type"))
+    base64_img = base64.b64encode(img.file.read())
+    await crud.update(
+        session=session, table=UserTable,
+        data={"avatar_user": str(base64_img.decode())},
+        uuid_user=user["sub"]
+    )
+    await fast_api_cache.clear(NameSpace.USER_INFO.value)
+    return {"status_code": status.HTTP_200_OK, "data": "Пользователь успешно изменил аватар"}
