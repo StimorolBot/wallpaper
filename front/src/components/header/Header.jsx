@@ -12,31 +12,35 @@ import { UserMenu } from "../ui/menu/UserMenu"
 import { NotificationMenu } from "../ui/menu/NotificationMenu"
 import { CustomSearch } from "../ui/search/CustomSearch"
 
-// import { LoaderV2 } from "../loader/LoaderV2"
-
 import style from "./style/header.module.sass"
 
 
 export function Header() {
     const {tag, setTeg} = useContext(TagContext)
-    const [response, setResponse] = useState({"user_name": null, "avatar_user": null, "uuid_user": null, "notification": null})
-    
+    const [userInfoResponse, setUserInfoResponse] = useState({"user_name": null, "avatar_user": null, "user_uuid": null})
+    const [notificationResponse, setNotificationResponse] = useState({"user_uuid": null, "user_name": null, "subscriber_uuid": null, "operation": null})
+
     const [isShowMenu, setIsShowMenu] = useState(false)
     const [isShowNotification, setIsShowNotification] = useState(false)
 
     const wsRef = useRef(null)
-    const [clickMenu, setClickMenu] = useState({})
-    
+
     const clickUserMenuRef = useRef(null)
     const clickNotificationMenuRef = useRef(null)
 
-    const [request, isLoading, error] = useFetch(
+    const [getInfoUserRequest, isLoadingGetInfoUser, errorGetInfoUser] = useFetch(
         async () => {
             await api.get("/user/info").then((r) => {
                 if (r.data){
-                    setResponse(...r.data)
+                    setUserInfoResponse(...r.data)
                 }
             })
+        }
+    )
+
+    const [getNotificationRequest, isLoadingNotification, errorNotification] = useFetch(
+        async () => {
+            await api.get("/user/get-notification").then((r) => setNotificationResponse(r.data))
         }
     )
 
@@ -45,7 +49,8 @@ export function Header() {
 
     useEffect(() => {
         (async () => {
-            await request()
+            await getInfoUserRequest()
+            await getNotificationRequest()
         })()
     }, [])
 
@@ -53,8 +58,8 @@ export function Header() {
         <>
         <header className={style.header}>
             <div className="container">
-                { response.user_name && 
-                    <Ws response={response} setResponse={setResponse} wsRef={wsRef}/>
+                { userInfoResponse.user_name && 
+                    <Ws response={userInfoResponse} setResponse={setUserInfoResponse} wsRef={wsRef}/>
                 }
                 <div className={style.header__inner}>
                     <Link className={style.logo} to="/">
@@ -69,18 +74,15 @@ export function Header() {
                                 />
                             </li>
                             <li className={style.header__item} ref={clickNotificationMenuRef}>
-                                <div 
-                                    className={style.notification__container} 
-                                    onClick={() => setIsShowNotification(s => !s)} 
-                                >
+                                <div className={style.notification__container}>
                                     { isShowNotification && 
-                                        <NotificationMenu wsRef={wsRef}/>
-                                    }
-                                    <div className={response.notification 
+                                        <NotificationMenu response={notificationResponse} />
+                                    } 
+                                    <div className={notificationResponse?.user_name
                                         ? `${style.header__notification} ${style.header__notification_active}`
                                         : style.header__notification} 
                                     >
-                                        <svg>
+                                        <svg onClick={() => setIsShowNotification(s => !s)}>
                                             <use xlinkHref="/static/main.svg#notifications"></use>    
                                         </svg>
                                     </div>
@@ -95,15 +97,19 @@ export function Header() {
                                 <span className={style.header__separation}></span>
                             </li>
                             <li className={style.header__item} ref={clickUserMenuRef}>
-                                {response.avatar_user
+                                {userInfoResponse.avatar_user
                                     ?<>
                                     <img
                                         className={style.header__avatar}
-                                        src={`data:image/jpeg;base64,${response.avatar_user}`} alt="avatar"
+                                        src={`data:image/jpeg;base64,${userInfoResponse.avatar_user}`} alt="avatar"
                                         onClick={() => setIsShowMenu(s => !s)}
                                     />
                                     { isShowMenu &&
-                                        <UserMenu userAvatar={response.avatar_user} userName={response.user_name} uuidUser={response.uuid_user}/>
+                                        <UserMenu 
+                                            userAvatar={userInfoResponse.avatar_user}
+                                            userName={userInfoResponse.user_name} 
+                                            uuidUser={userInfoResponse.user_uuid}
+                                        />
                                     }
                                     </>
                                     :<Link to="/auth/login">
