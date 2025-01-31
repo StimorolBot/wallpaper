@@ -9,8 +9,8 @@ class ImageSchemas(BaseModel):
     prompt: ValidPromptImg
     negative_prompt: ValidPromptImg | None = None
     style: StyleImg
-    width: ValidSizeImg = 1024
-    height: ValidSizeImg = 1024
+    width: ValidSizeImg
+    height: ValidSizeImg
     is_public: bool = False
 
 
