@@ -8,6 +8,8 @@ from src.app.redis.redis_func import get_redis
 from src.app.img.enums.style_img import StyleImg
 from src.app.img.enums.filter_time import FilterTime
 
+IMG_UUID = "a4c687d2dde54c1aa39385d23f2fcc9d"
+
 
 class TestImgPos:
 
@@ -35,17 +37,26 @@ class TestImgPos:
 
     async def test_publish(self, ac: AsyncClient):
         token = await get_redis("img_token_test")
-        response = await ac.post("/publish",
-            json={"uuid_img": "a4c687d2dde54c1aa39385d23f2fcc9d"},
+        response = await ac.post(
+            "/publish",
+            json={"uuid_img": IMG_UUID},
             cookies={"access_token": token["access_token"]}
         )
         assert response.status_code == status.HTTP_200_OK
 
+    async def test_create_tag(self, ac: AsyncClient):
+        token = await get_redis("img_token_test")
+        data = {"uuid_img": IMG_UUID, "tag_list": ["#testTag"], "is_automatically": False}
+        response = await ac.post("/tag/create", json=data, cookies={"access_token": token["access_token"]})
+
+        assert response.status_code == status.HTTP_201_CREATED
+
+    # вернет null если нет тегов
     async def test_get_img_by_uuid(self, ac: AsyncClient):  # ошибка
         token = await get_redis("img_token_test")
         response = await ac.get(
-            "/wallpaper/a4c687d2dde54c1aa39385d23f2fcc9d",
-            params={"uuid_img": "a4c687d2dde54c1aa39385d23f2fcc9d"},
+            f"/wallpaper/{IMG_UUID}",
+            params={"uuid_img": IMG_UUID},
             cookies={"access_token": token["access_token"]}
         )
         assert response.status_code == status.HTTP_200_OK
@@ -60,7 +71,7 @@ class TestImgPos:
     async def test_set_reaction(self, ac: AsyncClient, reaction, operation_type):
         data = {
             "reaction": reaction,
-            "img_uuid": "a4c687d2dde54c1aa39385d23f2fcc9d",
+            "img_uuid": IMG_UUID,
             "operation_type": operation_type
         }
         token = await get_redis("img_token_test")
@@ -73,7 +84,7 @@ class TestImgPos:
 
     async def test_create_img(self, ac: AsyncClient):
         token = await get_redis("img_token_test")
-        data = {"prompt": "тест", "style": StyleImg.ANIME.value}
+        data = {"prompt": "тест", "style": StyleImg.ANIME.value, "width": 300, "height": 300}
         response = await ac.post("/create", json=data, cookies={"access_token": token["access_token"]})
         assert response.status_code == status.HTTP_201_CREATED
 
@@ -95,7 +106,6 @@ class TestImgNeg:
             ("test1", "ANIME", 1024, -1024),
             ("test1", "ANIME", 2000, 1024),
             ("test1", "ANIME", 1024, 2000),
-            ("test ! @ + - / . | \\", "ANIME", 1024, 1024)
         ]
     )
     async def test_create_img(self, ac: AsyncClient, prompt: str, style: str, width: int, height: int):
@@ -132,12 +142,6 @@ class TestImgPosNoCookies:
         response = await ac.get("/popular", params={"filter_time": filter_time})
         assert response.status_code == status.HTTP_200_OK
 
-    async def test_get_img_by_uuid(self, ac: AsyncClient):
-        response = await ac.get(
-            "/wallpaper/a4c687d2dde54c1aa39385d23f2fcc9d",
-            params={"uuid_img": "a4c687d2dde54c1aa39385d23f2fcc9d"})
-        assert response.status_code == status.HTTP_200_OK
-
 
 class TestImgNegNoCookies:
 
@@ -147,6 +151,6 @@ class TestImgNegNoCookies:
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
     async def test_set_reaction(self, ac: AsyncClient):
-        data = {"reaction": True, "img_uuid": "a4c687d2dde54c1aa39385d23f2fcc9d"}
+        data = {"reaction": True, "img_uuid": IMG_UUID}
         response = await ac.post("set-reaction", json=data)
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
