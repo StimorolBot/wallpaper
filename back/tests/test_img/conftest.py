@@ -26,13 +26,12 @@ async def create_img(session: AsyncSession):
         "style": StyleImg.ANIME.value,
         "prompt": "hello word!",
         "img_base64": "/9j/4AAQSkZJRgABAQAAAQABAAD...KXFFACUtFFAH/9k=",
-        "is_public": True
     }
 
     await crud.create(session=session, table=ImgTable, data=data)
 
 
-async def set_info_user(session: AsyncSession):
+async def add_info_user(session: AsyncSession):
     data = {
         "uuid_user": TEST_UUID_USER,
         "avatar_user": "/9j/4AAQSkZJRgABAQAAAQABAAD..."
@@ -51,7 +50,7 @@ async def create_user():
     async with async_session_maker() as session:
         await crud.create(session=session, table=AuthTable, data=data)
         await create_img(session)
-        await set_info_user(session)
+        await add_info_user(session)
 
 
 @pytest.fixture(autouse=True, scope="module")
