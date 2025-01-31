@@ -56,7 +56,7 @@ async def get_all_img(
         access_token: Annotated[str, Cookie()] = None,
         session: AsyncSession = Depends(get_async_session)
 ) -> Page:
-    query = get_info_about_img(access_token)
+    query = get_info_about_img(access_token, True, True)
     res = await session.execute(query.order_by(desc(ImgTable.create_date)))
     img_list = res.mappings().all()
     data = [AllImageDTO.model_validate(item, from_attributes=True) for item in img_list]
@@ -70,7 +70,7 @@ async def get_popular_img(
         access_token: Annotated[str, Cookie()] = None,
         session: AsyncSession = Depends(get_async_session)
 ) -> Page:
-    query = get_info_about_img(access_token)
+    query = get_info_about_img(access_token, True, True)
     if filter_time.value not in FilterTime.ALL.value:
         query = query.where(
             ImgTable.create_date >= get_unc_now()
@@ -106,12 +106,12 @@ async def get_img_by_uuid(
     )
 
     res = await session.execute(query.distinct())
-    img_list = res.mappings().all()
+    img = res.mappings().all()
 
-    if not img_list:
+    if not img:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Не удалось найти '{uuid_img}'")
 
-    return [AboutImgDTO.model_validate(item, from_attributes=True) for item in img_list]
+    return [AboutImgDTO.model_validate(item, from_attributes=True) for item in img]
 
 
 @img_router.post("/set-reaction", status_code=status.HTTP_200_OK)
