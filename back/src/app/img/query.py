@@ -53,8 +53,8 @@ def check_reaction(uuid: str, reaction: bool = True, label: str = "is_like"):
 
 
 def get_info_about_img(
-        access_token=None, is_public: bool = True,
-        is_multi: bool = True, *args, **filter_kwargs
+        access_token: str, is_public: bool,
+        is_multi: bool, *args, **filter_kwargs
 ) -> Select:
     if not access_token:
         return base_select(is_public, is_multi, *args, **filter_kwargs)
