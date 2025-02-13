@@ -86,7 +86,11 @@ async def subscribe_user(friend_request: ActionRequestSchema, subscriber: dict =
 
 
 @user_router.get("/get-notification")
-async def get_notification(user: dict = Depends(get_user_by_token)):
+async def get_notification(access_token: Annotated[str, Cookie()] = None):
+    if not access_token:
+        return {"operation": None, "data": "Пользователь не авторизован"}
+
+    user = get_user_by_token(access_token)
     data = await get_redis(user["sub"])
     if data:
         return ActionRequestSchema.model_validate(data, from_attributes=True)
