@@ -120,8 +120,30 @@ class TestImgNeg:
 
     @pytest.mark.parametrize("filter_time", (" ", "ANY"))
     async def test_get_popular_img(self, ac: AsyncClient, filter_time: str):
-        response = await ac.get("/popular", params={"filter_time": filter_time})
+        token = await get_redis("img_token_test")
+        response = await ac.get(
+            "/popular",
+            params={"filter_time": filter_time},
+            cookies={"access_token": token["access_token"]}
+        )
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+
+    @pytest.mark.parametrize(
+        "tag_list",
+        (
+                ["Test"], ["#Te st"], ["#Test#"], ["Test#"], ["Te#st"], ["#Test!"],
+                ["#"], ["#!,"], [""], ["#Test_12"], ["#TetsTetsTetsTetsTetsTets"],
+                ["#Test", "#Test", "#Test", "#Test", "#Test", "#Test", "#Test", "#Test", "#Test"]
+        )
+    )
+    async def test_create_tag(self, ac: AsyncClient, tag_list: list[str]):
+        token = await get_redis("img_token_test")
+        response = await ac.post(
+            "/tag/create",
+            json={"uuid_img": IMG_UUID, "tag_list": tag_list, "is_automatically": False},
+            cookies={"access_token": token["access_token"]}
+        )
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
 class TestImgPosNoCookies:
