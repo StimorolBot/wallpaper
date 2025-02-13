@@ -17,7 +17,7 @@ export function Copy({buffer}){
         }
     }
     return(
-        <>
+        <div title={isCopy ? "Текс скопирован в буфер обмена" : "Скопировать" }>
             { isCopy
                 ? <svg className="copy__svg ok_svg">
                     <use xlinkHref="/static/main.svg#ok-svg"></use>    
@@ -26,6 +26,6 @@ export function Copy({buffer}){
                     <use xlinkHref="/static/main.svg#copy-svg"></use>    
                 </svg>
             }
-        </>
+        </div>
     )
 }
