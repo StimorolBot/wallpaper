@@ -1,5 +1,5 @@
 <svg display="none" xmlns="http://www.w3.org/2000/svg">
-    <symbol id="notifications" viewBox="0 0 448 512" width="28" height="32">
+    <symbol id="notifications-svg" viewBox="0 0 448 512" width="28" height="32">
         <path 
             d="M439.39 
                 362.29c-19.32-20.76-55.47-51.99-55.47-154.29c0-77.7-54.48-139.9-127.94-155.16V32c0-17.67-14.32-32-31.98-32s-31.98 
@@ -9,14 +9,14 @@
                 23.31 131.46 44.53 159.42zM224 512c35.32 0 63.97-28.65 63.97-64H160.03c0 35.35 28.65 64 63.97 64" 
         />
     </symbol>
-     <symbol id="chat" viewBox="0 0 512 512" width="32" height="32">
+     <symbol id="chat-svg" viewBox="0 0 512 512" width="32" height="32">
         <path
             d="M448 0H64C28.7 0 0 28.7 0 64v288c0 35.3 28.7 64 64 64h96v84c0 7.1 5.8 12 12 12c2.4 0 4.9-.7 7.1-2.4L304 
                 416h144c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64m16 352c0 8.8-7.2 16-16 16H288l-12.8 9.6L208 
                 428v-60H64c-8.8 0-16-7.2-16-16V64c0-8.8 7.2-16 16-16h384c8.8 0 16 7.2 16 16z" 
         />
     </symbol>
-    <symbol id="auth" viewBox="0 0 512 512" width="32" height="32">
+    <symbol id="auth-svg" viewBox="0 0 512 512" width="32" height="32">
         <g>
             <path 
                 d="m437.019 74.98c-48.352-48.351-112.639-74.98-181.019-74.98s-132.667 26.629-181.02 
@@ -35,8 +35,8 @@
                 />
         </g>
     </symbol>
-    <symbol id="main-page" width="24" height="26" viewBox="0 0 24 26" fill="none">
-        <g clipPath="url(#clip0_1_13)">
+    <symbol id="main-page-svg" width="24" height="26" viewBox="0 0 24 26" fill="none">
+        <g>
             <path
                 stroke="#2A52BE" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
                 d="M4.17734 25C2.60668 25 1.33334 23.6933 1.33334 22.08V10.344C1.33334 9.45734 1.72668 8.61734 2.40001 8.064L10.2227
@@ -50,14 +50,14 @@
             />
         </g>
         <defs>
-            <clipPath id="clip0_1_13">
+            <clipPath>
                 <rect fill="#2A52BE" width="24" height="26"/>
             </clipPath>
         </defs>
      </symbol>
 
-    <symbol id="create-page" width="26" height="26" viewBox="0 0 26 26">
-        <g clipPath="url(#clip0_1_14)">
+    <symbol id="create-page-svg" width="26" height="26" viewBox="0 0 26 26">
+        <g>
             <path
                 fill="white"
                 d="M15.4375 17.875V16.25H16.25V10.5625H15.4375V8.9375H18.6875V10.5625H17.875V16.25H18.6875V17.875H15.4375ZM12.5938
@@ -69,28 +69,28 @@
             <path fill="white" d="M26 26H0V0H11.375V1.625H1.625V24.375H24.375V14.625H26V26Z"/>
         </g>
         <defs>
-            <clipPath id="clip0_1_14">
+            <clipPath>
                 <rect fill="white" width="26" height="26"/>
             </clipPath>
         </defs>
     </symbol>
-    <symbol id="popular-page" width="14" height="26" viewBox="0 0 14 26">
-        <g clipPath="url(#clip0_1_7)">
+    <symbol id="popular-page-svg" width="14" height="26" viewBox="0 0 14 26">
+        <g>
             <path fill="#F4A900" d="M5.83333 16.1379H0L8.16667 -0.597687V8.96553H14L5.83333 25.7012V16.1379Z"/>
         </g>
         <defs>
-            <clipPath id="clip0_1_7">
+            <clipPath>
                 <rect fill="#F4A900" width="14" height="26"/>
                 </clipPath>
         </defs>
     </symbol>
-    <symbol id="categories-page" width="29" height="25" viewBox="0 0 29 25">
+    <symbol id="categories-page-svg" width="29" height="25" viewBox="0 0 29 25">
         <path 
             stroke="#9B2D30" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" 
             d="M1 2H27M4 7.25H24M7 12.5H21M1 23H27M4 17.75H24"
         />
     </symbol>
-    <symbol id="git-hub" width="50" height="50" viewBox="0 0 512 512">
+    <symbol id="gitHub-svg" width="50" height="50" viewBox="0 0 512 512">
         <path
             fill="white"
             d="m256 0c-140.699219 0-256 116.300781-256 257 0 139.882812 114.25 255 256 255 141.574219 0 256-114.945312 256-255
@@ -116,7 +116,7 @@
                 101.800781-227 226-227s226 102.800781 226 227c0 97.800781-63.699219 181.199219-151 211.800781zm0 0" 
         />
     </symbol>
-    <symbol id="show-psd" width="28px" height="28px" viewBox="0 0 24 24">
+    <symbol id="show-psd-svg" width="28px" height="28px" viewBox="0 0 24 24">
         <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
             <path 
                 d="M3.587 13.779c1.78 1.769 4.883 4.22 8.413 4.22s6.634-2.451 
@@ -128,7 +128,7 @@
             />
         </g>
     </symbol>
-    <symbol id="hidden-psd" width="32" height="32" viewBox="0 0 24 24">
+    <symbol id="hidden-psd-svg" width="32" height="32" viewBox="0 0 24 24">
         <path
             fillRule="evenodd" clipRule="evenodd" 
             d="M11.254 13.9749V17H12.754V13.9672C14.2271 13.846 15.6039 13.3931 16.8015 12.6851L18.3545 
@@ -141,12 +141,12 @@
                 13.8685 11.254 13.9749Z" 
         />
     </symbol>
-    <symbol id="download-btn" width="32" height="32" viewBox="0 0 24 24">
+    <symbol id="download-btn-svg" width="32" height="32" viewBox="0 0 24 24">
         <path fill="none" strokeWidth="2"
             d="M4 16v1a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
         />
     </symbol>
-    <symbol id="like" width="32" height="32" viewBox="0 0 32 32">
+    <symbol id="like-svg" width="32" height="32" viewBox="0 0 32 32">
         <path
             strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"
             d="M6 6c4.665-2.332 8.5.5 10 2.5c1.5-2 5.335-4.832 10-2.5c6 3 4.5 10.5 0 
@@ -154,7 +154,7 @@
                 23.165 6 21C1.5 16.5 0 9 6 6"
         /> 
     </symbol>
-    <symbol id="dislike" width="32" height="32" viewBox="0 0 32 32">
+    <symbol id="dislike-svg" width="32" height="32" viewBox="0 0 32 32">
         <g strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
             <path 
                 d="M15.391 25.744a1 1 0 0 0-.203.607l-.02 3.075a.577.577 0 0 1-.914.465C10.79 27.453 
@@ -210,7 +210,7 @@
             />
         </g>
     </symbol>
-    <symbol id="loader" fill="#000000" width="300px" height="300px" viewBox="0 0 256.00098 256.00098">
+    <symbol id="loader-svg" fill="#000000" width="300px" height="300px" viewBox="0 0 256.00098 256.00098">
         <path 
             d="M128.001,76a52,52,0,1,0,52,52A52.05895,52.05895,0,0,0,128.001,76Zm0,96a44,44,0,1,1,44-44A44.04978,
                 44.04978,0,0,1,128.001,172Zm103.606-19.19434-15.70459-20.93652c.07276-2.56543.01953-5.86182-.02246-7.709l15.72022-20.95948a3.99977,
@@ -270,7 +270,7 @@
             />
         </g>
     </symbol>
-    <symbol id="like-svg" width="32" height="32" viewBox="0 0 48 48">
+    <symbol id="liked-svg" width="32" height="32" viewBox="0 0 48 48">
         <path
             fill="none" stroke="#1E5945" strokeLinejoin="round" strokeWidth="2"
             d="M27.6 18.6v-7.2A5.4 5.4 0 0 0 22.2 6L15 22.2V42h20.916a3.6 3.6 0 0 0 3.6-3.06L42 22.74a3.6 3.6 0 0 0-3.6-4.14zM15 

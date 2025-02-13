@@ -36,7 +36,7 @@ export function UserMenu({userAvatar, userName, uuidUser}){
                 </li>
                 <li className="user-menu__item">
                     <svg className="user-menu__svg" >
-                        <use xlinkHref="/static/main.svg#like-svg"></use>    
+                        <use xlinkHref="/static/main.svg#liked-svg"></use>    
                     </svg>
                     <Link className="user-menu__link" to={`/profile/${uuidUser}/reaction`}>Понравившиеся</Link>
                 </li>

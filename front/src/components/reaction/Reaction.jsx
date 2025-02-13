@@ -64,7 +64,7 @@ export function Reaction({item}) {
         <dl className="reaction-list">
             <dt className="reaction__item-img">
                 <svg className={item.reaction ? "like like_active": "like"} onClick={async (event) => await request(event, true)}>
-                    <use xlinkHref="/static/main.svg#like"></use>
+                    <use xlinkHref="/static/main.svg#like-svg"></use>
                 </svg>
             </dt>
             <dd className="reaction__item-count">
@@ -72,7 +72,7 @@ export function Reaction({item}) {
             </dd>
             <dt className={item.reaction === false ? "dislike dislike_active": "dislike"}> 
                 <svg className="reaction__svg reaction_dislike" onClick={async (event) => await request(event, false)}>
-                    <use xlinkHref="/static/main.svg#dislike"></use>
+                    <use xlinkHref="/static/main.svg#dislike-svg"></use>
                 </svg>
             </dt>
             <dd className="reaction__item-count">

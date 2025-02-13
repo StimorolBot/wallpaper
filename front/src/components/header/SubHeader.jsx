@@ -11,7 +11,7 @@ export function SubHeader() {
                     <li className={style.subheader__item}>
                         <Link className={style.subheader__link} to="/">
                             <svg className={style.subheader__svg}>
-                                <use xlinkHref="/static/main.svg#main-page"></use>    
+                                <use xlinkHref="/static/main.svg#main-page-svg"></use>    
                             </svg>
                             <p>Главная</p>
                         </Link>
@@ -19,7 +19,7 @@ export function SubHeader() {
                     <li className={style.subheader__item}>
                         <Link className={style.subheader__link} to="/create">
                             <svg className={style.subheader__svg}>
-                                <use xlinkHref="/static/main.svg#create-page"></use>    
+                                <use xlinkHref="/static/main.svg#create-page-svg"></use>    
                             </svg>
                             <p>Создать</p>
                         </Link>
@@ -27,7 +27,7 @@ export function SubHeader() {
                     <li className={style.subheader__item}>
                         <Link className={style.subheader__link} to="/popular">
                             <svg>
-                                <use xlinkHref="/static/main.svg#popular-page"></use>    
+                                <use xlinkHref="/static/main.svg#popular-page-svg"></use>    
                             </svg>
                             <p>Популярное </p>
                         </Link>
@@ -35,7 +35,7 @@ export function SubHeader() {
                     <li className={style.subheader__item}>
                         <Link className={style.subheader__link} to="/category">
                             <svg className={style.subheader__svg}>
-                                <use xlinkHref="/static/main.svg#categories-page"></use>    
+                                <use xlinkHref="/static/main.svg#categories-page-svg"></use>    
                             </svg>
                             <p>Категории</p>
                         </Link>
