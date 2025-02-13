@@ -1,4 +1,5 @@
 from uuid import UUID
+from re import search
 
 from starlette import status
 from fastapi import HTTPException
@@ -69,9 +70,23 @@ def valid_len(val: str, min_val: int, max_val: int):
         )
 
 
+def valid_tag(val: list, handler):
+    if len(val) > 8:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Превышен лимит количества тегов")
+
+    pattern = r"^#[a-zA-Z0-9]{2,20}$"
+
+    for v in val:
+        if not search(pattern, v.strip()):
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Неверный формат тега")
+
+    return val
+
+
 ValidUuid = Annotated[str, WrapValidator(valid_uuid)]
 ValidName = Annotated[str, WrapValidator(valid_name)]
 ValidSizeImg = Annotated[int, WrapValidator(valid_size_img)]
 ValidPassword = Annotated[str, WrapValidator(valid_password)]
 ValidPromptImg = Annotated[str, WrapValidator(valid_prompt_img)]
 ValidCodeConfirm = Annotated[str, WrapValidator(valid_code_confirm)]
+ValidTag = Annotated[list[str], WrapValidator(valid_tag)]
